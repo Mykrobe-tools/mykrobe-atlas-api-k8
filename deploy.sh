@@ -24,6 +24,8 @@ fi
 
 echo
 echo "Namespace $NAMESPACE"
+echo "Service Host $KUBERNETES_SERVICE_HOST"
+echo "Port $KUBERNETES_PORT_443_TCP_PORT"
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment" \
