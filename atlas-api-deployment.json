@@ -22,10 +22,6 @@
       "spec": {
         "containers": [
           {
-            "command": [
-              "yarn",
-              "start"
-            ],
             "image": "#{image}",
             "name": "atlas-api",
             "ports": [
