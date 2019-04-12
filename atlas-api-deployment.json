@@ -8,7 +8,6 @@
     "name": "atlas-api-deployment"
   },
   "spec": {
-    "replicas": 1,
     "selector": {
       "matchLabels": {
         "app": "atlas-api"
@@ -24,7 +23,7 @@
         "containers": [
           {
             "command": [
-              "npm",
+              "yarn",
               "start"
             ],
             "image": "#{image}",
