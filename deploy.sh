@@ -32,7 +32,7 @@ echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment" \
-    -X GET -o /dev/stdout -w "%{http_code}")
+    -X GET -o /dev/null -w "%{http_code}")
 
 echo "Result $status_code"
 
@@ -54,7 +54,7 @@ echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service" \
-    -X GET -o /dev/stdout -w "%{http_code}")
+    -X GET -o /dev/null -w "%{http_code}")
 
 echo "Result $status_code"
 
@@ -76,7 +76,7 @@ echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses/atlas-api-ingress" \
-    -X GET -o /dev/stdout -w "%{http_code}")
+    -X GET -o /dev/null -w "%{http_code}")
 
 echo "Result $status_code"
 
