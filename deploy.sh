@@ -56,6 +56,7 @@ else
     -X POST -d @atlas-api-deployment.json
 fi
 
+echo
 echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service"
 curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service" -X GET
