@@ -28,11 +28,13 @@ echo "Namespace $NAMESPACE"
 echo "Service Host $KUBERNETES_SERVICE_HOST"
 echo "Port $KUBERNETES_PORT_443_TCP_PORT"
 
-echo "Calling ... https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment"
+echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment"
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment" \
     -X GET -o /dev/null -w "%{http_code}")
+
+echo "Result $status_code"
 
 # if [ $status_code == 200 ]; then
 #   echo
@@ -48,9 +50,13 @@ status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
 #     -X POST -d @atlas-api-deployment.json
 # fi
 
+echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service"
+
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service" \
     -X GET -o /dev/null -w "%{http_code}")
+
+echo "Result $status_code"
 
 # if [ $status_code == 200 ]; then
 #  echo
@@ -66,9 +72,13 @@ status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
 #     -X POST -d @atlas-api-service.json
 # fi
 
+echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses/atlas-api-ingress"
+
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses/atlas-api-ingress" \
     -X GET -o /dev/null -w "%{http_code}")
+
+echo "Result $status_code"
 
 # if [ $status_code == 200 ]; then
 #  echo
