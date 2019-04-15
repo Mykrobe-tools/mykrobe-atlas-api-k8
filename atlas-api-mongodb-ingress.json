@@ -9,7 +9,8 @@
       "external-dns.alpha.kubernetes.io/hostname": "db-dev-mykrobe.makeandship.com",
       "alb.ingress.kubernetes.io/certificate-arn": "arn:aws:acm:eu-west-2:439083994182:certificate/903055b8-bd9f-45e8-81c2-25cbdb78497c",
       "alb.ingress.kubernetes.io/listen-ports": "[{ \"HTTPS\": 27017 }]"
-    }
+    },
+    "namespace": "mykrobe"
   },
   "spec": {
     "backend": {
