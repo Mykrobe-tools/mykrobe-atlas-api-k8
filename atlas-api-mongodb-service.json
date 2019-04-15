@@ -2,9 +2,9 @@
   "apiVersion": "v1",
   "kind": "Service",
   "metadata": {
-    "name": "atlas-api-mongodb",
+    "name": "db",
     "labels": {
-      "name": "atlas-api-mongodb"
+      "name": "db"
     },
     "namespace": "mykrobe"
   },
@@ -17,7 +17,7 @@
       }
     ],
     "selector": {
-      "app": "atlas-api-mongodb"
+      "app": "db"
     }
   }
 }

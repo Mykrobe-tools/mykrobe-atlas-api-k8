@@ -2,9 +2,9 @@
   "apiVersion": "v1",
   "kind": "ReplicationController",
   "metadata": {
-    "name": "atlas-api-mongodb-controller",
+    "name": "db-controller",
     "labels": {
-      "name": "atlas-api-mongodb"
+      "name": "db"
     },
     "namespace": "mykrobe"
   },
@@ -13,36 +13,35 @@
     "template": {
       "metadata": {
         "labels": {
-          "name": "atlas-api-mongodb"
+          "name": "db"
         }
       },
       "spec": {
         "containers": [
           {
             "image": "mongo",
-            "name": "atlas-api-mongodb",
+            "name": "db",
             "ports": [
               {
-                "name": "atlas-api-mongodb",
+                "name": "db",
                 "containerPort": 27017,
                 "hostPort": 27017
               }
             ],
             "volumeMounts": [
               {
-                "name": "atlas-api-mongodb-data",
+                "name": "db-data",
                 "mountPath": "/data/db"
               }
-            ],
-            "restartPolicy": "Always",
-            "volumes": [
-              {
-                "name": "atlas-api-mongodb-data",
-                "persistentVolumeClaim": {
-                  "claimName": "atlas-api-mongodb-data"
-                }
-              }
             ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "db-data",
+            "persistentVolumeClaim": {
+              "claimName": "db-data"
+            }
           }
         ]
       }
