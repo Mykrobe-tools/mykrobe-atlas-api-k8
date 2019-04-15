@@ -2,12 +2,11 @@
   "apiVersion": "v1",
   "kind": "PersistentVolumeClaim",
   "metadata": {
-    "name": "atlas-api-mongodb-data"
+    "name": "atlas-api-mongodb-data",
+    "namespace": "mykrobe"
   },
   "spec": {
-    "accessModes": [
-      "ReadWriteOnce"
-    ],
+    "accessModes": ["ReadWriteOnce"],
     "resources": {
       "requests": {
         "storage": "8Gi"

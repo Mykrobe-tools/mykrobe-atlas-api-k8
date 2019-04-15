@@ -5,7 +5,8 @@
     "name": "atlas-api-mongodb-controller",
     "labels": {
       "name": "atlas-api-mongodb"
-    }
+    },
+    "namespace": "mykrobe"
   },
   "spec": {
     "replicas": 1,

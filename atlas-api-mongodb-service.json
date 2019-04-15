@@ -5,7 +5,8 @@
     "name": "atlas-api-mongodb",
     "labels": {
       "name": "atlas-api-mongodb"
-    }
+    },
+    "namespace": "mykrobe"
   },
   "spec": {
     "type": "NodePort",
