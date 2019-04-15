@@ -77,7 +77,7 @@
               },
               {
                 "name": "DB_PORT_27017_TCP_ADDR",
-                "value": "db-dev-mykrobe.makeandship.com:27017"
+                "value": "db:27017"
               }
             ]
           }
