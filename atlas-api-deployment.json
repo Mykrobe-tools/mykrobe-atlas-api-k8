@@ -22,16 +22,26 @@
       "spec": {
         "containers": [
           {
-            "command": [
-              "yarn",
-              "start"
-            ],
             "image": "#{image}",
             "name": "atlas-api",
             "ports": [
               {
                 "containerPort": 3000,
                 "protocol": "TCP"
+              }
+            ],
+            "env": [
+              {
+                "name": "NODE_ENV",
+                "value": "production"
+              },
+              {
+                "name": "MONGO_USER",
+                "value": "admin"
+              },
+              {
+                "name": "MONGO_USER",
+                "value": "5HKCO4SDkTfy"
               }
             ]
           }
