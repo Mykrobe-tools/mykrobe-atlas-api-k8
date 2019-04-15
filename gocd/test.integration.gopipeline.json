@@ -1,0 +1,80 @@
+{
+  "group": "API",
+  "name": "test.integration",
+  "label_template": "${COUNT}",
+  "lock_behavior": "none",
+  "environment_variables": [
+    {
+      "name": "DOCKERHUB_USERNAME",
+      "value": "mthomsit"
+    }
+  ],
+  "parameters": [],
+  "materials": [
+    {
+      "pipeline": "build",
+      "stage": "build.test.integration",
+      "name": "upstream",
+      "type": "dependency"
+    }
+  ],
+  "stages": [
+    {
+      "name": "test.integration",
+      "fetch_materials": true,
+      "never_cleanup_artifacts": false,
+      "clean_working_directory": false,
+      "approval": {
+        "type": "success",
+        "users": [],
+        "roles": []
+      },
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "test.integration",
+          "environment_variables": [],
+          "tabs": [
+            {
+              "name": "Integration",
+              "path": "testoutput/reports/integration-test-report.html"
+            }
+          ],
+          "resources": [],
+          "artifacts": [],
+          "properties": [],
+          "elastic_profile_id": "atlas-api",
+          "run_instance_count": "0",
+          "timeout": 0.0,
+          "tasks": [
+            {
+              "artifact_id": "atlas-api-test-integration",
+              "configuration": [
+                {
+                  "key": "EnvironmentVariablePrefix",
+                  "value": ""
+                }
+              ],
+              "pipeline": "build",
+              "stage": "build.test.integration",
+              "job": "build.test.integration",
+              "artifact_origin": "external",
+              "run_if": "passed",
+              "type": "fetch"
+            },
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "docker run --rm $DOCKERHUB_USERNAME/atlas-api-test-integration:$GO_DEPENDENCY_LABEL_UPSTREAM yarn test:integration"
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

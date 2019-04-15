@@ -1,0 +1,277 @@
+{
+  "group": "API",
+  "name": "build",
+  "label_template": "${COUNT}",
+  "lock_behavior": "none",
+  "environment_variables": [
+    {
+      "name": "DOCKERHUB_USERNAME",
+      "value": "mthomsit"
+    },
+    {
+      "name": "DOCKERHUB_HOST",
+      "value": ""
+    },
+    {
+      "name": "DOCKERHUB_PASSWORD",
+      "encrypted_value": "AES:R9MYGcplMLdBAPr47Hr7hw\u003d\u003d:dh7GjZLBSk5iV+PxvfkYdw\u003d\u003d"
+    }
+  ],
+  "parameters": [],
+  "materials": [
+    {
+      "url": "git@api.atlas.github.com:Mykrobe-tools/mykrobe-atlas-api.git",
+      "branch": "release/dev",
+      "shallow_clone": false,
+      "filter": {
+        "ignore": [],
+        "whitelist": []
+      },
+      "auto_update": true,
+      "type": "git"
+    }
+  ],
+  "stages": [
+    {
+      "name": "build",
+      "fetch_materials": true,
+      "never_cleanup_artifacts": false,
+      "clean_working_directory": false,
+      "approval": {
+        "type": "success",
+        "users": [],
+        "roles": []
+      },
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "build",
+          "environment_variables": [],
+          "tabs": [],
+          "resources": [],
+          "artifacts": [
+            {
+              "id": "atlas-api",
+              "store_id": "DockerHub",
+              "configuration": [
+                {
+                  "key": "Image",
+                  "value": "${DOCKERHUB_USERNAME}/atlas-api"
+                },
+                {
+                  "key": "Tag",
+                  "value": "${GO_PIPELINE_LABEL}"
+                },
+                {
+                  "key": "BuildFile",
+                  "value": ""
+                }
+              ],
+              "type": "external"
+            }
+          ],
+          "properties": [],
+          "elastic_profile_id": "atlas-api",
+          "run_instance_count": "0",
+          "timeout": 0.0,
+          "tasks": [
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "cp /home/go/.ssh/bitbucket-readonly ."
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            },
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "cp /home/go/.ssh/atlas-jsonschema-readonly ."
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            },
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "cp /home/go/.ssh/atlas-api-deploy-readonly ."
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            },
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "docker build -t $DOCKERHUB_USERNAME/atlas-api:$GO_PIPELINE_LABEL . -f deploy/Dockerfile"
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "build.test.unit",
+      "fetch_materials": true,
+      "never_cleanup_artifacts": false,
+      "clean_working_directory": false,
+      "approval": {
+        "type": "success",
+        "users": [],
+        "roles": []
+      },
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "build.test.unit",
+          "environment_variables": [],
+          "tabs": [],
+          "resources": [],
+          "artifacts": [
+            {
+              "id": "atlas-api-test-unit",
+              "store_id": "DockerHub",
+              "configuration": [
+                {
+                  "key": "Image",
+                  "value": "${DOCKERHUB_USERNAME}/atlas-api-test-unit"
+                },
+                {
+                  "key": "Tag",
+                  "value": "${GO_PIPELINE_LABEL}"
+                },
+                {
+                  "key": "BuildFile",
+                  "value": ""
+                }
+              ],
+              "type": "external"
+            }
+          ],
+          "properties": [],
+          "elastic_profile_id": "atlas-api",
+          "run_instance_count": "0",
+          "timeout": 0.0,
+          "tasks": [
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "docker login --username\u003d$DOCKERHUB_USERNAME --password\u003d$DOCKERHUB_PASSWORD $DOCKERHUB_HOST"
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            },
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "cat deploy/Dockerfile.test.unit.template | while read line; do echo $(eval echo `echo $line`); done \u003e deploy/Dockerfile.test.unit"
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            },
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "docker build -t $DOCKERHUB_USERNAME/atlas-api-test-unit:$GO_PIPELINE_LABEL . -f deploy/Dockerfile.test.unit"
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "build.test.integration",
+      "fetch_materials": true,
+      "never_cleanup_artifacts": false,
+      "clean_working_directory": false,
+      "approval": {
+        "type": "success",
+        "users": [],
+        "roles": []
+      },
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "build.test.integration",
+          "environment_variables": [],
+          "tabs": [],
+          "resources": [],
+          "artifacts": [
+            {
+              "id": "atlas-api-test-integration",
+              "store_id": "DockerHub",
+              "configuration": [
+                {
+                  "key": "Image",
+                  "value": "mthomsit/atlas-api-test-integration"
+                },
+                {
+                  "key": "Tag",
+                  "value": "${GO_PIPELINE_LABEL}"
+                },
+                {
+                  "key": "BuildFile",
+                  "value": ""
+                }
+              ],
+              "type": "external"
+            }
+          ],
+          "properties": [],
+          "elastic_profile_id": "atlas-api",
+          "run_instance_count": "0",
+          "timeout": 0.0,
+          "tasks": [
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "docker login --username\u003d$DOCKERHUB_USERNAME --password\u003d$DOCKERHUB_PASSWORD $DOCKERHUB_HOST"
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            },
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "cat deploy/Dockerfile.test.integration.template | while read line; do echo $(eval echo `echo $line`); done \u003e deploy/Dockerfile.test.integration"
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            },
+            {
+              "command": "bash",
+              "timeout": -1.0,
+              "arguments": [
+                "-c",
+                "docker build -t $DOCKERHUB_USERNAME/atlas-api-test-integration:$GO_PIPELINE_LABEL . -f deploy/Dockerfile.test.integration"
+              ],
+              "run_if": "passed",
+              "type": "exec"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

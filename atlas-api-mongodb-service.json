@@ -17,7 +17,7 @@
       }
     ],
     "selector": {
-      "app": "db"
+      "name": "db"
     }
   }
 }
