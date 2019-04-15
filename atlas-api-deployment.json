@@ -40,8 +40,40 @@
                 "value": "admin"
               },
               {
-                "name": "MONGO_USER",
+                "name": "MONGO_PASSWORD",
                 "value": "5HKCO4SDkTfy"
+              },
+              {
+                "name": "AWS_ACCESS_KEY",
+                "value": "AKIAIXA6O4I5CNPLVEZQ"
+              },
+              {
+                "name": "AWS_SECRET_KEY",
+                "value": "Ch8GWtz5rJ4XOLNArg30thxfOX9oFqNyX3DS282V"
+              },
+              {
+                "name": "AWS_REGION",
+                "value": "eu-west-1"
+              },
+              {
+                "name": "ATLAS_APP",
+                "value": "https://dev-mykrobe.makeandship.com"
+              },
+              {
+                "name": "ES_CLUSTER_URL",
+                "value": "https://admin:Fc&S8QL<@j<&}3Bj@es-dev.makeandship.com:9200"
+              },
+              {
+                "name": "ES_INDEX_NAME",
+                "value": "mykrobe-dev"
+              },
+              {
+                "name": "KEYCLOAK_REDIRECT_URI",
+                "value": "https://dev-mykrobe.makeandship.com/"
+              },
+              {
+                "name": "API_HOST",
+                "value": "api-dev-mykrobe.makeandship.com"
               }
             ]
           }
