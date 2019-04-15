@@ -1,0 +1,50 @@
+{
+  "apiVersion": "v1",
+  "kind": "ReplicationController",
+  "metadata": {
+    "name": "atlas-api-mongodb-controller",
+    "labels": {
+      "name": "atlas-api-mongodb"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "template": {
+      "metadata": {
+        "labels": {
+          "name": "atlas-api-mongodb"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "mongo",
+            "name": "atlas-api-mongodb",
+            "ports": [
+              {
+                "name": "atlas-api-mongodb",
+                "containerPort": 27017,
+                "hostPort": 27017
+              }
+            ],
+            "volumeMounts": [
+              {
+                "name": "atlas-api-mongodb-data",
+                "mountPath": "/data/db"
+              }
+            ],
+            "restartPolicy": "Always",
+            "volumes": [
+              {
+                "name": "atlas-api-mongodb-data",
+                "persistentVolumeClaim": {
+                  "claimName": "atlas-api-mongodb-data"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
