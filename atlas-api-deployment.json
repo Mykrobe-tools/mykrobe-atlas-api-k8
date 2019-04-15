@@ -74,6 +74,10 @@
               {
                 "name": "API_HOST",
                 "value": "api-dev-mykrobe.makeandship.com"
+              },
+              {
+                "name": "DB_PORT_27017_TCP_ADDR",
+                "value": "db-dev-mykrobe.makeandship.com:27017"
               }
             ]
           }
