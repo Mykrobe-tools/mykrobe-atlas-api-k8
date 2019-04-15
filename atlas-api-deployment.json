@@ -23,7 +23,6 @@
         "containers": [
           {
             "image": "#{image}",
-            "imagePullSecrets": [{ "name": "dockerhub" }],
             "name": "atlas-api",
             "ports": [ 
               {
@@ -82,7 +81,8 @@
               }
             ]
           }
-        ]
+        ],
+        "imagePullSecrets": [{ "name": "dockerhub" }]
       }
     }
   }
