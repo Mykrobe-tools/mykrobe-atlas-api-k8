@@ -3,7 +3,7 @@
   "kind": "PersistentVolume",
   "metadata": {
     "name": "db-pv",
-    "namespace": "mykrobe"
+    "namespace": "default"
   },
   "spec": {
     "storageClassName": "manual",

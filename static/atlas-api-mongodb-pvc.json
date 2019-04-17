@@ -3,7 +3,7 @@
   "kind": "PersistentVolumeClaim",
   "metadata": {
     "name": "db-data",
-    "namespace": "mykrobe"
+    "namespace": "default"
   },
   "spec": {
     "accessModes": ["ReadWriteOnce"],

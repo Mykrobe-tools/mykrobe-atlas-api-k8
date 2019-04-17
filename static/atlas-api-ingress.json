@@ -10,7 +10,7 @@
       "alb.ingress.kubernetes.io/certificate-arn": "arn:aws:acm:eu-west-2:439083994182:certificate/903055b8-bd9f-45e8-81c2-25cbdb78497c",
       "alb.ingress.kubernetes.io/listen-ports": "[{ \"HTTP\": 80 },{ \"HTTPS\": 443 }]"
     },
-    "namespace": "mykrobe"
+    "namespace": "default"
   },
   "spec": {
     "backend": {
@@ -19,7 +19,7 @@
     },
     "rules": [
       {
-        "host": "api-dev-mykrobe.makeandship.com",
+        "host": "api-dev-mykrobe-atlas.makeandship.com",
         "http": {
           "paths": [
             {
