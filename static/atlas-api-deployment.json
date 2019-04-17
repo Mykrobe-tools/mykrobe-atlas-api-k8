@@ -88,7 +88,7 @@
           {
             "name": "uploads-volume",
             "hostPath": {
-              "path": "/data/atlas",
+              "path": "/ssd0/atlas",
               "type": "Directory"
             }
           }
