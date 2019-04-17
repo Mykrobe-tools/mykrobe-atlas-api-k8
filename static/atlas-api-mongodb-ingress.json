@@ -19,7 +19,7 @@
     },
     "rules": [
       {
-        "host": "db-dev-mykrobe.makeandship.com",
+        "host": "db-dev-mykrobe-atlas.makeandship.com",
         "http": {
           "paths": [
             {
