@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
 sed -i "s~#{image}~$ARTIFACT_IMAGE~g" atlas-api-deployment.json
+sed -i "s~#{MONGO_USER}~$MONGO_USER~g" atlas-api-deployment.json
+sed -i "s~#{MONGO_PASSWORD}~$MONGO_PASSWORD~g" atlas-api-deployment.json
+sed -i "s~#{AWS_ACCESS_KEY}~$AWS_ACCESS_KEY~g" atlas-api-deployment.json
+sed -i "s~#{AWS_SECRET_KEY}~$AWS_SECRET_KEY~g" atlas-api-deployment.json
+sed -i "s~#{AWS_REGION}~$AWS_REGION~g" atlas-api-deployment.json
+sed -i "s~#{ATLAS_APP}~$ATLAS_APP~g" atlas-api-deployment.json
+sed -i "s~#{ES_CLUSTER_URL}~$ES_CLUSTER_URL~g" atlas-api-deployment.json
+sed -i "s~#{ES_INDEX_NAME}~$ES_INDEX_NAME~g" atlas-api-deployment.json
+sed -i "s~#{KEYCLOAK_REDIRECT_URI}~$KEYCLOAK_REDIRECT_URI~g" atlas-api-deployment.json
+sed -i "s~#{API_HOST}~$API_HOST~g" atlas-api-deployment.json
+sed -i "s~#{DB_PORT_27017_TCP_ADDR}~$DB_PORT_27017_TCP_ADDR~g" atlas-api-deployment.json
 
 if [ -z $KUBE_TOKEN ]; then
   echo "FATAL: Environment Variable KUBE_TOKEN must be specified."

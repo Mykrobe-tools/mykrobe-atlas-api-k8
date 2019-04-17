@@ -37,47 +37,47 @@
               },
               {
                 "name": "MONGO_USER",
-                "value": "admin"
+                "value": "#{MONGO_USER}"
               },
               {
                 "name": "MONGO_PASSWORD",
-                "value": "5HKCO4SDkTfy"
+                "value": "#{MONGO_PASSWORD}"
               },
               {
                 "name": "AWS_ACCESS_KEY",
-                "value": "AKIAIXA6O4I5CNPLVEZQ"
+                "value": "#{AWS_ACCESS_KEY}"
               },
               {
                 "name": "AWS_SECRET_KEY",
-                "value": "Ch8GWtz5rJ4XOLNArg30thxfOX9oFqNyX3DS282V"
+                "value": "#{AWS_SECRET_KEY}"
               },
               {
                 "name": "AWS_REGION",
-                "value": "eu-west-1"
+                "value": "#{AWS_REGION}"
               },
               {
                 "name": "ATLAS_APP",
-                "value": "https://dev-mykrobe.makeandship.com"
+                "value": "#{ATLAS_APP}"
               },
               {
                 "name": "ES_CLUSTER_URL",
-                "value": "https://admin:Fc&S8QL<@j<&}3Bj@es-dev.makeandship.com:9200"
+                "value": "#{ES_CLUSTER_URL}"
               },
               {
                 "name": "ES_INDEX_NAME",
-                "value": "mykrobe-dev"
+                "value": "#{ES_INDEX_NAME}"
               },
               {
                 "name": "KEYCLOAK_REDIRECT_URI",
-                "value": "https://dev-mykrobe.makeandship.com/"
+                "value": "#{KEYCLOAK_REDIRECT_URI}"
               },
               {
                 "name": "API_HOST",
-                "value": "api-dev-mykrobe.makeandship.com"
+                "value": "#{API_HOST}"
               },
               {
                 "name": "DB_PORT_27017_TCP_ADDR",
-                "value": "db:27017"
+                "value": "#{DB_PORT_27017_TCP_ADDR}"
               }
             ]
           }
