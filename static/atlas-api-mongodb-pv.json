@@ -12,7 +12,7 @@
     },
     "accessModes": ["ReadWriteOnce"],
     "hostPath": {
-      "path": "/home/ec2-user/gocd/data"
+      "path": "/home/atlas/db/data"
     }
   }
 }
