@@ -1,0 +1,23 @@
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+    "name": "db",
+    "labels": {
+      "name": "db"
+    },
+    "namespace": "mykrobe"
+  },
+  "spec": {
+    "type": "NodePort",
+    "ports": [
+      {
+        "port": 27017,
+        "targetPort": 27017
+      }
+    ],
+    "selector": {
+      "name": "db"
+    }
+  }
+}

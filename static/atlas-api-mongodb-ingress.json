@@ -1,0 +1,36 @@
+{
+  "apiVersion": "extensions/v1beta1",
+  "kind": "Ingress",
+  "metadata": {
+    "name": "db-ingress",
+    "annotations": {
+      "kubernetes.io/ingress.class": "alb",
+      "alb.ingress.kubernetes.io/scheme": "internet-facing",
+      "external-dns.alpha.kubernetes.io/hostname": "db-dev-mykrobe.makeandship.com",
+      "alb.ingress.kubernetes.io/certificate-arn": "arn:aws:acm:eu-west-2:439083994182:certificate/903055b8-bd9f-45e8-81c2-25cbdb78497c",
+      "alb.ingress.kubernetes.io/listen-ports": "[{ \"HTTPS\": 27017 }]"
+    },
+    "namespace": "mykrobe"
+  },
+  "spec": {
+    "backend": {
+      "serviceName": "db",
+      "servicePort": 27017
+    },
+    "rules": [
+      {
+        "host": "db-dev-mykrobe.makeandship.com",
+        "http": {
+          "paths": [
+            {
+              "backend": {
+                "serviceName": "db",
+                "servicePort": 27017
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
