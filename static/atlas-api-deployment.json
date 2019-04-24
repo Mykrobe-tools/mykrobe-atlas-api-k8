@@ -30,6 +30,12 @@
                 "protocol": "TCP"
               }
             ],
+            "volumeMounts": [
+              {
+                "mountPath": "/app/uploads",
+                "name": "uploads-volume"
+              }
+            ],
             "env": [
               {
                 "name": "NODE_ENV",
@@ -76,6 +82,15 @@
                 "value": "api-dev-mykrobe-atlas.makeandship.com"
               }
             ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "uploads-volume",
+            "hostPath": {
+              "path": "/ssd0/atlas",
+              "type": "Directory"
+            }
           }
         ],
         "imagePullSecrets": [{ "name": "dockerhub" }]
