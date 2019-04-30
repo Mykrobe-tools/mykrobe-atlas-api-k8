@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-echo "--- Before"
-echo
-cat atlas-api-deployment.json
-echo "---"
-
 sed -i "s~#{image}~$ARTIFACT_IMAGE~g" atlas-api-deployment.json
 sed -i "s~#{MONGO_USER}~$MONGO_USER~g" atlas-api-deployment.json
 sed -i "s~#{MONGO_PASSWORD}~$MONGO_PASSWORD~g" atlas-api-deployment.json
@@ -21,11 +16,6 @@ sed -i "s~#{ES_INDEX_NAME}~$ES_INDEX_NAME~g" atlas-api-deployment.json
 sed -i "s~#{KEYCLOAK_REDIRECT_URI}~$KEYCLOAK_REDIRECT_URI~g" atlas-api-deployment.json
 sed -i "s~#{API_HOST}~$API_HOST~g" atlas-api-deployment.json
 sed -i "s~#{DB_PORT_27017_TCP_ADDR}~$DB_PORT_27017_TCP_ADDR~g" atlas-api-deployment.json
-
-echo "--- After"
-echo
-cat atlas-api-deployment.json
-echo "---"
 
 
 if [ -z $KUBE_TOKEN ]; then
