@@ -95,7 +95,7 @@ echo
 # --------------------------------------------------------------
 
 echo
-echo "Deploying API"
+echo "Deploying API using $ARTIFACT_IMAGE"
 echo
 
 # --------------------------------------------------------------
@@ -171,7 +171,7 @@ if [ $status_code == 200 ]; then
 else
   echo "Creating ingress"
   echo
-  
+
   curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses" \
     -X POST -d @atlas-api-ingress.json
