@@ -68,25 +68,25 @@ echo
 # --------------------------------------------------------------
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-mongodb-service" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/db" \
     -X GET -o /dev/null -w "%{http_code}")
 
 echo
-echo "Result $status_code"
+echo "MongoDB service: $status_code"
 
 if [ $status_code == 200 ]; then
   echo "Updating service for mongodb"
   echo
 
   curl -H 'Content-Type: application/strategic-merge-patch+json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORTapi/v1/namespaces/$NAMESPACE/services/atlas-api-mongodb-service" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/db" \
     -X PATCH -d @atlas-api-mongodb-service.json
 else
   echo "Creating service for mongodb"
   echo
 
   curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORTapi/v1/namespaces/$NAMESPACE/services" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services" \
     -X POST -d @atlas-api-mongodb-service.json
 fi
 
@@ -96,7 +96,6 @@ echo
 
 echo
 echo "Deploying API using $ARTIFACT_IMAGE"
-echo
 
 # --------------------------------------------------------------
 
