@@ -66,8 +66,24 @@
                 "value": "https://dev-mykrobe-atlas.makeandship.com"
               },
               {
-                "name": "ES_CLUSTER_URL",
-                "value": "https://admin:Fc&S8QL<@j<&}3Bj@es-dev.makeandship.com:9200"
+                "name": "ES_SCHEME",
+                "value": "https"
+              },
+              {
+                "name": "ES_HOST",
+                "value": "es-dev.makeandship.com"
+              },
+              {
+                "name": "ES_PORT",
+                "value": "9200"
+              },
+              {
+                "name": "ES_USERNAME",
+                "value": "admin"
+              },
+              {
+                "name": "ES_PASSWORD",
+                "value": "Fc&S8QL<@j<&}3Bj"
               },
               {
                 "name": "ES_INDEX_NAME",

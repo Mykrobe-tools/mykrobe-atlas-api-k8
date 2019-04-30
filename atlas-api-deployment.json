@@ -60,8 +60,24 @@
                 "value": "#{ATLAS_APP}"
               },
               {
-                "name": "ES_CLUSTER_URL",
-                "value": "#{ES_CLUSTER_URL}"
+                "name": "ES_SCHEME",
+                "value": "#{ES_SCHEME}"
+              },
+              {
+                "name": "ES_HOST",
+                "value": "#{ES_HOST}"
+              },
+              {
+                "name": "ES_PORT",
+                "value": "#{ES_PORT}"
+              },
+              {
+                "name": "ES_USERNAME",
+                "value": "#{ES_USERNAME}"
+              },
+              {
+                "name": "ES_PASSWORD",
+                "value": "#{ES_PASSWORD}"
               },
               {
                 "name": "ES_INDEX_NAME",
