@@ -8,6 +8,11 @@ sed -i "s~#{AWS_SECRET_KEY}~$AWS_SECRET_KEY~g" atlas-api-deployment.json
 sed -i "s~#{AWS_REGION}~$AWS_REGION~g" atlas-api-deployment.json
 sed -i "s~#{ATLAS_APP}~$ATLAS_APP~g" atlas-api-deployment.json
 sed -i "s~#{ES_CLUSTER_URL}~$ES_CLUSTER_URL~g" atlas-api-deployment.json
+sed -i "s~#{ES_SCHEME}~$ES_SCHEME~g" atlas-api-deployment.json
+sed -i "s~#{ES_HOST}~$ES_HOST~g" atlas-api-deployment.json
+sed -i "s~#{ES_PORT}~$ES_PORT~g" atlas-api-deployment.json
+sed -i "s~#{ES_USERNAME}~$ES_USERNAME~g" atlas-api-deployment.json
+sed -i "s~#{ES_PASSWORD}~$ES_PASSWORD~g" atlas-api-deployment.json
 sed -i "s~#{ES_INDEX_NAME}~$ES_INDEX_NAME~g" atlas-api-deployment.json
 sed -i "s~#{KEYCLOAK_REDIRECT_URI}~$KEYCLOAK_REDIRECT_URI~g" atlas-api-deployment.json
 sed -i "s~#{API_HOST}~$API_HOST~g" atlas-api-deployment.json
