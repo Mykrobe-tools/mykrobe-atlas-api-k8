@@ -33,128 +33,148 @@ if [ -z $KUBERNETES_PORT_443_TCP_PORT ]; then
   exit ${2:-1}
 fi
 
+# --------------------------------------------------------------
+
 echo
 echo "Deploying MongoDB"
-echo 
+echo
+
+# --------------------------------------------------------------
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/replicationcontrollers/atlas-api-mongodb-controller" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/replicationcontrollers/atlas-api-mongodb-controller" \
     -X GET -o /dev/null -w "%{http_code}")
 
-echo
-echo "Result $status_code"
+echo "MongoDB replication controller $status_code"
 
 if [ $status_code == 200 ]; then
+  echo "Updating MongoDB replication controller"
   echo
-  echo "Updating replication controller for mongodb"
+  
   curl -H 'Content-Type: application/strategic-merge-patch+json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/replicationcontrollers/atlas-api-mongodb-controller" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/replicationcontrollers/atlas-api-mongodb-controller" \
     -X PATCH -d @atlas-api-mongodb-replicationcontroller.json
 else
+ echo "Creating MongoDB replication controller"
  echo
- echo "Creating replication controller for mongodb"
+  
  curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/replicationcontrollers" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/replicationcontrollers" \
     -X POST -d @atlas-api-mongodb-replicationcontroller.json
 fi
 
+echo
+
+# --------------------------------------------------------------
+
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/services/atlas-api-mongodb-service" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-mongodb-service" \
     -X GET -o /dev/null -w "%{http_code}")
 
 echo
 echo "Result $status_code"
 
 if [ $status_code == 200 ]; then
-  echo
   echo "Updating service for mongodb"
+  echo
+
   curl -H 'Content-Type: application/strategic-merge-patch+json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/services/atlas-api-mongodb-service" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORTapi/v1/namespaces/$NAMESPACE/services/atlas-api-mongodb-service" \
     -X PATCH -d @atlas-api-mongodb-service.json
 else
- echo
- echo "Creating service for mongodb"
- curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/services" \
+  echo "Creating service for mongodb"
+  echo
+
+  curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORTapi/v1/namespaces/$NAMESPACE/services" \
     -X POST -d @atlas-api-mongodb-service.json
 fi
 
-echo 
-echo "------------------------------------------------------------"
-echo 
+echo
+
+# --------------------------------------------------------------
 
 echo
 echo "Deploying API"
-echo 
-echo "Artifact image $ARTIFACT_IMAGE"
-echo "Namespace $NAMESPACE"
-echo "Service Host $KUBERNETES_SERVICE_HOST"
-echo "Port $KUBERNETES_PORT_443_TCP_PORT"
-
 echo
-echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment"
 
-curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment" \
-    -X GET
+# --------------------------------------------------------------
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment" \
     -X GET -o /dev/null -w "%{http_code}")
 
 echo
-echo "Result $status_code"
+echo "API deployment: $status_code"
 
 if [ $status_code == 200 ]; then
-  echo
   echo "Updating deployment"
+  echo
+
   curl -H 'Content-Type: application/strategic-merge-patch+json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-api-deployment" \
     -X PATCH -d @atlas-api-deployment.json
 else
- echo
- echo "Creating deployment"
- curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
+  echo "Creating deployment"
+  echo
+
+  curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments" \
     -X POST -d @atlas-api-deployment.json
 fi
 
 echo
-echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service"
-curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service" -X GET
+
+# --------------------------------------------------------------
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service" \
     -X GET -o /dev/null -w "%{http_code}")
 
 echo
-echo "Result $status_code"
+echo "API service: $status_code"
 
-if [ $status_code == 404 ]; then
+if [ $status_code == 200 ]; then
+ echo "Updating API service"
  echo
- echo "Creating service"
+
+ curl -H 'Content-Type: application/strategic-merge-patch+json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services/atlas-api-service" \
+    -X PATCH -d @atlas-api-service.json
+else
+ echo "Creating API service"
+ echo
+
  curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/services" \
     -X POST -d @atlas-api-service.json
+
 fi
 
 echo
-echo "Calling ... GET https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses/atlas-api-ingress"
-curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses/atlas-api-ingress" -X GET 
+
+# --------------------------------------------------------------
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses/atlas-api-ingress" \
     -X GET -o /dev/null -w "%{http_code}")
 
-echo
-echo "Result $status_code"
+echo "API Ingress: $status_code"
 
-if [ $status_code == 404 ]; then
+if [ $status_code == 200 ]; then
+ echo "Updating ingress"
  echo
- echo "Creating ingress"
- curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
+
+ curl -H 'Content-Type: application/strategic-merge-patch+json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses/atlas-api-ingress" \
+    -X PATCH -d @atlas-api-ingress.json
+else
+  echo "Creating ingress"
+  echo
+  
+  curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/extensions/v1beta1/namespaces/$NAMESPACE/ingresses" \
     -X POST -d @atlas-api-ingress.json
 fi
+
+echo
