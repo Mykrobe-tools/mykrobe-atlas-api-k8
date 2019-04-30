@@ -13,6 +13,7 @@
     "accessModes": ["ReadWriteOnce"],
     "hostPath": {
       "path": "/home/atlas/db/data"
-    }
+    },
+    "persistentVolumeReclaimPolicy":"Retain"
   }
 }
