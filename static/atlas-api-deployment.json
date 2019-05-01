@@ -22,7 +22,7 @@
       "spec": {
         "containers": [
           {
-            "image": "mthomsit/atlas-api:27",
+            "image": "mthomsit/atlas-api:28",
             "name": "atlas-api",
             "ports": [
               {
@@ -96,6 +96,10 @@
               {
                 "name": "API_HOST",
                 "value": "api-dev-mykrobe-atlas.makeandship.com"
+              },
+              {
+                "name": "DEBUG",
+                "value": "1"
               }
             ]
           }
