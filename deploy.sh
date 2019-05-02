@@ -16,6 +16,7 @@ sed -i "s~#{ES_INDEX_NAME}~$ES_INDEX_NAME~g" atlas-api-deployment.json
 sed -i "s~#{KEYCLOAK_REDIRECT_URI}~$KEYCLOAK_REDIRECT_URI~g" atlas-api-deployment.json
 sed -i "s~#{API_HOST}~$API_HOST~g" atlas-api-deployment.json
 sed -i "s~#{DB_PORT_27017_TCP_ADDR}~$DB_PORT_27017_TCP_ADDR~g" atlas-api-deployment.json
+sed -i "s~#{ANALYSIS_API}~$ANALYSIS_API~g" atlas-api-deployment.json
 
 
 if [ -z $KUBE_TOKEN ]; then
