@@ -104,6 +104,10 @@
               {
                 "name": "ANALYSIS_API",
                 "value": "https://analysis-api-dev-mykrobe-atlas.makeandship.com"
+              },
+              {
+                "name": "UPLOADS_LOCATION",
+                "value": "/ssd0/atlas"
               }
             ]
           }
