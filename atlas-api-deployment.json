@@ -94,6 +94,10 @@
               {
                 "name": "DB_PORT_27017_TCP_ADDR",
                 "value": "#{DB_PORT_27017_TCP_ADDR}"
+              },
+              {
+                "name": "ANALYSIS_API",
+                "value": "#{ANALYSIS_API}"
               }
             ]
           }
