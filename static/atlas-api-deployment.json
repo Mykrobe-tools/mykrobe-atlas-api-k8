@@ -107,7 +107,7 @@
               },
               {
                 "name": "UPLOADS_LOCATION",
-                "value": "/data/atlas"
+                "value": "/data"
               }
             ]
           }
