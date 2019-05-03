@@ -107,7 +107,7 @@
               },
               {
                 "name": "UPLOADS_LOCATION",
-                "value": "/ssd0/atlas"
+                "value": "/app/uploads"
               }
             ]
           }
