@@ -98,6 +98,11 @@
               {
                 "name": "ANALYSIS_API",
                 "value": "#{ANALYSIS_API}"
+              },
+              ,
+              {
+                "name": "BIGSI_API",
+                "value": "#{BIGSI_API}"
               }
             ]
           }
