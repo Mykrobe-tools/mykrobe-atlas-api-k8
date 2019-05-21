@@ -112,6 +112,10 @@
               {
                 "name": "UPLOADS_LOCATION",
                 "value": "/data"
+              },
+              {
+                "name": "DEMO_DATA_ROOT_FOLDER",
+                "value": "/demo"
               }
             ]
           }
