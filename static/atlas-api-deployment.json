@@ -37,7 +37,7 @@
               },
               {
                 "mountPath": "/app/demo",
-                "name": "uploads-volume"
+                "name": "demo-volume"
               }
             ],
             "env": [
@@ -129,6 +129,13 @@
             "name": "uploads-volume",
             "hostPath": {
               "path": "/ssd0/atlas",
+              "type": "Directory"
+            }
+          },
+          {
+            "name": "demo-volume",
+            "hostPath": {
+              "path": "/ssd0/atlas/demo",
               "type": "Directory"
             }
           }
