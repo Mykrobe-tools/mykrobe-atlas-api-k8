@@ -34,6 +34,10 @@
               {
                 "mountPath": "/app/uploads",
                 "name": "uploads-volume"
+              },
+              {
+                "mountPath": "/app/demo",
+                "name": "uploads-volume"
               }
             ],
             "env": [
@@ -115,7 +119,7 @@
               },
               {
                 "name": "DEMO_DATA_ROOT_FOLDER",
-                "value": "/demo"
+                "value": "/app/demo"
               }
             ]
           }
