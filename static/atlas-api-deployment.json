@@ -22,7 +22,7 @@
       "spec": {
         "containers": [
           {
-            "image": "mthomsit/atlas-api:46",
+            "image": "mthomsit/atlas-api:47",
             "name": "atlas-api",
             "ports": [
               {
