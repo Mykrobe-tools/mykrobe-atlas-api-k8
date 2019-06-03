@@ -34,7 +34,7 @@
                 "mountPath": "/data/db"
               }
             ],
-            "command": ["--auth"]
+            "command": ["mongo --auth"]
           }
         ],
         "volumes": [
