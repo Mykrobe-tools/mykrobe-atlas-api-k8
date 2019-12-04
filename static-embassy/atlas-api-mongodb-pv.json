@@ -3,7 +3,7 @@
   "kind": "PersistentVolume",
   "metadata": {
     "name": "db-pv",
-    "namespace": "mykrobe"
+    "namespace": "default"
   },
   "spec": {
     "storageClassName": "manual",
@@ -12,7 +12,7 @@
     },
     "accessModes": ["ReadWriteOnce"],
     "hostPath": {
-      "path": "/home/ec2-user/gocd/data"
+      "path": "/home/atlas/db/data"
     },
     "persistentVolumeReclaimPolicy":"Retain"
   }
