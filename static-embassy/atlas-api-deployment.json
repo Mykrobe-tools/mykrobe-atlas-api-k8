@@ -131,16 +131,14 @@
         "volumes": [
           {
             "name": "uploads-volume",
-            "hostPath": {
-              "path": "/ssd0/atlas",
-              "type": "Directory"
+            "persistentVolumeClaim": {
+              "claimName": "uploads"
             }
           },
           {
             "name": "demo-volume",
-            "hostPath": {
-              "path": "/ssd0/atlas/demo",
-              "type": "Directory"
+            "persistentVolumeClaim": {
+              "claimName": "demo-data"
             }
           }
         ],
