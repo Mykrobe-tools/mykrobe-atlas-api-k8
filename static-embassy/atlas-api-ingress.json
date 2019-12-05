@@ -4,11 +4,7 @@
   "metadata": {
     "name": "atlas-api-ingress",
     "annotations": {
-      "kubernetes.io/ingress.class": "alb",
-      "alb.ingress.kubernetes.io/scheme": "internet-facing",
-      "external-dns.alpha.kubernetes.io/hostname": "api-dev-mykrobe-atlas.makeandship.com",
-      "alb.ingress.kubernetes.io/certificate-arn": "arn:aws:acm:eu-west-2:439083994182:certificate/903055b8-bd9f-45e8-81c2-25cbdb78497c",
-      "alb.ingress.kubernetes.io/listen-ports": "[{ \"HTTP\": 80 },{ \"HTTPS\": 443 }]"
+      "external-dns.alpha.kubernetes.io/hostname": "api-dev.mykro.be"
     },
     "namespace": "default"
   },
@@ -19,7 +15,7 @@
     },
     "rules": [
       {
-        "host": "api-dev-mykrobe-atlas.makeandship.com",
+        "host": "api-dev.mykro.be",
         "http": {
           "paths": [
             {

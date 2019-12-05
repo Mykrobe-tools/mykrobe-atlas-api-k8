@@ -22,7 +22,7 @@
       "spec": {
         "containers": [
           {
-            "image": "mthomsit/atlas-api:4",
+            "image": "makeandship/atlas-api:4",
             "name": "atlas-api",
             "ports": [
               {
@@ -67,7 +67,7 @@
               },
               {
                 "name": "ATLAS_APP",
-                "value": "https://dev-mykrobe-atlas.makeandship.com"
+                "value": "https://dev.mykro.be"
               },
               {
                 "name": "ES_SCHEME",
@@ -95,11 +95,11 @@
               },
               {
                 "name": "KEYCLOAK_REDIRECT_URI",
-                "value": "https://dev-mykrobe.makeandship.com/"
+                "value": "https://dev.mykro.be/"
               },
               {
                 "name": "API_HOST",
-                "value": "api-dev-mykrobe-atlas.makeandship.com"
+                "value": "api-dev.mykro.be"
               },
               {
                 "name": "DEBUG",
@@ -107,11 +107,11 @@
               },
               {
                 "name": "ANALYSIS_API",
-                "value": "https://analysis-api-dev-mykrobe-atlas.makeandship.com"
+                "value": "https://analysis-dev.mykro.be"
               },
               {
                 "name": "BIGSI_API",
-                "value": "https://dev-bigsi-mykrobe-atlas.makeandship.com"
+                "value": "https://bigsi-dev.mykro.be"
               },
               {
                 "name": "UPLOADS_LOCATION",
