@@ -30,7 +30,7 @@ before_script:
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
-  - git clone https://${GITLAB_USER_LOGIN}:${GITLAB_USER_ACCESS_TOKEN}@gitlab.ebi.ac.uk/davidyuan/vault.git
+#  - git clone https://${GITLAB_USER_LOGIN}:${GITLAB_USER_ACCESS_TOKEN}@gitlab.ebi.ac.uk/davidyuan/vault.git
   - find ${CI_PROJECT_DIR} -type f -name '*.sh' | xargs chmod +x
   - mkdir -p ${ARTIFACT_DIR}
   - PATH=${PATH}:${CI_PROJECT_DIR}
