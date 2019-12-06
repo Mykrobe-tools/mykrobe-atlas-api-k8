@@ -34,7 +34,7 @@ before_script:
   - find ${CI_PROJECT_DIR} -type f -name '*.sh' | xargs chmod +x
   - mkdir -p ${ARTIFACT_DIR}
   - PATH=${PATH}:${CI_PROJECT_DIR}
-#  - set
+  - set
 
 stages:
 #  - dev
