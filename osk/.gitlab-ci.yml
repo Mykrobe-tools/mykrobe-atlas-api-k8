@@ -4,6 +4,7 @@
 variables:
   #CLUSTER: "argent"
   KUBECONFIG: ${CI_PROJECT_DIR}/osk/argent.yml
+  GIT_SUBMODULE_STRATEGY: normal
 
 #dev-ehk:
 #  stage: dev
