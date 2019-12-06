@@ -9,7 +9,7 @@ contexts:
     cluster: argent
     user: kube-admin-argent
   name: argent
-current-context: gke_extreme-lore-114513_europe-west4-b_tsi-gpu-1
+current-context: argent
 kind: Config
 preferences: {}
 users:
