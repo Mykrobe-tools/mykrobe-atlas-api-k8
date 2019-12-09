@@ -1,0 +1,32 @@
+{
+  "apiVersion": "extensions/v1beta1",
+  "kind": "Ingress",
+  "metadata": {
+    "name": "db-ingress",
+    "annotations": {
+      "external-dns.alpha.kubernetes.io/hostname": "db-dev.mykro.be"
+    },
+    "namespace": "default"
+  },
+  "spec": {
+    "backend": {
+      "serviceName": "db",
+      "servicePort": 27017
+    },
+    "rules": [
+      {
+        "host": "db-dev.mykro.be",
+        "http": {
+          "paths": [
+            {
+              "backend": {
+                "serviceName": "db",
+                "servicePort": 27017
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

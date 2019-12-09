@@ -1,0 +1,114 @@
+{
+  "apiVersion": "apps/v1beta2",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "atlas-api"
+    },
+    "name": "atlas-api-deployment"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app": "atlas-api"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "atlas-api"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "#{image}",
+            "name": "atlas-api",
+            "ports": [ 
+              {
+                "containerPort": 3000,
+                "protocol": "TCP"
+              }
+            ],
+            "env": [
+              {
+                "name": "NODE_ENV",
+                "value": "production"
+              },
+              {
+                "name": "MONGO_USER",
+                "value": "#{MONGO_USER}"
+              },
+              {
+                "name": "MONGO_PASSWORD",
+                "value": "#{MONGO_PASSWORD}"
+              },
+              {
+                "name": "AWS_ACCESS_KEY",
+                "value": "#{AWS_ACCESS_KEY}"
+              },
+              {
+                "name": "AWS_SECRET_KEY",
+                "value": "#{AWS_SECRET_KEY}"
+              },
+              {
+                "name": "AWS_REGION",
+                "value": "#{AWS_REGION}"
+              },
+              {
+                "name": "ATLAS_APP",
+                "value": "#{ATLAS_APP}"
+              },
+              {
+                "name": "ES_SCHEME",
+                "value": "#{ES_SCHEME}"
+              },
+              {
+                "name": "ES_HOST",
+                "value": "#{ES_HOST}"
+              },
+              {
+                "name": "ES_PORT",
+                "value": "#{ES_PORT}"
+              },
+              {
+                "name": "ES_USERNAME",
+                "value": "#{ES_USERNAME}"
+              },
+              {
+                "name": "ES_PASSWORD",
+                "value": "Fc&S8QL<@j<&}3Bj"
+              },
+              {
+                "name": "ES_INDEX_NAME",
+                "value": "#{ES_INDEX_NAME}"
+              },
+              {
+                "name": "KEYCLOAK_REDIRECT_URI",
+                "value": "#{KEYCLOAK_REDIRECT_URI}"
+              },
+              {
+                "name": "API_HOST",
+                "value": "#{API_HOST}"
+              },
+              {
+                "name": "DB_PORT_27017_TCP_ADDR",
+                "value": "#{DB_PORT_27017_TCP_ADDR}"
+              },
+              {
+                "name": "ANALYSIS_API",
+                "value": "#{ANALYSIS_API}"
+              },
+              ,
+              {
+                "name": "BIGSI_API",
+                "value": "#{BIGSI_API}"
+              }
+            ]
+          }
+        ],
+        "imagePullSecrets": [{ "name": "dockerhub" }]
+      }
+    }
+  }
+}

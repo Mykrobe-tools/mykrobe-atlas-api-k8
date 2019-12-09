@@ -1,0 +1,149 @@
+{
+  "group": "API",
+  "name": "deploy",
+  "label_template": "${COUNT}",
+  "lock_behavior": "none",
+  "environment_variables": [
+    {
+      "name": "DOCKERHUB_USERNAME",
+      "value": "mthomsit"
+    },
+    {
+      "name": "NAMESPACE",
+      "value": "mykrobe"
+    },
+    {
+      "name": "AWS_SECRET_KEY",
+      "value": "Ch8GWtz5rJ4XOLNArg30thxfOX9oFqNyX3DS282V"
+    },
+    {
+      "name": "AWS_ACCESS_KEY",
+      "value": "AKIAIXA6O4I5CNPLVEZQ"
+    },
+    {
+      "name": "AWS_REGION",
+      "value": "eu-west-1"
+    },
+    {
+      "name": "ATLAS_APP",
+      "value": "https://dev-mykrobe.makeandship.com"
+    },
+    {
+      "name": "ES_CLUSTER_URL",
+      "value": "https://admin:Fc\u0026S8QL\u003c@j\u003c\u0026}3Bj@es-dev.makeandship.com:9200"
+    },
+    {
+      "name": "ES_INDEX_NAME",
+      "value": "mykrobe-dev"
+    },
+    {
+      "name": "KEYCLOAK_REDIRECT_URI",
+      "value": "https://dev-mykrobe.makeandship.com/"
+    },
+    {
+      "name": "SWAGGER_API_URL",
+      "value": "https://api-dev-mykrobe.makeandship.com/swagger.json"
+    },
+    {
+      "name": "API_HOST",
+      "value": "api-dev-mykrobe.makeandship.com"
+    },
+    {
+      "name": "KUBE_TOKEN",
+      "encrypted_value": "AES:lw3GRna3Bmm/MftAzTaJuA\u003d\u003d:K2fFLoI9NBhvOZJ5yxsQAxk9OxN2XU29XRaobdPFXXN9cMjOvMRlqpcSoMXORndgrPb+fX9aCWi3nyEplDwGfCVPPJ5seiySZov/t68+FQUojUZh8BQ+BDbjmi4TGYgJMgIBiYz9LnTUghXM4v7We/M/5A48tlVEGuPxKRWuiFaS1IqxZoQesKjPD24oG4RO3xibHiV0OpRxVAwtySC1gAj9lKnst9OZRye4ThCPd1mTGoiwe53rfNoHwvzwV/jsj/lUmcEE5ruvCd3LTKt0Qg7Z1u3yPZQo8OHbgkJf3D9cfLvx816tKEr3r5PpikvI3xhaUCPWmJFx6qnFgIDmgCHru51o7ZllHc4dNROZbAiotsNMDylTvEjSMYSTJV5sOlrb51OuA51h3Gwr5CNfHXgAfKPfYa2A7s17kSKqgNbDTJ03XLMnIqCQOMemCKxygyo+PL7btkysNOhiSG/lSkevgkgx4tprL9Z6N2jgM8tn7NKmVnFkrLS6jIJOjfA/vWX+/3eLQDUCWf+Omilu0HmajCRokiuT235638AWZzYaAAw2/lj/5tjpnfbHZGHCL1deAma/W/XuIyhGhHHL59SitxyF+I2aqawWNfnbFEn7JoMOAjPIZzYCN9XRqocEuKvAPzHkai1HOXYvBahhzKWODoHJwbJRwIxhbDlHVsswTfdBf7l6IBAU+vldqttS3kRuty9r8eSQABVHg3gU1QerpGbHz6mEInruMhH4Xy4+AyFTm4msUbYbFgzEGWofbZJLDxItEjnZb7EIfgtQHwTZ6i+xM8HhCtYQ2LoF35KVBllYZD/yTcgtslGCzoaxjqzFitXFxGgWTSkLi2PF6sb/n8HXlVRmixwV9oRT/Rddgkl84JtmlYT7h3MX+v1/wEL9gG9VzO3Azw90jd8veqW/aViK1HlYPw+iHZ6q0qzWqAHjpLVJFRpe8sO6NrHOqKTd1Y+V0XdrUG4/jXq0/sxs+kWNSvAvC+dbHtd8KTavcWzqeJgZ70nLcRBuMU7jS2gzj+4ZBo9MjM4zNufwEXq1a8SP8BRGn2l8TwVG/SiO1ewbxkWDIXIt+yjX/hFPtHdwpa5jFtgVBKiz9SWozg\u003d\u003d"
+    },
+    {
+      "name": "ANALYSIS_API",
+      "value": "https://analysis-api-dev-mykrobe.makeandship.com"
+    }
+  ],
+  "parameters": [],
+  "materials": [
+    {
+      "pipeline": "build",
+      "stage": "build",
+      "name": "build",
+      "type": "dependency"
+    },
+    {
+      "pipeline": "test.unit",
+      "stage": "test.unit",
+      "name": "test.unit",
+      "type": "dependency"
+    },
+    {
+      "pipeline": "test.integration",
+      "stage": "test.integration",
+      "name": "test.integration",
+      "type": "dependency"
+    },
+    {
+      "url": "git@api-deploy.atlas.github.com:Mykrobe-tools/mykrobe-atlas-api-k8.git",
+      "branch": "master",
+      "shallow_clone": false,
+      "filter": {
+        "ignore": [],
+        "whitelist": []
+      },
+      "auto_update": true,
+      "name": "mykrobe-atlas-api-k8",
+      "type": "git"
+    }
+  ],
+  "stages": [
+    {
+      "name": "deploy",
+      "fetch_materials": true,
+      "never_cleanup_artifacts": false,
+      "clean_working_directory": false,
+      "approval": {
+        "type": "success",
+        "users": [],
+        "roles": []
+      },
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "deploy",
+          "environment_variables": [],
+          "tabs": [
+            {
+              "name": "Integration",
+              "path": "testoutput/reports/integration-test-report.html"
+            }
+          ],
+          "resources": [],
+          "artifacts": [],
+          "properties": [],
+          "elastic_profile_id": "atlas-api",
+          "run_instance_count": "0",
+          "timeout": 0.0,
+          "tasks": [
+            {
+              "artifact_id": "atlas-api",
+              "configuration": [
+                {
+                  "key": "EnvironmentVariablePrefix",
+                  "value": ""
+                }
+              ],
+              "pipeline": "build",
+              "stage": "build",
+              "job": "build",
+              "artifact_origin": "external",
+              "run_if": "passed",
+              "type": "fetch"
+            },
+            {
+              "command": "./deploy.sh",
+              "timeout": -1.0,
+              "arguments": [],
+              "run_if": "passed",
+              "type": "exec"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
