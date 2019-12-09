@@ -35,6 +35,7 @@ before_script:
   - mkdir -p ${ARTIFACT_DIR}
   - PATH=${PATH}:${CI_PROJECT_DIR}
   - set
+  - git config --list
 
 stages:
 #  - dev
