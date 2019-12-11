@@ -17,7 +17,7 @@ sed -i "s~#{KEYCLOAK_REDIRECT_URI}~$KEYCLOAK_REDIRECT_URI~g" atlas-api-deploymen
 sed -i "s~#{API_HOST}~$API_HOST~g" atlas-api-deployment.json
 sed -i "s~#{DB_PORT_27017_TCP_ADDR}~$DB_PORT_27017_TCP_ADDR~g" atlas-api-deployment.json
 sed -i "s~#{ANALYSIS_API}~$ANALYSIS_API~g" atlas-api-deployment.json
-
+sed -i "s~#{GOOGLE_MAPS_API_KEY}~$GOOGLE_MAPS_API_KEY~g" atlas-api-deployment.json
 
 if [ -z $KUBE_TOKEN ]; then
   echo "FATAL: Environment Variable KUBE_TOKEN must be specified."

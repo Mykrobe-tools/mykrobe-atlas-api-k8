@@ -104,6 +104,10 @@
               {
                 "name": "ANALYSIS_API",
                 "value": "https://analysis-api-dev-mykrobe-atlas.makeandship.com"
+              },
+              {
+                "name": "GOOGLE_MAPS_API_KEY",
+                "value": "AIzaSyAe_EWm97fTPHqzfRrhu2DVwO_iseBQkAc"
               }
             ]
           }
