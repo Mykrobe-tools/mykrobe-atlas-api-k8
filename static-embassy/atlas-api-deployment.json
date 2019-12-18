@@ -132,7 +132,7 @@
           {
             "name": "uploads-volume",
             "persistentVolumeClaim": {
-              "claimName": "uploads"
+              "claimName": "uploads-data"
             }
           },
           {
