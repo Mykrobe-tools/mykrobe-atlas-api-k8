@@ -8,6 +8,7 @@
     "name": "keycloak-deployment"
   },
   "spec": {
+    "replicas": 1,
     "selector": {
       "matchLabels": {
         "app": "keycloak"
@@ -22,7 +23,7 @@
       "spec": {
         "containers": [
           {
-            "image": "makeandship/keycloak",
+            "image": "makeandship/keycloak:1",
             "name": "keycloak",
             "ports": [
               {
@@ -43,11 +44,15 @@
               },
               {
                 "name": "DB_ADDR",
-                "value": "postgres"
+                "value": "keycloak-postgres"
               },
               {
                 "name": "DB_DATABASE",
                 "value": "keycloak"
+              },
+              {
+                "name": "DB_PORT",
+                "value": "5432"
               },
               {
                 "name": "DB_USER",

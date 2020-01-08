@@ -5,7 +5,7 @@
     "labels": {
       "app": "postgres"
     },
-    "name": "postgres"
+    "name": "keycloak-postgres"
   },
   "spec": {
     "replicas": 1,
