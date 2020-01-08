@@ -76,7 +76,7 @@
             {
               "name": "keycloak-theme-volume",
               "persistentVolumeClaim": {
-                "claimName": "keycloak-theme-pvc"
+                "claimName": "keycloak-theme-data"
               }
             }
           ],

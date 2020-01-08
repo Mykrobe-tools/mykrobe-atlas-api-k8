@@ -2,7 +2,7 @@
   "apiVersion": "v1",
   "kind": "PersistentVolumeClaim",
   "metadata": {
-    "name": "keycloak-theme-pvc",
+    "name": "keycloak-theme-data",
     "namespace": "default"
   },
   "spec": {

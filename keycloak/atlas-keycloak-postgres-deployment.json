@@ -53,7 +53,7 @@
           {
             "name": "postgresdb",
             "persistentVolumeClaim": {
-              "claimName": "postgres-pvc"
+              "claimName": "postgres-data"
             }
           }
         ]
