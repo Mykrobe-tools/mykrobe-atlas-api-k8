@@ -99,7 +99,7 @@
               },
               {
                 "name": "KEYCLOAK_URL",
-                "value": "https://accounts-dev.makeandship.com"
+                "value": "https://accounts-dev.makeandship.com/auth"
               },
               {
                 "name": "KEYCLOAK_ADMIN_PASSWORD",
