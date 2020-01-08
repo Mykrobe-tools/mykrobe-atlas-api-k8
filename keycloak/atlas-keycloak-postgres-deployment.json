@@ -30,7 +30,7 @@
             "volumeMounts": [
               {
                 "mountPath": "/var/lib/postgresql/data",
-                "name": "postgredb"
+                "name": "postgresdb"
               }
             ],
             "env": [
@@ -51,9 +51,9 @@
         ],
         "volumes": [
           {
-            "name": "postgredb",
+            "name": "postgresdb",
             "persistentVolumeClaim": {
-              "claimName": "postgres-pv-claim"
+              "claimName": "postgres-pvc"
             }
           }
         ]

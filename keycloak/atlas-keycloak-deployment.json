@@ -33,7 +33,7 @@
               "volumeMounts": [
                 {
                   "mountPath": "/opt/jboss/keycloak/themes/mykrobe",
-                  "name": "theme-volume"
+                  "name": "keycloak-theme-volume"
                 }
               ],
               "env": [
@@ -74,9 +74,9 @@
           ],
           "volumes": [
             {
-              "name": "theme-volume",
+              "name": "keycloak-theme-volume",
               "persistentVolumeClaim": {
-                "claimName": "keycloak-theme"
+                "claimName": "keycloak-theme-pvc"
               }
             }
           ],
