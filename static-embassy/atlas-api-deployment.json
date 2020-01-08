@@ -22,7 +22,7 @@
       "spec": {
         "containers": [
           {
-            "image": "makeandship/atlas-api:4",
+            "image": "makeandship/atlas-api:6",
             "name": "atlas-api",
             "ports": [
               {
@@ -96,6 +96,10 @@
               {
                 "name": "KEYCLOAK_REDIRECT_URI",
                 "value": "https://dev.mykro.be/"
+              },
+              {
+                "name": "KEYCLOAK_ADMIN_PASSWORD",
+                "value": "tvDW6jnTHFCZJhDbsTSZDMfY"
               },
               {
                 "name": "API_HOST",
