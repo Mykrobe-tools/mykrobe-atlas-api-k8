@@ -1,0 +1,87 @@
+{
+    "apiVersion": "apps/v1beta2",
+    "kind": "Deployment",
+    "metadata": {
+      "labels": {
+        "app": "keycloak"
+      },
+      "name": "keycloak-deployment"
+    },
+    "spec": {
+      "selector": {
+        "matchLabels": {
+          "app": "keycloak"
+        }
+      },
+      "template": {
+        "metadata": {
+          "labels": {
+            "app": "keycloak"
+          }
+        },
+        "spec": {
+          "containers": [
+            {
+              "image": "makeandship/keycloak",
+              "name": "keycloak",
+              "ports": [
+                {
+                  "containerPort": 8080,
+                  "protocol": "http"
+                }
+              ],
+              "volumeMounts": [
+                {
+                  "mountPath": "/opt/jboss/keycloak/themes/mykrobe",
+                  "name": "theme-volume"
+                }
+              ],
+              "env": [
+                {
+                  "name": "DB_VENDOR",
+                   "value": "POSTGRES"
+                },
+                {
+                  "name": "DB_ADDR",
+                  "value": "postgres"
+                },
+                {
+                  "name": "DB_DATABASE",
+                  "value": "keycloak"
+                },
+                {
+                  "name": "DB_USER",
+                  "value": "keycloak"
+                },
+                {
+                  "name": "DB_PASSWORD",
+                  "value": "GpwL9EHF7VmHZFYWaAf9GYHp"
+                },
+                {
+                  "name": "KEYCLOAK_USER",
+                  "value": "admin"
+                },
+                {
+                  "name": "KEYCLOAK_PASSWORD",
+                  "value": "ND8KeyqjBn6KWGuseVdefU3X"
+                },
+                {
+                  "name": "PROXY_ADDRESS_FORWARDING",
+                  "value": "true"
+                }
+              ]
+            }
+          ],
+          "volumes": [
+            {
+              "name": "theme-volume",
+              "persistentVolumeClaim": {
+                "claimName": "keycloak-theme"
+              }
+            }
+          ],
+          "imagePullSecrets": [{ "name": "dockerhub" }]
+        }
+      }
+    }
+}
