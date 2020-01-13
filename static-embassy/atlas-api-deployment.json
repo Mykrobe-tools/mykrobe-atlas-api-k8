@@ -22,7 +22,7 @@
       "spec": {
         "containers": [
           {
-            "image": "makeandship/atlas-api:12",
+            "image": "makeandship/atlas-api:22",
             "name": "atlas-api",
             "ports": [
               {
@@ -140,7 +140,7 @@
           {
             "name": "uploads-volume",
             "persistentVolumeClaim": {
-              "claimName": "uploads"
+              "claimName": "uploads-data"
             }
           },
           {
