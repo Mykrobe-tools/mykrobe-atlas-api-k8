@@ -22,7 +22,7 @@
       "spec": {
         "containers": [
           {
-            "image": "makeandship/atlas-api:7",
+            "image": "makeandship/atlas-api:34",
             "name": "atlas-api",
             "ports": [
               {
@@ -99,7 +99,7 @@
               },
               {
                 "name": "KEYCLOAK_URL",
-                "value": "https://accounts-dev.makeandship.com/auth"
+                "value": "https://accounts.makeandship.com/auth"
               },
               {
                 "name": "KEYCLOAK_ADMIN_PASSWORD",
@@ -140,7 +140,7 @@
           {
             "name": "uploads-volume",
             "persistentVolumeClaim": {
-              "claimName": "uploads"
+              "claimName": "uploads-data"
             }
           },
           {
