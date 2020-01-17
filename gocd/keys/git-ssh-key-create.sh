@@ -1,0 +1,12 @@
+kubectl create secret generic git-ssh-key \
+    --from-file=config=config \
+    --from-file=bitbucket-readonly=bitbucket-readonly \
+    --from-file=atlas-api-readonly=atlas-api-readonly \
+    --from-file=atlas-readonly=atlas-readonly \
+  	--from-file=atlas-api-deploy-readonly=atlas-api-deploy-readonly \
+    --from-file=atlas-deploy-readonly=atlas-deploy-readonly \
+    --from-file=atlas-jsonschema-readonly=atlas-jsonschema-readonly \
+	--from-file=atlas-cli-deploy-readonly=atlas-cli-deploy-readonly \
+    --from-file=atlas-pipelines-readonly=atlas-pipelines-readonly \
+    --from-file=known_hosts=known_hosts \
+    --namespace gocd
