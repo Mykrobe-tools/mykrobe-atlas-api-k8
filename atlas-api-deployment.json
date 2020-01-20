@@ -22,7 +22,7 @@
       "spec": {
         "containers": [
           {
-            "image": "#{ARTEFACT_IMAGE}",
+            "image": "#{ARTIFACT_IMAGE}",
             "name": "atlas-api",
             "ports": [ 
               {
