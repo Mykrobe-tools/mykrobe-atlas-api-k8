@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+# --------------------------------------------------------------
+# Automated deployment using the kubernetes API:
+
+# - MongoDB: Replication Controller
+# - MongoDB: Service
+# - MongoDB: Ingress (not autodeployed or used)
+# - MongoDB: PVC (not autodeployed)
+
+# - API: Deployment
+# - API: Service
+# - API: Ingress
+# - API: PVC (not autodeployed)
+# --------------------------------------------------------------
+
 sed -i "s~#{ARTEFACT_IMAGE}~$ARTIFACT_IMAGE~g" atlas-api-deployment.json
 sed -i "s~#{MONGO_USER}~$MONGO_USER~g" atlas-api-deployment.json
 sed -i "s~#{MONGO_PASSWORD}~$MONGO_PASSWORD~g" atlas-api-deployment.json
