@@ -1,0 +1,16 @@
+{
+  "apiVersion": "v1",
+  "kind": "PersistentVolumeClaim",
+  "metadata": {
+    "name": "gocd-pvc",
+    "namespace": "gocd"
+  },
+  "spec": {
+    "accessModes": ["ReadWriteMany"],
+    "resources": {
+      "requests": {
+        "storage": "5Gi"
+      }
+    }
+  }
+}

@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 
-sed -i "s~#{image}~$ARTIFACT_IMAGE~g" atlas-api-deployment.json
+# --------------------------------------------------------------
+# Automated deployment using the kubernetes API:
+
+# - MongoDB: Replication Controller
+# - MongoDB: Service
+# - MongoDB: Ingress (not autodeployed or used)
+# - MongoDB: PVC (not autodeployed)
+
+# - API: Deployment
+# - API: Service
+# - API: Ingress
+# - API: PVC (not autodeployed)
+# --------------------------------------------------------------
+
+sed -i "s~#{ARTEFACT_IMAGE}~$ARTIFACT_IMAGE~g" atlas-api-deployment.json
 sed -i "s~#{MONGO_USER}~$MONGO_USER~g" atlas-api-deployment.json
 sed -i "s~#{MONGO_PASSWORD}~$MONGO_PASSWORD~g" atlas-api-deployment.json
 sed -i "s~#{AWS_ACCESS_KEY}~$AWS_ACCESS_KEY~g" atlas-api-deployment.json
@@ -15,8 +29,12 @@ sed -i "s~{{ES_PASSWORD}}~$ES_PASSWORD~g" atlas-api-deployment.json
 sed -i "s~#{ES_INDEX_NAME}~$ES_INDEX_NAME~g" atlas-api-deployment.json
 sed -i "s~#{KEYCLOAK_REDIRECT_URI}~$KEYCLOAK_REDIRECT_URI~g" atlas-api-deployment.json
 sed -i "s~#{API_HOST}~$API_HOST~g" atlas-api-deployment.json
-sed -i "s~#{DB_PORT_27017_TCP_ADDR}~$DB_PORT_27017_TCP_ADDR~g" atlas-api-deployment.json
+sed -i "s~#{DEBUG}~$DEBUG~g" atlas-api-deployment.json
 sed -i "s~#{ANALYSIS_API}~$ANALYSIS_API~g" atlas-api-deployment.json
+sed -i "s~#{BIGSI_API}~$BIGSI_API~g" atlas-api-deployment.json
+sed -i "s~#{UPLOADS_LOCATION}~$UPLOADS_LOCATION~g" atlas-api-deployment.json
+sed -i "s~#{DEMO_DATA_ROOT_FOLDER}~$DEMO_DATA_ROOT_FOLDER~g" atlas-api-deployment.json
+sed -i "s~#{LOCATIONIQ_API_KEY}~$LOCATIONIQ_API_KEY~g" atlas-api-deployment.json
 
 
 if [ -z $KUBE_TOKEN ]; then

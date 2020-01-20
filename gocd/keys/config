@@ -1,0 +1,41 @@
+Host bitbucket.org
+Hostname bitbucket.org
+IdentityFile /home/go/.ssh/bitbucket-readonly
+User git
+IdentitiesOnly yes
+
+Host api.atlas.github.com
+Hostname github.com
+IdentityFile /home/go/.ssh/atlas-api-readonly
+User git
+IdentitiesOnly yes
+
+Host api-deploy.atlas.github.com
+Hostname github.com
+IdentityFile /home/go/.ssh/atlas-api-deploy-readonly
+User git
+IdentitiesOnly yes
+
+Host client.atlas.github.com
+Hostname github.com
+IdentityFile /home/go/.ssh/atlas-readonly
+User git
+IdentitiesOnly yes
+
+Host client-deploy.atlas.github.com
+Hostname github.com
+IdentityFile /home/go/.ssh/atlas-deploy-readonly
+User git
+IdentitiesOnly yes
+
+Host cli-deploy.atlas.github.com
+Hostname github.com
+IdentityFile /home/go/.ssh/atlas-cli-deploy-readonly
+User git
+IdentitiesOnly yes
+
+Host pipelines.atlas.github.com
+Hostname github.com
+IdentityFile /home/go/.ssh/atlas-pipelines-readonly
+User git
+IdentitiesOnly yes

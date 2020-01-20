@@ -6,7 +6,7 @@
     "labels": {
       "name": "db"
     },
-    "namespace": "mykrobe"
+    "namespace": "default"
   },
   "spec": {
     "type": "NodePort",
