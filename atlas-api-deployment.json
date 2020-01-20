@@ -22,12 +22,22 @@
       "spec": {
         "containers": [
           {
-            "image": "#{image}",
+            "image": "#{ARTEFACT_IMAGE}",
             "name": "atlas-api",
             "ports": [ 
               {
                 "containerPort": 3000,
                 "protocol": "TCP"
+              }
+            ],
+            "volumeMounts": [
+              {
+                "mountPath": "/app/uploads",
+                "name": "uploads-volume"
+              },
+              {
+                "mountPath": "/app/demo",
+                "name": "demo-volume"
               }
             ],
             "env": [
@@ -77,7 +87,7 @@
               },
               {
                 "name": "ES_PASSWORD",
-                "value": "Fc&S8QL<@j<&}3Bj"
+                "value": "#{ES_PASSWORD}"
               },
               {
                 "name": "ES_INDEX_NAME",
@@ -88,23 +98,56 @@
                 "value": "#{KEYCLOAK_REDIRECT_URI}"
               },
               {
+                "name": "KEYCLOAK_URL",
+                "value": "#{KEYCLOAK_URI}"
+              },
+              {
+                "name": "KEYCLOAK_ADMIN_PASSWORD",
+                "value": "#{KEYCLOAK_ADMIN_PASSWORD}"
+              },
+              {
                 "name": "API_HOST",
                 "value": "#{API_HOST}"
               },
               {
-                "name": "DB_PORT_27017_TCP_ADDR",
-                "value": "#{DB_PORT_27017_TCP_ADDR}"
+                "name": "DEBUG",
+                "value": "#{DEBUG}"
               },
               {
                 "name": "ANALYSIS_API",
                 "value": "#{ANALYSIS_API}"
               },
-              ,
               {
                 "name": "BIGSI_API",
                 "value": "#{BIGSI_API}"
+              },
+              {
+                "name": "UPLOADS_LOCATION",
+                "value": "#{UPLOADS_LOCATION}"
+              },
+              {
+                "name": "DEMO_DATA_ROOT_FOLDER",
+                "value": "#{DEMO_DATA_ROOT_FOLDER}"
+              },
+              {
+                "name": "LOCATIONIQ_API_KEY",
+                "value": "#{LOCATION_API_KEY}"
               }
             ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "uploads-volume",
+            "persistentVolumeClaim": {
+              "claimName": "uploads-data"
+            }
+          },
+          {
+            "name": "demo-volume",
+            "persistentVolumeClaim": {
+              "claimName": "demo-data"
+            }
           }
         ],
         "imagePullSecrets": [{ "name": "dockerhub" }]
