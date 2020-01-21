@@ -119,7 +119,7 @@ echo
 # --------------------------------------------------------------
 
 echo
-echo "Deploying API using $$DOCKERHUB_ORGANISATION/atlas-api:$GO_DEPENDENCY_LABEL_BUILD"
+echo "Deploying API using $DOCKERHUB_ORGANISATION/atlas-api:$GO_DEPENDENCY_LABEL_BUILD"
 
 # --------------------------------------------------------------
 
