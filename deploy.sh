@@ -14,7 +14,7 @@
 # - API: PVC (not autodeployed)
 # --------------------------------------------------------------
 
-sed -i "s~#{ARTIFACT_IMAGE}~$DOCKERHUB_ORGANISATION/atlas-api:$GO_DEPENDENCY_LABEL_UPSTREAM~g" atlas-api-deployment.json
+sed -i "s~#{ARTIFACT_IMAGE}~$DOCKERHUB_ORGANISATION/atlas-api:$GO_DEPENDENCY_LABEL_BUILD~g" atlas-api-deployment.json
 sed -i "s~#{MONGO_USER}~$MONGO_USER~g" atlas-api-deployment.json
 sed -i "s~#{MONGO_PASSWORD}~$MONGO_PASSWORD~g" atlas-api-deployment.json
 sed -i "s~#{AWS_ACCESS_KEY}~$AWS_ACCESS_KEY~g" atlas-api-deployment.json
@@ -119,7 +119,7 @@ echo
 # --------------------------------------------------------------
 
 echo
-echo "Deploying API using $ARTIFACT_IMAGE"
+echo "Deploying API using $$DOCKERHUB_ORGANISATION/atlas-api:$GO_DEPENDENCY_LABEL_BUILD"
 
 # --------------------------------------------------------------
 
