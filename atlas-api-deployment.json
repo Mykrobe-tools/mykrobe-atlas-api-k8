@@ -99,7 +99,7 @@
               },
               {
                 "name": "KEYCLOAK_URL",
-                "value": "#{KEYCLOAK_URI}"
+                "value": "#{KEYCLOAK_URL}"
               },
               {
                 "name": "KEYCLOAK_ADMIN_PASSWORD",
