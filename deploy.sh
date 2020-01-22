@@ -28,6 +28,7 @@ sed -i "s~#{ES_USERNAME}~$ES_USERNAME~g" atlas-api-deployment.json
 sed -i "s~#{ES_PASSWORD}~$ES_PASSWORD~g" atlas-api-deployment.json
 sed -i "s~#{ES_INDEX_NAME}~$ES_INDEX_NAME~g" atlas-api-deployment.json
 sed -i "s~#{KEYCLOAK_REDIRECT_URI}~$KEYCLOAK_REDIRECT_URI~g" atlas-api-deployment.json
+sed -i "s~#{KEYCLOAK_ADMIN_PASSWORD}~$KEYCLOAK_ADMIN_PASSWORD~g" atlas-api-deployment.json
 sed -i "s~#{KEYCLOAK_URL}~$KEYCLOAK_URL~g" atlas-api-deployment.json
 sed -i "s~#{API_HOST}~$API_HOST~g" atlas-api-deployment.json
 sed -i "s~#{DEBUG}~$DEBUG~g" atlas-api-deployment.json
