@@ -54,7 +54,7 @@ echo "Deploying Keycloak using $DOCKERHUB_ORGANISATION/atlas-keycloak:$GO_DEPEND
 # --------------------------------------------------------------
 
 status_code=$(curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-keycloak-deployment" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/keycloak-deployment" \
     -X GET -o /dev/null -w "%{http_code}")
 
 echo
@@ -65,7 +65,7 @@ if [ $status_code == 200 ]; then
   echo
 
   curl -H 'Content-Type: application/strategic-merge-patch+json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
-    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-keycloak-deployment" \
+    "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/keycloak-deployment" \
     -X PATCH -d @keycloak/atlas-keycloak-deployment.json
 else
   echo "Creating deployment"
