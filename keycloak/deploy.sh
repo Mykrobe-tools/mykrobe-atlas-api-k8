@@ -14,17 +14,17 @@
 # - API: PVC (not autodeployed)
 # --------------------------------------------------------------
 
-sed -i "s~#{ARTIFACT_IMAGE}~$DOCKERHUB_ORGANISATION/atlas-keycloak:$GO_DEPENDENCY_LABEL_BUILD~g" atlas-keycloak-deployment.json
+sed -i "s~#{ARTIFACT_IMAGE}~$DOCKERHUB_ORGANISATION/atlas-keycloak:$GO_DEPENDENCY_LABEL_BUILD~g" keycloak/atlas-keycloak-deployment.json
 
-sed -i "s~#{KEYCLOAK_DB_VENDOR}~$KEYCLOAK_DB_VENDOR~g" atlas-keycloak-deployment.json
-sed -i "s~#{KEYCLOAK_DB_ADDR}~$KEYCLOAK_DB_ADDR~g" atlas-keycloak-deployment.json
-sed -i "s~#{KEYCLOAK_DB_DATABASE}~$KEYCLOAK_DB_DATABASE~g" atlas-keycloak-deployment.json
-sed -i "s~#{KEYCLOAK_DB_PORT}~$KEYCLOAK_DB_PORT~g" atlas-keycloak-deployment.json
-sed -i "s~#{KEYCLOAK_DB_USER}~$KEYCLOAK_DB_USER~g" atlas-keycloak-deployment.json
-sed -i "s~#{KEYCLOAK_DB_PASSWORD}~$KEYCLOAK_DB_PASSWORD~g" atlas-keycloak-deployment.json
-sed -i "s~#{KEYCLOAK_USER}~$KEYCLOAK_USER~g" atlas-keycloak-deployment.json
-sed -i "s~#{KEYCLOAK_PASSWORD}~$KEYCLOAK_PASSWORD~g" atlas-keycloak-deployment.json
-sed -i "s~#{PROXY_ADDRESS_FORWARDING}~$PROXY_ADDRESS_FORWARDING~g" atlas-keycloak-deployment.json
+sed -i "s~#{KEYCLOAK_DB_VENDOR}~$KEYCLOAK_DB_VENDOR~g" keycloak/atlas-keycloak-deployment.json
+sed -i "s~#{KEYCLOAK_DB_ADDR}~$KEYCLOAK_DB_ADDR~g" keycloak/atlas-keycloak-deployment.json
+sed -i "s~#{KEYCLOAK_DB_DATABASE}~$KEYCLOAK_DB_DATABASE~g" keycloak/atlas-keycloak-deployment.json
+sed -i "s~#{KEYCLOAK_DB_PORT}~$KEYCLOAK_DB_PORT~g" keycloak/atlas-keycloak-deployment.json
+sed -i "s~#{KEYCLOAK_DB_USER}~$KEYCLOAK_DB_USER~g" keycloak/atlas-keycloak-deployment.json
+sed -i "s~#{KEYCLOAK_DB_PASSWORD}~$KEYCLOAK_DB_PASSWORD~g" keycloak/atlas-keycloak-deployment.json
+sed -i "s~#{KEYCLOAK_USER}~$KEYCLOAK_USER~g" keycloak/atlas-keycloak-deployment.json
+sed -i "s~#{KEYCLOAK_PASSWORD}~$KEYCLOAK_PASSWORD~g" keycloak/atlas-keycloak-deployment.json
+sed -i "s~#{PROXY_ADDRESS_FORWARDING}~$PROXY_ADDRESS_FORWARDING~g" keycloak/atlas-keycloak-deployment.json
 
 if [ -z $KUBE_TOKEN ]; then
   echo "FATAL: Environment Variable KUBE_TOKEN must be specified."
@@ -66,14 +66,14 @@ if [ $status_code == 200 ]; then
 
   curl -H 'Content-Type: application/strategic-merge-patch+json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments/atlas-keycloak-deployment" \
-    -X PATCH -d @atlas-keycloak-deployment.json
+    -X PATCH -d @keycloak/atlas-keycloak-deployment.json
 else
   echo "Creating deployment"
   echo
 
   curl -H 'Content-Type: application/json' -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
     "https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/apis/apps/v1beta2/namespaces/$NAMESPACE/deployments" \
-    -X POST -d @atlas-keycloak-deployment.json
+    -X POST -d @keycloak/atlas-keycloak-deployment.json
 fi
 
 echo
