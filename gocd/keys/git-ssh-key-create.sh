@@ -8,5 +8,6 @@ kubectl create secret generic git-ssh-key \
     --from-file=atlas-jsonschema-readonly=atlas-jsonschema-readonly \
 	--from-file=atlas-cli-deploy-readonly=atlas-cli-deploy-readonly \
     --from-file=atlas-pipelines-readonly=atlas-pipelines-readonly \
+    --from-file=atlas-keycloak-readonly=atlas-keycloak-readonly \
     --from-file=known_hosts=known_hosts \
     --namespace gocd
