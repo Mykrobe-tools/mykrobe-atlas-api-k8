@@ -44,8 +44,34 @@
             ],
             "volumeMounts": [
               {
-                "mountPath": "/node2/",
-                "name": "elasticsearch-data"
+                "name": "elasticsearch-data",
+                "mountPath": "/usr/share/elasticsearch/data",
+                "subPath": "data2"
+              },
+              {
+                "name": "elasticsearch-config",
+                "mountPath": "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig/config.yml",
+                "subPath": "config.yml"
+              },
+              {
+                "name": "elasticsearch-config",
+                "mountPath": "/usr/share/elasticsearch/config/elasticsearch.yml",
+                "subPath": "custom-elasticsearch.yml"
+              },
+              {
+                "name": "es-admin-dev-mykrobe-be",
+                "mountPath": "/usr/share/elasticsearch/config/chain.pem",
+                "subPath": "tls.cert"
+              },
+              {
+                "name": "es-admin-dev-mykrobe-be",
+                "mountPath": "/usr/share/elasticsearch/config/cert.pem",
+                "subPath": "tls.cert"
+              },
+              {
+                "name": "es-admin-dev-mykrobe-be",
+                "mountPath": "/usr/share/elasticsearch/config/privkey.pem",
+                "subPath": "tls.key"
               }
             ],
             "env": [
@@ -85,6 +111,18 @@
             "name": "elasticsearch-data",
             "persistentVolumeClaim": {
               "claimName": "elasticsearch-data"
+            }
+          },
+          {
+            "name": "elasticsearch-config",
+            "secret": {
+              "secretName": "es-dev-config"
+            }
+          },
+          {
+            "name": "es-admin-dev-mykrobe-be",
+            "secret": {
+              "secretName": "es-admin-dev-mykrobe-be"
             }
           }
         ],

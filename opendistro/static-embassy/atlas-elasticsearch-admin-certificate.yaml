@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: es-admin-dev-mykro-be
+  namespace: default
+spec:
+  secretName: es-admin-dev-mykro-be
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: 'es-admin-dev.mykro.be'
+  dnsNames:
+  - es-admin-dev.mykro.be
+  acme:
+    config:
+    - dns01:
+        provider: cf-dns
+      domains:
+        - es-admin-dev.mykro.be
