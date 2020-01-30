@@ -1,0 +1,95 @@
+{
+  "apiVersion": "apps/v1beta2",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "odfe-node1"
+    },
+    "name": "odfe-node1"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "odfe-node1"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "odfe-node1"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "amazon/opendistro-for-elasticsearch:1.2.0",
+            "name": "odfe-node1",
+            "ports": [
+              {
+                "containerPort": 9200,
+                "protocol": "TCP",
+                "name": "http"
+              },
+              {
+                "containerPort": 9300,
+                "protocol": "TCP",
+                "name": "transport"
+              },
+              {
+                "containerPort": 9600,
+                "protocol": "TCP",
+                "name": "metrics"
+              }
+            ],
+            "volumeMounts": [
+              {
+                "mountPath": "/node1/",
+                "name": "elasticsearch-data"
+              }
+            ],
+            "env": [
+              {
+                "name": "cluster.name",
+                "value": "odfe-cluster"
+              },
+              {
+                "name": "node.name",
+                "value": "odfe-node1"
+              },
+              {
+                "name": "discovery.seed_hosts",
+                "value": "odfe-cluster"
+              },
+              {
+                "name": "cluster.initial_master_nodes",
+                "value": "odfe-node1,odfe-node2"
+              },
+              {
+                "name": "cluster.name",
+                "value": "odfe-cluster"
+              },
+              {
+                "name": "bootstrap.memory_lock",
+                "value": "true"
+              },
+              {
+                "name": "ES_JAVA_OPTS",
+                "value": "Xms512m -Xmx512m"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "elasticsearch-data",
+            "persistentVolumeClaim": {
+              "claimName": "elasticsearch-data"
+            }
+          }
+        ],
+        "imagePullSecrets": [{ "name": "dockerhub" }]
+      }
+    }
+  }
+}
