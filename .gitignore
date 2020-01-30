@@ -6,4 +6,5 @@ gocd/keys/atlas-deploy-readonly
 gocd/keys/atlas-jsonschema-readonly
 gocd/keys/atlas-pipelines-readonly
 gocd/keys/atlas-readonly
+gocd/keys/atlas-keycloak-readonly
 gocd/keys/bitbucket-readonly

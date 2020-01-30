@@ -22,6 +22,12 @@ IdentityFile /home/go/.ssh/atlas-readonly
 User git
 IdentitiesOnly yes
 
+Host keycloak.atlas.github.com
+Hostname github.com
+IdentityFile /home/go/.ssh/atlas-keycloak-readonly
+User git
+IdentitiesOnly yes
+
 Host client-deploy.atlas.github.com
 Hostname github.com
 IdentityFile /home/go/.ssh/atlas-deploy-readonly

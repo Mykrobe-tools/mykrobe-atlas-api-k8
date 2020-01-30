@@ -23,7 +23,7 @@
       "spec": {
         "containers": [
           {
-            "image": "#{ARTIFACT_IMAGE}",
+            "image": "makeandship/keycloak:1",
             "name": "keycloak",
             "ports": [
               {
@@ -40,39 +40,39 @@
             "env": [
               {
                 "name": "DB_VENDOR",
-                "value": "#{KEYCLOAK_DB_VENDOR}"
+                 "value": "POSTGRES"
               },
               {
                 "name": "DB_ADDR",
-                "value": "#{KEYCLOAK_DB_ADDR}"
+                "value": "keycloak-postgres"
               },
               {
                 "name": "DB_DATABASE",
-                "value": "#{KEYCLOAK_DB_DATABASE}"
+                "value": "keycloak"
               },
               {
                 "name": "DB_PORT",
-                "value": "#{KEYCLOAK_DB_PORT}"
+                "value": "5432"
               },
               {
                 "name": "DB_USER",
-                "value": "#{KEYCLOAK_DB_USER}"
+                "value": "keycloak"
               },
               {
                 "name": "DB_PASSWORD",
-                "value": "#{KEYCLOAK_DB_PASSWORD}"
+                "value": "GpwL9EHF7VmHZFYWaAf9GYHp"
               },
               {
                 "name": "KEYCLOAK_USER",
-                "value": "#{KEYCLOAK_USER}"
+                "value": "admin"
               },
               {
                 "name": "KEYCLOAK_PASSWORD",
-                "value": "#{KEYCLOAK_PASSWORD}"
+                "value": "ND8KeyqjBn6KWGuseVdefU3X"
               },
               {
                 "name": "PROXY_ADDRESS_FORWARDING",
-                "value": "#{PROXY_ADDRESS_FORWARDING}"
+                "value": "true"
               }
             ]
           }
