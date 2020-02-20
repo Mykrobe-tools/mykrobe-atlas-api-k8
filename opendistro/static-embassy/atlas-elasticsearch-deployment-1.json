@@ -59,17 +59,22 @@
                 "subPath": "custom-elasticsearch.yml"
               },
               {
-                "name": "es-admin-dev-mykrobe-be",
+                "name": "es-admin-dev-mykro-be",
+                "mountPath": "/usr/share/elasticsearch/config/fullchain.pem",
+                "subPath": "tls.crt"
+              },
+              {
+                "name": "es-admin-dev-mykro-be",
                 "mountPath": "/usr/share/elasticsearch/config/chain.pem",
-                "subPath": "tls.cert"
+                "subPath": "tls.crt"
               },
               {
-                "name": "es-admin-dev-mykrobe-be",
+                "name": "es-admin-dev-mykro-be",
                 "mountPath": "/usr/share/elasticsearch/config/cert.pem",
-                "subPath": "tls.cert"
+                "subPath": "tls.crt"
               },
               {
-                "name": "es-admin-dev-mykrobe-be",
+                "name": "es-admin-dev-mykro-be",
                 "mountPath": "/usr/share/elasticsearch/config/privkey.pem",
                 "subPath": "tls.key"
               }
@@ -101,7 +106,7 @@
               },
               {
                 "name": "ES_JAVA_OPTS",
-                "value": "Xms512m -Xmx512m"
+                "value": "-Xms512m -Xmx512m"
               }
             ]
           }
@@ -120,9 +125,9 @@
             }
           },
           {
-            "name": "es-admin-dev-mykrobe-be",
+            "name": "es-admin-dev-mykro-be",
             "secret": {
-              "secretName": "es-admin-dev-mykrobe-be"
+              "secretName": "es-admin-dev-mykro-be"
             }
           }
         ],

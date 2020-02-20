@@ -1,6 +1,6 @@
-cluster.name: "makeandship-dev-7"
+cluster.name: "es-dev"
 network.bind_host: 0.0.0.0
-network.publish_host: es-dev-v7.makeandship.com
+network.publish_host: es-dev.mykro.be
 #network.host: 0.0.0.0
 
 # # minimum_master_nodes need to be explicitly set when bound on a public IP
@@ -28,7 +28,7 @@ opendistro_security.allow_unsafe_democertificates: true
 opendistro_security.allow_default_init_securityindex: true
 opendistro_security.authcz.admin_dn:
         #- CN=es-dev-v7.makeandship.com,OU=client,O=client,L=test, C=de
-  - CN=es-dev-v7.makeandship.com, O=Let's Encrypt, C=US
+  - CN=es-dev.mykro.be, O=Let's Encrypt, C=US
 
 opendistro_security.audit.type: internal_elasticsearch
 opendistro_security.enable_snapshot_restore_privilege: true
