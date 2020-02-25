@@ -51,32 +51,32 @@
               {
                 "name": "elasticsearch-config",
                 "mountPath": "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig/config.yml",
-                "subPath": "config.yml"
+                "subPath": "simple-config.yml"
               },
               {
                 "name": "elasticsearch-config",
                 "mountPath": "/usr/share/elasticsearch/config/elasticsearch.yml",
-                "subPath": "custom-elasticsearch.yml"
+                "subPath": "simple-custom-elasticsearch.yml"
               },
               {
-                "name": "es-admin-dev-mykro-be",
+                "name": "elasticsearch-config",
                 "mountPath": "/usr/share/elasticsearch/config/fullchain.pem",
-                "subPath": "tls.crt"
+                "subPath": "odfe-tmp-chain.pem"
               },
               {
-                "name": "es-admin-dev-mykro-be",
+                "name": "elasticsearch-config",
                 "mountPath": "/usr/share/elasticsearch/config/chain.pem",
-                "subPath": "tls.crt"
+                "subPath": "odfe-tmp-cert.pem"
               },
               {
-                "name": "es-admin-dev-mykro-be",
+                "name": "elasticsearch-config",
                 "mountPath": "/usr/share/elasticsearch/config/cert.pem",
-                "subPath": "tls.crt"
+                "subPath": "odfe-tmp-cert.pem"
               },
               {
-                "name": "es-admin-dev-mykro-be",
+                "name": "elasticsearch-config",
                 "mountPath": "/usr/share/elasticsearch/config/privkey.pem",
-                "subPath": "tls.key"
+                "subPath": "odfe-tmp-privkey.pem"
               }
             ],
             "env": [
@@ -111,6 +111,37 @@
             ]
           }
         ],
+        "initContainers": [
+          {
+            "name": "init-odfe",
+            "image": "busybox:1.28",
+            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
+            "securityContext": {
+              "runAsUser": 0,
+              "privileged": true
+            }
+          },
+          {
+            "name": "init-odfe",
+            "image": "busybox:1.28",
+            "command": ["sh", "-c", "ulimit -l unlimited"],
+            "securityContext": {
+              "capabilities": {
+                "add": ["IPC_LOCK", "SYS_RESOURCE"]
+              }  
+            }
+          },
+          {
+            "name": "init-odfe",
+            "image": "busybox:1.28",
+            "command": ["sh", "-c", "ulimit memlock=-1"],
+            "securityContext": {
+              "capabilities": {
+                "add": ["IPC_LOCK", "SYS_RESOURCE"]
+              }  
+            }
+          }
+        ],
         "volumes": [
           {
             "name": "elasticsearch-data",
@@ -121,7 +152,7 @@
           {
             "name": "elasticsearch-config",
             "secret": {
-              "secretName": "es-dev-config"
+              "secretName": "es-simple-dev-config"
             }
           },
           {
