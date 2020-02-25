@@ -12,25 +12,25 @@
   "spec": {
     "backend": {
       "serviceName": "opendistro-es-client-service",
-      "servicePort": 8080
+      "servicePort": 9200
     },
     "tls": [
       {
         "hosts": [
-          "accounts-dev.mykro.be"
+          "es-dev.mykro.be"
         ],
         "secretName": "es-dev-mykro-be-tls"
       }
     ],
     "rules": [
       {
-        "host": "accounts-dev.mykro.be",
+        "host": "es-dev.mykro.be",
         "http": {
           "paths": [
             {
               "backend": {
-                "serviceName": "keycloak-service",
-                "servicePort": 8080
+                "serviceName": "opendistro-es-client-service",
+                "servicePort": 9200
               }
             }
           ]
