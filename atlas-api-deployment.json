@@ -23,6 +23,7 @@
         "containers": [
           {
             "image": "#{ARTIFACT_IMAGE}",
+            "imagePullPolicy": "Always",
             "name": "atlas-api",
             "ports": [ 
               {
