@@ -132,6 +132,10 @@
               {
                 "name": "LOCATIONIQ_API_KEY",
                 "value": "#{LOCATION_API_KEY}"
+              },
+              {
+                "name": "LOG_LEVEL",
+                "value": "#{LOG_LEVEL}"
               }
             ]
           }

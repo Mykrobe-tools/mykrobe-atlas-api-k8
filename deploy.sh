@@ -37,7 +37,7 @@ sed -i "s~#{BIGSI_API}~$BIGSI_API~g" atlas-api-deployment.json
 sed -i "s~#{UPLOADS_LOCATION}~$UPLOADS_LOCATION~g" atlas-api-deployment.json
 sed -i "s~#{DEMO_DATA_ROOT_FOLDER}~$DEMO_DATA_ROOT_FOLDER~g" atlas-api-deployment.json
 sed -i "s~#{LOCATION_API_KEY}~$LOCATION_API_KEY~g" atlas-api-deployment.json
-
+sed -i "s~#{LOG_LEVEL}~$LOG_LEVEL~g" atlas-api-deployment.json
 
 if [ -z $KUBE_TOKEN ]; then
   echo "FATAL: Environment Variable KUBE_TOKEN must be specified."
