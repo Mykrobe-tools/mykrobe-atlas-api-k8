@@ -3,9 +3,7 @@ kind: ConfigMap
 metadata:
   labels:
     app: mongodb-replicaset
-    release: mykrobe
-  name: mykrobe-mongodb-replicaset-init
-  namespace: mykrobe-dev
+  name: mongodb-replicaset-init
 data:
   on-start.sh: |
     #!/usr/bin/env bash
