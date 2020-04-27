@@ -4,6 +4,8 @@ source config.sh
 
 echo ""
 echo "Deploying OpenDistro using:"
+echo " - Application name: $APPLICATION_NAME"
+echo " - Release name: $RELEASE_NAME"
 echo " - ES Image: $OPENDISTRO_IMAGE"
 echo " - KIBANA Image: $KIBANA_IMAGE"
 echo " - Namespace: $NAMESPACE"
@@ -15,33 +17,33 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
-  name: mykrobe-opendistro-es-es
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
+  name: $APPLICATION_NAME-es
   namespace: $NAMESPACE
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
-  name: mykrobe-opendistro-es-kibana
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
+  name: $APPLICATION_NAME-kibana
   namespace: $NAMESPACE
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
-  name: mykrobe-opendistro-es-es
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
+  name: $APPLICATION_NAME-es
   namespace: $NAMESPACE
 rules:
 - apiGroups:
   - extensions
   resourceNames:
-  - mykrobe-opendistro-es-psp
+  - $APPLICATION_NAME-psp
   resources:
   - podsecuritypolicies
   verbs:
@@ -51,15 +53,15 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
-  name: mykrobe-opendistro-es-kibana
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
+  name: $APPLICATION_NAME-kibana
   namespace: $NAMESPACE
 rules:
 - apiGroups:
   - extensions
   resourceNames:
-  - mykrobe-opendistro-es-psp
+  - $APPLICATION_NAME-psp
   resources:
   - podsecuritypolicies
   verbs:
@@ -69,32 +71,32 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
-  name: mykrobe-opendistro-es-elastic-rolebinding
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
+  name: $APPLICATION_NAME-elastic-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: mykrobe-opendistro-es-es
+  name: $APPLICATION_NAME-es
 subjects:
 - kind: ServiceAccount
-  name: mykrobe-opendistro-es-es
+  name: $APPLICATION_NAME-es
   namespace: $NAMESPACE
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
-  name: mykrobe-opendistro-es-kibana-rolebinding
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
+  name: $APPLICATION_NAME-kibana-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: mykrobe-opendistro-es-kibana
+  name: $APPLICATION_NAME-kibana
 subjects:
 - kind: ServiceAccount
-  name: mykrobe-opendistro-es-kibana
+  name: $APPLICATION_NAME-kibana
   namespace: $NAMESPACE
 ---
 apiVersion: v1
@@ -103,9 +105,9 @@ data:
 kind: Secret
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
-  name: mykrobe-opendistro-es-es-config
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
+  name: $APPLICATION_NAME-es-config
   namespace: $NAMESPACE
 type: Opaque
 ---
@@ -114,10 +116,10 @@ kind: Service
 metadata:
   annotations: {}
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
     role: client
-  name: mykrobe-opendistro-es-client-service
+  name: $APPLICATION_NAME-client-service
   namespace: $NAMESPACE
 spec:
   ports:
@@ -135,10 +137,10 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
     role: data
-  name: mykrobe-opendistro-es-data-svc
+  name: $APPLICATION_NAME-data-svc
   namespace: $NAMESPACE
 spec:
   clusterIP: None
@@ -156,10 +158,10 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
     role: master
-  name: mykrobe-opendistro-es-discovery
+  name: $APPLICATION_NAME-discovery
   namespace: $NAMESPACE
 spec:
   clusterIP: None
@@ -174,10 +176,10 @@ kind: Service
 metadata:
   annotations: {}
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
     role: kibana
-  name: mykrobe-opendistro-es-kibana-svc
+  name: $APPLICATION_NAME-kibana-svc
 spec:
   ports:
   - name: kibana-svc
@@ -191,24 +193,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
     role: client
-  name: mykrobe-opendistro-es-client
+  name: $APPLICATION_NAME-client
   namespace: $NAMESPACE
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mykrobe-opendistro-es
-      release: mykrobe
+      app: $APPLICATION_NAME
+      release: $RELEASE_NAME
       role: client
   template:
     metadata:
       annotations: null
       labels:
-        app: mykrobe-opendistro-es
-        release: mykrobe
+        app: $APPLICATION_NAME
+        release: $RELEASE_NAME
         role: client
     spec:
       containers:
@@ -228,7 +230,7 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: discovery.seed_hosts
-          value: mykrobe-opendistro-es-discovery
+          value: $APPLICATION_NAME-discovery
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
@@ -268,33 +270,33 @@ spec:
         name: init-sysctl
         securityContext:
           privileged: true
-      serviceAccountName: mykrobe-opendistro-es-es
+      serviceAccountName: $APPLICATION_NAME-es
       volumes:
       - name: config
         secret:
-          secretName: mykrobe-opendistro-es-es-config
+          secretName: $APPLICATION_NAME-es-config
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
     role: kibana
-  name: mykrobe-opendistro-es-kibana
+  name: $APPLICATION_NAME-kibana
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mykrobe-opendistro-es
-      release: mykrobe
+      app: $APPLICATION_NAME
+      release: $RELEASE_NAME
       role: kibana
   template:
     metadata:
       annotations: null
       labels:
-        app: mykrobe-opendistro-es
-        release: mykrobe
+        app: $APPLICATION_NAME
+        release: $RELEASE_NAME
         role: kibana
     spec:
       containers:
@@ -302,40 +304,40 @@ spec:
         - name: CLUSTER_NAME
           value: elasticsearch
         - name: ELASTICSEARCH_HOSTS
-          value: https://mykrobe-opendistro-es-client-service:9200
+          value: https://$APPLICATION_NAME-client-service:9200
         image: $KIBANA_IMAGE
-        name: mykrobe-opendistro-es-kibana
+        name: $APPLICATION_NAME-kibana
         ports:
         - containerPort: 5601
         resources: {}
         volumeMounts: null
       restartPolicy: Always
-      serviceAccountName: mykrobe-opendistro-es-kibana
+      serviceAccountName: $APPLICATION_NAME-kibana
       volumes: null
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
     role: data
-  name: mykrobe-opendistro-es-data
+  name: $APPLICATION_NAME-data
   namespace: $NAMESPACE
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mykrobe-opendistro-es
-      release: mykrobe
+      app: $APPLICATION_NAME
+      release: $RELEASE_NAME
       role: data
-  serviceName: mykrobe-opendistro-es-data-svc
+  serviceName: $APPLICATION_NAME-data-svc
   template:
     metadata:
       annotations: null
       labels:
-        app: mykrobe-opendistro-es
-        release: mykrobe
+        app: $APPLICATION_NAME
+        release: $RELEASE_NAME
         role: data
     spec:
       containers:
@@ -353,7 +355,7 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: discovery.seed_hosts
-          value: mykrobe-opendistro-es-discovery
+          value: $APPLICATION_NAME-discovery
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
@@ -404,11 +406,11 @@ spec:
         - mountPath: /usr/share/elasticsearch/data
           name: data
           subPath: null
-      serviceAccountName: mykrobe-opendistro-es-es
+      serviceAccountName: $APPLICATION_NAME-es
       volumes:
       - name: config
         secret:
-          secretName: mykrobe-opendistro-es-es-config
+          secretName: $APPLICATION_NAME-es-config
   updateStrategy:
     type: RollingUpdate
   volumeClaimTemplates:
@@ -426,25 +428,25 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
     role: master
-  name: mykrobe-opendistro-es-master
+  name: $APPLICATION_NAME-master
   namespace: $NAMESPACE
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mykrobe-opendistro-es
-      release: mykrobe
+      app: $APPLICATION_NAME
+      release: $RELEASE_NAME
       role: master
-  serviceName: mykrobe-opendistro-es-discovery
+  serviceName: $APPLICATION_NAME-discovery
   template:
     metadata:
       annotations: null
       labels:
-        app: mykrobe-opendistro-es
-        release: mykrobe
+        app: $APPLICATION_NAME
+        release: $RELEASE_NAME
         role: master
     spec:
       containers:
@@ -452,7 +454,7 @@ spec:
         - name: cluster.name
           value: elasticsearch
         - name: cluster.initial_master_nodes
-          value: mykrobe-opendistro-es-master-0,
+          value: $APPLICATION_NAME-master-0,
         - name: node.master
           value: "true"
         - name: node.ingest
@@ -466,7 +468,7 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: discovery.seed_hosts
-          value: mykrobe-opendistro-es-discovery
+          value: $APPLICATION_NAME-discovery
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
@@ -519,11 +521,11 @@ spec:
         - mountPath: /usr/share/elasticsearch/data
           name: data
           subPath: null
-      serviceAccountName: mykrobe-opendistro-es-es
+      serviceAccountName: $APPLICATION_NAME-es
       volumes:
       - name: config
         secret:
-          secretName: mykrobe-opendistro-es-es-config
+          secretName: $APPLICATION_NAME-es-config
   updateStrategy:
     type: RollingUpdate
   volumeClaimTemplates:
@@ -541,9 +543,9 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   labels:
-    app: mykrobe-opendistro-es
-    release: mykrobe
-  name: mykrobe-opendistro-es-psp
+    app: $APPLICATION_NAME
+    release: $RELEASE_NAME
+  name: $APPLICATION_NAME-psp
 spec:
   fsGroup:
     ranges:
