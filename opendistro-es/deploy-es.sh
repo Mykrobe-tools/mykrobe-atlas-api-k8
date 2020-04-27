@@ -4,7 +4,8 @@ source config.sh
 
 echo ""
 echo "Deploying OpenDistro using:"
-echo " - Image: $OPENDISTRO_IMAGE"
+echo " - ES Image: $OPENDISTRO_IMAGE"
+echo " - KIBANA Image: $KIBANA_IMAGE"
 echo " - Namespace: $NAMESPACE"
 echo ""
 
@@ -302,7 +303,7 @@ spec:
           value: elasticsearch
         - name: ELASTICSEARCH_HOSTS
           value: https://mykrobe-opendistro-es-client-service:9200
-        image: $OPENDISTRO_IMAGE
+        image: $KIBANA_IMAGE
         name: mykrobe-opendistro-es-kibana
         ports:
         - containerPort: 5601
@@ -365,7 +366,7 @@ spec:
               resource: limits.cpu
         - name: ES_JAVA_OPTS
           value: -Xms512m -Xmx512m
-        image: amazon/opendistro-for-elasticsearch:1.6.0
+        image: $OPENDISTRO_IMAGE
         imagePullPolicy: Always
         livenessProbe:
           initialDelaySeconds: 60
@@ -476,7 +477,7 @@ spec:
               resource: limits.cpu
         - name: ES_JAVA_OPTS
           value: -Xms512m -Xmx512m
-        image: amazon/opendistro-for-elasticsearch:1.6.0
+        image: $OPENDISTRO_IMAGE
         imagePullPolicy: Always
         livenessProbe:
           initialDelaySeconds: 60
@@ -570,4 +571,5 @@ spec:
   - secret
   - downwardAPI
   - persistentVolumeClaim
+
 EOF
