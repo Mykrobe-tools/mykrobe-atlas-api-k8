@@ -2,12 +2,12 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: mykrobe-confluent-cp-kafka
+  name: {PREFIX}-cp-kafka
   labels:
     app: cp-kafka
-    release: mykrobe-confluent
+    release: {PREFIX}
 spec:
-  serviceName: mykrobe-confluent-cp-kafka-headless
+  serviceName: {PREFIX}-cp-kafka-headless
   podManagementPolicy: OrderedReady
   replicas: 3
   updateStrategy:
@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         app: cp-kafka
-        release: mykrobe-confluent
+        release: {PREFIX}
     spec:
       affinity:
         podAntiAffinity:
@@ -32,7 +32,7 @@ spec:
                   - key: "release"
                     operator: In
                     values:
-                    - mykrobe-confluent
+                    - {PREFIX}
               topologyKey: "kubernetes.io/hostname"
       containers:
       - name: cp-kafka-broker
@@ -64,13 +64,13 @@ spec:
         - name: KAFKA_HEAP_OPTS
           value: -Xms512M -Xmx512M
         - name: KAFKA_ZOOKEEPER_CONNECT
-          value: "mykrobe-confluent-cp-zookeeper-headless:2181"
+          value: "{PREFIX}-cp-zookeeper-headless:2181"
         - name: KAFKA_LOG_DIRS
           value: "/opt/kafka/data-0/logs"
         - name: KAFKA_METRIC_REPORTERS
           value: "io.confluent.metrics.reporter.ConfluentMetricsReporter"
         - name: CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS
-          value: "PLAINTEXT://mykrobe-confluent-cp-kafka-headless:9092"
+          value: "PLAINTEXT://{PREFIX}-cp-kafka-headless:9092"
         - name: "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP"
           value: "PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT"
         - name: "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR"
@@ -84,7 +84,7 @@ spec:
         - -exc
         - |
           export KAFKA_BROKER_ID=${HOSTNAME##*-} && \
-          export KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${POD_NAME}.mykrobe-confluent-cp-kafka-headless.${POD_NAMESPACE}:9092,EXTERNAL://${HOST_IP}:$((31090 + ${KAFKA_BROKER_ID})) && \
+          export KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${POD_NAME}.{PREFIX}-cp-kafka-headless.${POD_NAMESPACE}:9092,EXTERNAL://${HOST_IP}:$((31090 + ${KAFKA_BROKER_ID})) && \
           exec /etc/confluent/docker/run
         volumeMounts:
           - name: datadir-0
@@ -101,12 +101,12 @@ spec:
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: mykrobe-confluent-cp-zookeeper
+  name: {PREFIX}-cp-zookeeper
   labels:
     app: cp-zookeeper
-    release: mykrobe-confluent
+    release: {PREFIX}
 spec:
-  serviceName: mykrobe-confluent-cp-zookeeper-headless
+  serviceName: {PREFIX}-cp-zookeeper-headless
   podManagementPolicy: OrderedReady
   replicas: 3
   updateStrategy:
@@ -115,7 +115,7 @@ spec:
     metadata:
       labels:
         app: cp-zookeeper
-        release: mykrobe-confluent
+        release: {PREFIX}
     spec:
       affinity:
         podAntiAffinity:
@@ -131,7 +131,7 @@ spec:
                   - key: "release"
                     operator: In
                     values:
-                    - mykrobe-confluent
+                    - {PREFIX}
               topologyKey: "kubernetes.io/hostname"
       containers:
       - name: cp-zookeeper-server
@@ -165,7 +165,7 @@ spec:
         - name: ZOOKEEPER_CLIENT_PORT
           value: "2181"
         - name : ZOOKEEPER_SERVERS
-          value: "mykrobe-confluent-cp-zookeeper-0.mykrobe-confluent-cp-zookeeper-headless.mykrobe-dev:2888:3888;mykrobe-confluent-cp-zookeeper-1.mykrobe-confluent-cp-zookeeper-headless.mykrobe-dev:2888:3888;mykrobe-confluent-cp-zookeeper-2.mykrobe-confluent-cp-zookeeper-headless.mykrobe-dev:2888:3888"
+          value: "{PREFIX}-cp-zookeeper-0.{PREFIX}-cp-zookeeper-headless.{NAMESPACE}:2888:3888;{PREFIX}-cp-zookeeper-1.{PREFIX}-cp-zookeeper-headless.{NAMESPACE}:2888:3888;{PREFIX}-cp-zookeeper-2.{PREFIX}-cp-zookeeper-headless.{NAMESPACE}:2888:3888"
         # ZOOKEEPER_SERVER_ID is required just to pass cp-zookeeper ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
         - name: ZOOKEEPER_SERVER_ID

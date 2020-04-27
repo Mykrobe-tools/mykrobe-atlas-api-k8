@@ -5,6 +5,7 @@ source config.sh
 echo ""
 echo "Deploying Confluent platform using:"
 echo " - Namespace: $NAMESPACE"
+echo " - Prefix: $PREFIX"
 echo " - Control-center Image: $CONTROL_CENTER_IMAGE"
 echo " - Kafka-connect Image: $KAFKA_CONNECT_IMAGE"
 echo " - Schema-registry Image: $SCHEMA_REGISTRY_IMAGE"
@@ -17,60 +18,60 @@ cat <<EOF | kubectl apply -f -
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: mykrobe-confluent-cp-zookeeper-pdb
+  name: $PREFIX-cp-zookeeper-pdb
   namespace: $NAMESPACE
   labels:
     app: cp-zookeeper
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   selector:
     matchLabels:
       app: cp-zookeeper
-      release: mykrobe-confluent
+      release: $PREFIX
   maxUnavailable: 1
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mykrobe-confluent-cp-control-center
+  name: $PREFIX-cp-control-center
   namespace: $NAMESPACE
   labels:
     app: cp-control-center
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   ports:
     - name: cc-http
       port: 9021
   selector:
     app: cp-control-center
-    release: mykrobe-confluent
+    release: $PREFIX
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mykrobe-confluent-cp-kafka-connect
+  name: $PREFIX-cp-kafka-connect
   namespace: $NAMESPACE
   labels:
     app: cp-kafka-connect
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   ports:
     - name: kafka-connect
       port: 8083
   selector:
     app: cp-kafka-connect
-    release: mykrobe-confluent
+    release: $PREFIX
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mykrobe-confluent-cp-kafka-headless
+  name: $PREFIX-cp-kafka-headless
   namespace: $NAMESPACE
   labels:
     app: cp-kafka
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   ports:
     - port: 9092
@@ -78,49 +79,49 @@ spec:
   clusterIP: None
   selector:
     app: cp-kafka
-    release: mykrobe-confluent
+    release: $PREFIX
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mykrobe-confluent-cp-kafka
+  name: $PREFIX-cp-kafka
   namespace: $NAMESPACE
   labels:
     app: cp-kafka
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   ports:
     - port: 9092
       name: broker
   selector:
     app: cp-kafka
-    release: mykrobe-confluent
+    release: $PREFIX
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mykrobe-confluent-cp-schema-registry
+  name: $PREFIX-cp-schema-registry
   namespace: $NAMESPACE
   labels:
     app: cp-schema-registry
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   ports:
     - name: schema-registry
       port: 8081
   selector:
     app: cp-schema-registry
-    release: mykrobe-confluent
+    release: $PREFIX
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mykrobe-confluent-cp-zookeeper-headless
+  name: $PREFIX-cp-zookeeper-headless
   namespace: $NAMESPACE
   labels:
     app: cp-zookeeper
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   ports:
     - port: 2888
@@ -130,16 +131,16 @@ spec:
   clusterIP: None
   selector:
     app: cp-zookeeper
-    release: mykrobe-confluent
+    release: $PREFIX
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mykrobe-confluent-cp-zookeeper
+  name: $PREFIX-cp-zookeeper
   namespace: $NAMESPACE
   labels:
     app: cp-zookeeper
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   type: 
   ports:
@@ -147,27 +148,27 @@ spec:
       name: client
   selector:
     app: cp-zookeeper
-    release: mykrobe-confluent
+    release: $PREFIX
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: mykrobe-confluent-cp-control-center
+  name: $PREFIX-cp-control-center
   namespace: $NAMESPACE
   labels:
     app: cp-control-center
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cp-control-center
-      release: mykrobe-confluent
+      release: $PREFIX
   template:
     metadata:
       labels:
         app: cp-control-center
-        release: mykrobe-confluent
+        release: $PREFIX
     spec:
       containers:
         - name: cp-control-center
@@ -182,13 +183,13 @@ spec:
             
           env:
             - name: CONTROL_CENTER_BOOTSTRAP_SERVERS
-              value: PLAINTEXT://mykrobe-confluent-cp-kafka-headless:9092
+              value: PLAINTEXT://$PREFIX-cp-kafka-headless:9092
             - name: CONTROL_CENTER_ZOOKEEPER_CONNECT
               value: 
             - name: CONTROL_CENTER_CONNECT_CLUSTER
-              value: http://mykrobe-confluent-cp-kafka-connect:8083
+              value: http://$PREFIX-cp-kafka-connect:8083
             - name: CONTROL_CENTER_SCHEMA_REGISTRY_URL
-              value: http://mykrobe-confluent-cp-schema-registry:8081
+              value: http://$PREFIX-cp-schema-registry:8081
             - name: KAFKA_HEAP_OPTS
               value: "-Xms512M -Xmx512M"
             - name: "CONTROL_CENTER_REPLICATION_FACTOR"
@@ -198,22 +199,22 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: mykrobe-confluent-cp-kafka-connect
+  name: $PREFIX-cp-kafka-connect
   namespace: $NAMESPACE
   labels:
     app: cp-kafka-connect
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cp-kafka-connect
-      release: mykrobe-confluent
+      release: $PREFIX
   template:
     metadata:
       labels:
         app: cp-kafka-connect
-        release: mykrobe-confluent
+        release: $PREFIX
     spec:
       containers:
         - name: cp-kafka-connect-server
@@ -232,19 +233,19 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: CONNECT_BOOTSTRAP_SERVERS
-              value: PLAINTEXT://mykrobe-confluent-cp-kafka-headless:9092
+              value: PLAINTEXT://$PREFIX-cp-kafka-headless:9092
             - name: CONNECT_GROUP_ID
-              value: mykrobe-confluent
+              value: $PREFIX
             - name: CONNECT_CONFIG_STORAGE_TOPIC
-              value: mykrobe-confluent-cp-kafka-connect-config
+              value: $PREFIX-cp-kafka-connect-config
             - name: CONNECT_OFFSET_STORAGE_TOPIC
-              value: mykrobe-confluent-cp-kafka-connect-offset
+              value: $PREFIX-cp-kafka-connect-offset
             - name: CONNECT_STATUS_STORAGE_TOPIC
-              value: mykrobe-confluent-cp-kafka-connect-status
+              value: $PREFIX-cp-kafka-connect-status
             - name: CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL
-              value: http://mykrobe-confluent-cp-schema-registry:8081
+              value: http://$PREFIX-cp-schema-registry:8081
             - name: CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL
-              value: http://mykrobe-confluent-cp-schema-registry:8081
+              value: http://$PREFIX-cp-schema-registry:8081
             - name: KAFKA_HEAP_OPTS
               value: "-Xms512M -Xmx512M"
             - name: "CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR"
@@ -271,22 +272,22 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: mykrobe-confluent-cp-schema-registry
+  name: $PREFIX-cp-schema-registry
   namespace: $NAMESPACE
   labels:
     app: cp-schema-registry
-    release: mykrobe-confluent
+    release: $PREFIX
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cp-schema-registry
-      release: mykrobe-confluent
+      release: $PREFIX
   template:
     metadata:
       labels:
         app: cp-schema-registry
-        release: mykrobe-confluent
+        release: $PREFIX
     spec:
       containers:
         - name: cp-schema-registry-server
@@ -307,13 +308,18 @@ spec:
           - name: SCHEMA_REGISTRY_LISTENERS
             value: http://0.0.0.0:8081
           - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
-            value: PLAINTEXT://mykrobe-confluent-cp-kafka-headless:9092
+            value: PLAINTEXT://$PREFIX-cp-kafka-headless:9092
           - name: SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID
-            value: mykrobe-confluent
+            value: $PREFIX
           - name: SCHEMA_REGISTRY_MASTER_ELIGIBILITY
             value: "true"
           - name: SCHEMA_REGISTRY_HEAP_OPTS
             value: "-Xms512M -Xmx512M"
 EOF
 
-kubectl apply -f kafka-statefullset.yaml -n $NAMESPACE
+sed "s#{PREFIX}#$PREFIX#g" kafka-statefullset.yaml > kafka-statefullset-deploy-tmp.yaml
+sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp.yaml > kafka-statefullset-deploy.yaml
+
+kubectl apply -f kafka-statefullset-deploy.yaml -n $NAMESPACE
+
+rm kafka-statefullset-deploy*
