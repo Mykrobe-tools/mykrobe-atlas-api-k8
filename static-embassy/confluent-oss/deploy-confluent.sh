@@ -6,6 +6,7 @@ echo ""
 echo "Deploying Confluent platform using:"
 echo " - Namespace: $NAMESPACE"
 echo " - Prefix: $PREFIX"
+echo " - Confluent: $CONFLUENT"
 echo " - Control-center Image: $CONTROL_CENTER_IMAGE"
 echo " - Kafka-connect Image: $KAFKA_CONNECT_IMAGE"
 echo " - Schema-registry Image: $SCHEMA_REGISTRY_IMAGE"
@@ -18,60 +19,60 @@ cat <<EOF | kubectl apply -f -
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: $PREFIX-cp-zookeeper-pdb
+  name: $CONFLUENT-cp-zookeeper-pdb
   namespace: $NAMESPACE
   labels:
     app: cp-zookeeper
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   selector:
     matchLabels:
       app: cp-zookeeper
-      release: $PREFIX
+      release: $CONFLUENT
   maxUnavailable: 1
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $PREFIX-cp-control-center
+  name: $CONFLUENT-cc
   namespace: $NAMESPACE
   labels:
-    app: cp-control-center
-    release: $PREFIX
+    app: cc
+    release: $CONFLUENT
 spec:
   ports:
     - name: cc-http
       port: 9021
   selector:
-    app: cp-control-center
-    release: $PREFIX
+    app: cc
+    release: $CONFLUENT
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $PREFIX-cp-kafka-connect
+  name: $CONFLUENT-cp-kafka-connect
   namespace: $NAMESPACE
   labels:
     app: cp-kafka-connect
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   ports:
     - name: kafka-connect
       port: 8083
   selector:
     app: cp-kafka-connect
-    release: $PREFIX
+    release: $CONFLUENT
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $PREFIX-cp-kafka-headless
+  name: $CONFLUENT-cp-kafka-headless
   namespace: $NAMESPACE
   labels:
     app: cp-kafka
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   ports:
     - port: 9092
@@ -79,49 +80,49 @@ spec:
   clusterIP: None
   selector:
     app: cp-kafka
-    release: $PREFIX
+    release: $CONFLUENT
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $PREFIX-cp-kafka
+  name: $CONFLUENT-cp-kafka
   namespace: $NAMESPACE
   labels:
     app: cp-kafka
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   ports:
     - port: 9092
       name: broker
   selector:
     app: cp-kafka
-    release: $PREFIX
+    release: $CONFLUENT
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $PREFIX-cp-schema-registry
+  name: $CONFLUENT-cp-schema-registry
   namespace: $NAMESPACE
   labels:
     app: cp-schema-registry
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   ports:
     - name: schema-registry
       port: 8081
   selector:
     app: cp-schema-registry
-    release: $PREFIX
+    release: $CONFLUENT
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $PREFIX-cp-zookeeper-headless
+  name: $CONFLUENT-cp-zookeeper-headless
   namespace: $NAMESPACE
   labels:
     app: cp-zookeeper
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   ports:
     - port: 2888
@@ -131,16 +132,16 @@ spec:
   clusterIP: None
   selector:
     app: cp-zookeeper
-    release: $PREFIX
+    release: $CONFLUENT
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $PREFIX-cp-zookeeper
+  name: $CONFLUENT-cp-zookeeper
   namespace: $NAMESPACE
   labels:
     app: cp-zookeeper
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   type: 
   ports:
@@ -148,30 +149,30 @@ spec:
       name: client
   selector:
     app: cp-zookeeper
-    release: $PREFIX
+    release: $CONFLUENT
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: $PREFIX-cp-control-center
+  name: $CONFLUENT-cc
   namespace: $NAMESPACE
   labels:
-    app: cp-control-center
-    release: $PREFIX
+    app: cc
+    release: $CONFLUENT
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cp-control-center
-      release: $PREFIX
+      app: cc
+      release: $CONFLUENT
   template:
     metadata:
       labels:
-        app: cp-control-center
-        release: $PREFIX
+        app: cc
+        release: $CONFLUENT
     spec:
       containers:
-        - name: cp-control-center
+        - name: cc
           image: $CONTROL_CENTER_IMAGE
           imagePullPolicy: IfNotPresent
           ports:
@@ -183,13 +184,13 @@ spec:
             
           env:
             - name: CONTROL_CENTER_BOOTSTRAP_SERVERS
-              value: PLAINTEXT://$PREFIX-cp-kafka-headless:9092
+              value: PLAINTEXT://$CONFLUENT-cp-kafka-headless:9092
             - name: CONTROL_CENTER_ZOOKEEPER_CONNECT
               value: 
             - name: CONTROL_CENTER_CONNECT_CLUSTER
-              value: http://$PREFIX-cp-kafka-connect:8083
+              value: http://$CONFLUENT-cp-kafka-connect:8083
             - name: CONTROL_CENTER_SCHEMA_REGISTRY_URL
-              value: http://$PREFIX-cp-schema-registry:8081
+              value: http://$CONFLUENT-cp-schema-registry:8081
             - name: KAFKA_HEAP_OPTS
               value: "-Xms512M -Xmx512M"
             - name: "CONTROL_CENTER_REPLICATION_FACTOR"
@@ -199,22 +200,22 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: $PREFIX-cp-kafka-connect
+  name: $CONFLUENT-cp-kafka-connect
   namespace: $NAMESPACE
   labels:
     app: cp-kafka-connect
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cp-kafka-connect
-      release: $PREFIX
+      release: $CONFLUENT
   template:
     metadata:
       labels:
         app: cp-kafka-connect
-        release: $PREFIX
+        release: $CONFLUENT
     spec:
       containers:
         - name: cp-kafka-connect-server
@@ -233,19 +234,19 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: CONNECT_BOOTSTRAP_SERVERS
-              value: PLAINTEXT://$PREFIX-cp-kafka-headless:9092
+              value: PLAINTEXT://$CONFLUENT-cp-kafka-headless:9092
             - name: CONNECT_GROUP_ID
-              value: $PREFIX
+              value: $CONFLUENT
             - name: CONNECT_CONFIG_STORAGE_TOPIC
-              value: $PREFIX-cp-kafka-connect-config
+              value: $CONFLUENT-cp-kafka-connect-config
             - name: CONNECT_OFFSET_STORAGE_TOPIC
-              value: $PREFIX-cp-kafka-connect-offset
+              value: $CONFLUENT-cp-kafka-connect-offset
             - name: CONNECT_STATUS_STORAGE_TOPIC
-              value: $PREFIX-cp-kafka-connect-status
+              value: $CONFLUENT-cp-kafka-connect-status
             - name: CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL
-              value: http://$PREFIX-cp-schema-registry:8081
+              value: http://$CONFLUENT-cp-schema-registry:8081
             - name: CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL
-              value: http://$PREFIX-cp-schema-registry:8081
+              value: http://$CONFLUENT-cp-schema-registry:8081
             - name: KAFKA_HEAP_OPTS
               value: "-Xms512M -Xmx512M"
             - name: "CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR"
@@ -272,22 +273,22 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: $PREFIX-cp-schema-registry
+  name: $CONFLUENT-cp-schema-registry
   namespace: $NAMESPACE
   labels:
     app: cp-schema-registry
-    release: $PREFIX
+    release: $CONFLUENT
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cp-schema-registry
-      release: $PREFIX
+      release: $CONFLUENT
   template:
     metadata:
       labels:
         app: cp-schema-registry
-        release: $PREFIX
+        release: $CONFLUENT
     spec:
       containers:
         - name: cp-schema-registry-server
@@ -308,16 +309,16 @@ spec:
           - name: SCHEMA_REGISTRY_LISTENERS
             value: http://0.0.0.0:8081
           - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
-            value: PLAINTEXT://$PREFIX-cp-kafka-headless:9092
+            value: PLAINTEXT://$CONFLUENT-cp-kafka-headless:9092
           - name: SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID
-            value: $PREFIX
+            value: $CONFLUENT
           - name: SCHEMA_REGISTRY_MASTER_ELIGIBILITY
             value: "true"
           - name: SCHEMA_REGISTRY_HEAP_OPTS
             value: "-Xms512M -Xmx512M"
 EOF
 
-sed "s#{PREFIX}#$PREFIX#g" kafka-statefullset.yaml > kafka-statefullset-deploy-tmp.yaml
+sed "s#{PREFIX}#$CONFLUENT#g" kafka-statefullset.yaml > kafka-statefullset-deploy-tmp.yaml
 sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp.yaml > kafka-statefullset-deploy.yaml
 
 kubectl apply -f kafka-statefullset-deploy.yaml -n $NAMESPACE
