@@ -50,6 +50,10 @@
                 "value": "admin"
               },
               {
+                "name": "DB_HOST",
+                "value": "mykrobe-mongodb-replicaset-client.mykrobe-dev.svc.cluster.local"
+              },
+              {
                 "name": "MONGO_PASSWORD",
                 "value": "ZSAPRyR7aCgPhatsQuAxSNUyTHr9TJ4f"
               },
