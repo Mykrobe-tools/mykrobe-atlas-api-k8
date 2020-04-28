@@ -8,3 +8,5 @@ gocd/keys/atlas-pipelines-readonly
 gocd/keys/atlas-readonly
 gocd/keys/atlas-keycloak-readonly
 gocd/keys/bitbucket-readonly
+.DS_Store
+static-embassy/mongo-replica-set/config.sh
