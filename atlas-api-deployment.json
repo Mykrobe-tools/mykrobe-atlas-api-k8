@@ -47,6 +47,14 @@
                 "value": "production"
               },
               {
+                "name": "DB_SERVICE_HOST",
+                "value": "#{DB_SERVICE_HOST}"
+              },
+              {
+                "name": "DB_SERVICE_PORT",
+                "value": "#{DB_SERVICE_PORT}"
+              },
+              {
                 "name": "MONGO_USER",
                 "value": "#{MONGO_USER}"
               },
