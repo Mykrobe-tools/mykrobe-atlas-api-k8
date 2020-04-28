@@ -46,12 +46,16 @@
                 "value": "production"
               },
               {
-                "name": "MONGO_USER",
-                "value": "admin"
+                "name": "DB_SERVICE_HOST",
+                "value": "mykrobe-mongodb-replicaset-client.mykrobe-dev.svc.cluster.local"
               },
               {
-                "name": "DB_HOST",
-                "value": "mykrobe-mongodb-replicaset-client.mykrobe-dev.svc.cluster.local"
+                "name": "DB_SERVICE_PORT",
+                "value": "27017"
+              },
+              {
+                "name": "MONGO_USER",
+                "value": "admin"
               },
               {
                 "name": "MONGO_PASSWORD",
