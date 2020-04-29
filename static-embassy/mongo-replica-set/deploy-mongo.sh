@@ -10,6 +10,9 @@ echo " - Release: $RELEASE_NAME"
 echo " - Replicas: $REPLICAS"
 echo " - User: $MONGO_USER"
 echo " - Password: $MONGO_PASSWORD"
+echo " - App DB: $APP_DB"
+echo " - App User: $APP_USER"
+echo " - App Password: $APP_PASSWORD"
 echo " - Key: $MONGO_KEY"
 echo ""
 
@@ -34,6 +37,8 @@ data:
   key.txt: $MONGO_KEY
   password: $MONGO_PASSWORD
   user: $MONGO_USER
+  app_user: $APP_USER
+  app_password: $APP_PASSWORD
 kind: Secret
 metadata:
   labels:
@@ -208,6 +213,8 @@ spec:
           value: requireSSL
         - name: AUTH
           value: "true"
+        - name: APP_DB
+          value: $APP_DB
         - name: ADMIN_USER
           valueFrom:
             secretKeyRef:
@@ -217,6 +224,16 @@ spec:
           valueFrom:
             secretKeyRef:
               key: password
+              name: $RELEASE_NAME-mongodb-secret
+        - name: APP_USER
+          valueFrom:
+            secretKeyRef:
+              key: app_user
+              name: $RELEASE_NAME-mongodb-secret
+        - name: APP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: app_password
               name: $RELEASE_NAME-mongodb-secret
         image: $MONGO_IMAGE
         imagePullPolicy: IfNotPresent
