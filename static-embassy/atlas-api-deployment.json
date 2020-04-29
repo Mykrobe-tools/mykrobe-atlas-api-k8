@@ -22,7 +22,7 @@
       "spec": {
         "containers": [
           {
-            "image": "makeandship/atlas-api:34",
+            "image": "makeandship/atlas-api:30",
             "name": "atlas-api",
             "ports": [
               {
@@ -54,8 +54,12 @@
                 "value": "27017"
               },
               {
+                "name": "DB_RS_NAME",
+                "value": "rs0"
+              },
+              {
                 "name": "MONGO_USER",
-                "value": "admin"
+                "value": "atlas"
               },
               {
                 "name": "MONGO_PASSWORD",

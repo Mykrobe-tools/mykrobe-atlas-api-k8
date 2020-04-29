@@ -35,6 +35,9 @@ data:
         admin_user="$ADMIN_USER"
         admin_password="$ADMIN_PASSWORD"
         admin_creds=(-u "$admin_user" -p "$admin_password")
+        app_db="$APP_DB"
+        app_user="$APP_USER"
+        app_password="$APP_PASSWORD"
         if [[ "$METRICS" == "true" ]]; then
             metrics_user="$METRICS_USER"
             metrics_password="$METRICS_PASSWORD"
@@ -217,6 +220,7 @@ data:
         if [[ "${AUTH}" == "true" ]]; then
             log "Creating admin user..."
             mongo admin "${ssl_args[@]}" --eval "db.createUser({user: '${admin_user}', pwd: '${admin_password}', roles: [{role: 'root', db: 'admin'}]})"
+            mongo ${app_db} "${admin_creds[@]}" "${ssl_args[@]}" --authenticationDatabase admin --eval "db.createUser({user: '${app_user}', pwd: '${app_password}', roles: [{role: 'dbOwner', db: '${app_db}'}]})"
         fi
     fi
     
