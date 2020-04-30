@@ -73,6 +73,10 @@
               {
                 "name": "PROXY_ADDRESS_FORWARDING",
                 "value": "#{PROXY_ADDRESS_FORWARDING}"
+              },
+              {
+                "name": "KEYCLOAK_IMPORT",
+                "value": "/tmp/atlas-realm.json"
               }
             ]
           }
