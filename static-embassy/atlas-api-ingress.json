@@ -9,8 +9,7 @@
       "nginx.ingress.kubernetes.io/enable-cors": "true",
       "nginx.ingress.kubernetes.io/cors-allow-origin": "*",
       "nginx.ingress.kubernetes.io/proxy-body-size": "10m"
-    },
-    "namespace": "default"
+    }
   },
   "spec": {
     "backend": {
@@ -20,14 +19,14 @@
     "tls": [
       {
         "hosts": [
-          "api-dev.mykro.be"
+          "api-dev-static.mykro.be"
         ],
-        "secretName": "api-dev-mykro-be-tls"
+        "secretName": "api-dev-static-mykro-be-tls"
       }
     ],
     "rules": [
       {
-        "host": "api-dev.mykro.be",
+        "host": "api-dev-static.mykro.be",
         "http": {
           "paths": [
             {

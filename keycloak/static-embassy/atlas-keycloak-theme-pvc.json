@@ -2,8 +2,7 @@
   "apiVersion": "v1",
   "kind": "PersistentVolumeClaim",
   "metadata": {
-    "name": "keycloak-theme-data",
-    "namespace": "default"
+    "name": "keycloak-theme-data"
   },
   "spec": {
     "accessModes": ["ReadWriteMany"],

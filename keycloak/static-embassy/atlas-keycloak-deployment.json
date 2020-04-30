@@ -23,7 +23,7 @@
       "spec": {
         "containers": [
           {
-            "image": "makeandship/keycloak:1",
+            "image": "makeandship/keycloak:2",
             "name": "keycloak",
             "ports": [
               {

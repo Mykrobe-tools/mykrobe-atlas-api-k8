@@ -3,7 +3,6 @@
   "kind": "Service",
   "metadata": {
     "name": "keycloak-postgres",
-    "namespace": "default",
     "labels": {
       "app": "postgres"
     }

@@ -79,7 +79,7 @@
               },
               {
                 "name": "ATLAS_APP",
-                "value": "https://dev.mykro.be"
+                "value": "https://dev-static.mykro.be"
               },
               {
                 "name": "ES_SCHEME",
@@ -107,19 +107,19 @@
               },
               {
                 "name": "KEYCLOAK_REDIRECT_URI",
-                "value": "https://dev.mykro.be/"
+                "value": "https://dev-static.mykro.be/"
               },
               {
                 "name": "KEYCLOAK_URL",
-                "value": "https://accounts.makeandship.com/auth"
+                "value": "https://keycloak-dev-static.mykro.be/auth"
               },
               {
                 "name": "KEYCLOAK_ADMIN_PASSWORD",
-                "value": "tvDW6jnTHFCZJhDbsTSZDMfY"
+                "value": "ND8KeyqjBn6KWGuseVdefU3X"
               },
               {
                 "name": "API_HOST",
-                "value": "api-dev.mykro.be"
+                "value": "api-dev-static.mykro.be"
               },
               {
                 "name": "DEBUG",
