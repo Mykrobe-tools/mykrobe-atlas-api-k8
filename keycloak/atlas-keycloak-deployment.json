@@ -33,7 +33,7 @@
             ],
             "volumeMounts": [
               {
-                "mountPath": "/opt/jboss/keycloak/themes",
+                "mountPath": "/opt/jboss/keycloak/themes/mykrobe-atlas",
                 "name": "keycloak-theme-volume"
               }
             ],
