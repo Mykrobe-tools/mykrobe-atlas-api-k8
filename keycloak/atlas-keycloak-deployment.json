@@ -31,12 +31,6 @@
                 "protocol": "TCP"
               }
             ],
-            "volumeMounts": [
-              {
-                "mountPath": "/opt/jboss/keycloak/themes/mykrobe-atlas",
-                "name": "keycloak-theme-volume"
-              }
-            ],
             "env": [
               {
                 "name": "DB_VENDOR",
