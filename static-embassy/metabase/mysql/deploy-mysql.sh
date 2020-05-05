@@ -62,9 +62,8 @@ EOF
 sed "s#{NAMESPACE}#$NAMESPACE#g" mysql-deployment.yaml > mysql-deployment-tmp0.yaml
 sed "s#{PREFIX}#$PREFIX#g" mysql-deployment-tmp0.yaml > mysql-deployment-tmp1.yaml
 sed "s#{MYSQL_IMAGE}#$MYSQL_IMAGE#g" mysql-deployment-tmp1.yaml > mysql-deployment-tmp2.yaml
-sed "s#{MYSQL_IMAGE}#$MYSQL_IMAGE#g" mysql-deployment-tmp2.yaml > mysql-deployment-tmp3.yaml
-sed "s#{DATABASE}#$DATABASE#g" mysql-deployment-tmp3.yaml > mysql-deployment-tmp4.yaml
-sed "s#{DB_USER}#$DB_USER#g" mysql-deployment-tmp4.yaml > mysql-deployment-resolved.yaml
+sed "s#{DATABASE}#$DATABASE#g" mysql-deployment-tmp2.yaml > mysql-deployment-tmp3.yaml
+sed "s#{DB_USER}#$DB_USER#g" mysql-deployment-tmp3.yaml > mysql-deployment-resolved.yaml
 
 kubectl apply -f mysql-deployment-resolved.yaml
 
