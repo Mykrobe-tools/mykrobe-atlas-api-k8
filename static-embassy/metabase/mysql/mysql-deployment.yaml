@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {PREFIX}-mysql
+  namespace: {NAMESPACE}
+  labels:
+    app: {PREFIX}-mysql
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {PREFIX}-mysql
+      release: {PREFIX}-mysql
+  template:
+    metadata:
+      labels:
+        app: {PREFIX}-mysql
+        release: {PREFIX}-mysql
+    spec:
+      serviceAccountName: default
+      initContainers:
+      - name: "remove-lost-found"
+        image: "busybox:1.29.3"
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+        command:  ["rm", "-fr", "/var/lib/mysql/lost+found"]
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+      containers:
+      - name: {PREFIX}-mysql
+        image: {MYSQL_IMAGE}
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {PREFIX}-mysql
+              key: mysql-root-password
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {PREFIX}-mysql
+              key: mysql-password
+        - name: MYSQL_USER
+          value: {DB_USER}
+        - name: MYSQL_DATABASE
+          value: {DATABASE}
+        ports:
+        - name: mysql
+          containerPort: 3306
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {PREFIX}-mysql
