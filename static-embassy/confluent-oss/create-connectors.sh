@@ -20,9 +20,12 @@ curl -X POST \
         "connector.class": "io.debezium.connector.mongodb.MongoDbConnector",
         "tasks.max": 1,
         "mongodb.hosts" : "mykrobe-mongodb-replicaset-client.mykrobe-dev.svc.cluster.local:27017",
-        "mongodb.name" : "atlas",
+        "mongodb.name" : "mykrobe",
         "mongodb.user" : "admin",
         "mongodb.password" : "<admin_password>",
+        "mongodb.members.auto.discover": "true",
+        "mongodb.ssl.enabled": "false",
+        "database.blacklist": "config",
         "database.history.kafka.bootstrap.servers" : "mykrobe-confluent-kafka.mykrobe-dev.svc.cluster.local:9092"
         }
     }' http://$CONNECT_REST_ADVERTISED_HOST_NAME:8083/connectors
