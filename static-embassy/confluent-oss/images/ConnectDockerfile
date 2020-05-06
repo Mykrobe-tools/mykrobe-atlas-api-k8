@@ -1,0 +1,7 @@
+FROM confluentinc/cp-kafka-connect:5.4.1
+
+COPY mysql-connector-java-8.0.17.jar /usr/share/java/kafka-connect-jdbc/mysql-connector-java-8.0.17.jar
+
+RUN confluent-hub install --no-prompt debezium/debezium-connector-mongodb:latest
+
+ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
