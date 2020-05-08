@@ -26,6 +26,9 @@ curl -X POST \
         "mongodb.members.auto.discover": "true",
         "mongodb.ssl.enabled": "false",
         "database.blacklist": "config",
+        "transforms.unwrap.type": "io.debezium.connector.mongodb.transforms.UnwrapFromMongoDbEnvelope",
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "database.history.kafka.bootstrap.servers" : "mykrobe-confluent-kafka.mykrobe-dev.svc.cluster.local:9092"
         }
     }' http://$CONNECT_REST_ADVERTISED_HOST_NAME:8083/connectors
