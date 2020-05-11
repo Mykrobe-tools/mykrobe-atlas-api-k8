@@ -89,6 +89,69 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: $CONFLUENT-$KAFKA-0-nodeport
+  labels:
+    app: $KAFKA
+    release: $CONFLUENT
+    pod: $CONFLUENT-$KAFKA-0
+spec:
+  type: NodePort
+  ports:
+    - name: external-broker
+      port: 19092
+      targetPort: 31090
+      nodePort: 31090
+      protocol: TCP
+  selector:
+    app: $KAFKA
+    release: $CONFLUENT
+    statefulset.kubernetes.io/pod-name: $CONFLUENT-$KAFKA-0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $CONFLUENT-$KAFKA-1-nodeport
+  labels:
+    app: $KAFKA
+    release: $CONFLUENT
+    pod: $CONFLUENT-$KAFKA-1
+spec:
+  type: NodePort
+  ports:
+    - name: external-broker
+      port: 19092
+      targetPort: 31091
+      nodePort: 31091
+      protocol: TCP
+  selector:
+    app: $KAFKA
+    release: $CONFLUENT
+    statefulset.kubernetes.io/pod-name: $CONFLUENT-$KAFKA-1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $CONFLUENT-$KAFKA-2-nodeport
+  labels:
+    app: $KAFKA
+    release: $CONFLUENT
+    pod: $CONFLUENT-$KAFKA-2
+spec:
+  type: NodePort
+  ports:
+    - name: external-broker
+      port: 19092
+      targetPort: 31092
+      nodePort: 31092
+      protocol: TCP
+  selector:
+    app: $KAFKA
+    release: $CONFLUENT
+    statefulset.kubernetes.io/pod-name: $CONFLUENT-$KAFKA-2
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: $CONFLUENT-$KAFKA
   namespace: $NAMESPACE
   labels:
