@@ -80,7 +80,7 @@ spec:
           - name: MB_DB_PORT
             value: "3306"
           - name: MB_DB_DBNAME
-            value: "mykrobe"
+            value: $DATABASE
           - name: MB_DB_USER
             valueFrom:
               secretKeyRef:
