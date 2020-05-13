@@ -28,6 +28,21 @@ metadata:
   name: $PREFIX
   namespace: $NAMESPACE
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: mongodb-replicaset
+  name: $PREFIX-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: $PREFIX
+subjects:
+- kind: ServiceAccount
+  name: $PREFIX
+  namespace: $NAMESPACE
+---
 apiVersion: v1
 data:
   mongod.conf: |

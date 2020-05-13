@@ -28,6 +28,21 @@ metadata:
   name: $PREFIX-insight
   namespace: $NAMESPACE
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: $CONFLUENT
+  name: $PREFIX-insight-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: $PREFIX-insight
+subjects:
+- kind: ServiceAccount
+  name: $PREFIX-insight
+  namespace: $NAMESPACE
+---
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
