@@ -64,6 +64,7 @@ spec:
       labels:
         app: $PREFIX-metabase
     spec:
+      serviceAccountName: $PREFIX-insight
       containers:
         - name: metabase
           image: $METABASE_IMAGE

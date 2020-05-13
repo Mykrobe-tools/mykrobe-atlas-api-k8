@@ -31,6 +31,7 @@ spec:
       labels:
         app: $PREFIX-$APP_NAME
     spec:
+      serviceAccountName: $PREFIX-insight
       containers:
         - name: kafka-consumer
           image: $CONSUMER_IMAGE

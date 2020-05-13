@@ -21,6 +21,14 @@ kubectl apply -f mongodb-init-configmap.yaml -n $NAMESPACE
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: mongodb-replicaset
+  name: $PREFIX
+  namespace: $NAMESPACE
+---
+apiVersion: v1
 data:
   mongod.conf: |
     {}
@@ -111,6 +119,7 @@ spec:
         app: mongodb-replicaset
         release: $RELEASE_NAME
     spec:
+      serviceAccountName: $PREFIX
       containers:
       - args:
         - --config=/data/configdb/mongod.conf
