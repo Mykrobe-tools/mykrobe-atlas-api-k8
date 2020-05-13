@@ -18,6 +18,7 @@ spec:
         app: {KAFKA}
         release: {PREFIX}
     spec:
+      serviceAccountName: {PREFIX}-insight
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -125,6 +126,7 @@ spec:
         app: {ZOOKEEPER}
         release: {PREFIX}
     spec:
+      serviceAccountName: {PREFIX}-insight
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

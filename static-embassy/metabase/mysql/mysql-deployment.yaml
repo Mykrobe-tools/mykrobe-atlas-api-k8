@@ -19,7 +19,7 @@ spec:
         app: {PREFIX}-mysql
         release: {PREFIX}-mysql
     spec:
-      serviceAccountName: default
+      serviceAccountName: {PREFIX}-insight
       initContainers:
       - name: "remove-lost-found"
         image: "busybox:1.29.3"

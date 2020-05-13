@@ -20,6 +20,14 @@ echo ""
 
 cat <<EOF | kubectl apply -f -
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: $CONFLUENT
+  name: $PREFIX-insight
+  namespace: $NAMESPACE
+---
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -227,6 +235,7 @@ metadata:
     app: cc
     release: $CONFLUENT
 spec:
+  serviceAccountName: $PREFIX-insight
   replicas: 1
   selector:
     matchLabels:
@@ -273,6 +282,7 @@ metadata:
     app: $KAFKA_CONNECT
     release: $CONFLUENT
 spec:
+  serviceAccountName: $PREFIX-insight
   replicas: 1
   selector:
     matchLabels:
@@ -346,6 +356,7 @@ metadata:
     app: $SCHEMA_REGISTRY
     release: $CONFLUENT
 spec:
+  serviceAccountName: $PREFIX-insight
   replicas: 1
   selector:
     matchLabels:

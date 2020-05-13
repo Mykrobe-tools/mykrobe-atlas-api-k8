@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export NAMESPACE="mykrobe-dev"
+export NAMESPACE="mykrobe-search-dev"
 export APPLICATION_NAME="mykrobe-opendistro-es"
 export RELEASE_NAME="mykrobe"
 export OPENDISTRO_IMAGE="amazon/opendistro-for-elasticsearch:1.6.0"
