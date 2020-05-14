@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source config.sh
-
 echo ""
 echo "Deploying Kafka consumer using:"
 echo " - NAMESPACE: $NAMESPACE"

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source config.sh
-
 echo ""
 echo "Deploying OpenDistro using:"
 echo " - Application name: $APPLICATION_NAME"

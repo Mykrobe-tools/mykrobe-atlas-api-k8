@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export NAMESPACE="mykrobe-insight-dev"
+export NAMESPACE="mykrobe-insight-uat"
 export PREFIX="mykrobe"
 export MYSQL_IMAGE="mysql:5.7.28"
 export DATABASE="mykrobe"

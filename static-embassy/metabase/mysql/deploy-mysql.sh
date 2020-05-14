@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source config.sh
-
 echo ""
 echo "Deploying Mysql using:"
 echo " - Namespace: $NAMESPACE"

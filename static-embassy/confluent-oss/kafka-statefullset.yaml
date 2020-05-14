@@ -2,12 +2,13 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: {PREFIX}-{KAFKA}
+  name: {CONFLUENT}-{KAFKA}
+  namespace: {NAMESPACE}
   labels:
     app: {KAFKA}
-    release: {PREFIX}
+    release: {CONFLUENT}
 spec:
-  serviceName: {PREFIX}-{KAFKA}-headless
+  serviceName: {CONFLUENT}-{KAFKA}-headless
   podManagementPolicy: OrderedReady
   replicas: 3
   updateStrategy:
@@ -16,7 +17,7 @@ spec:
     metadata:
       labels:
         app: {KAFKA}
-        release: {PREFIX}
+        release: {CONFLUENT}
     spec:
       serviceAccountName: {PREFIX}-insight
       affinity:
@@ -33,7 +34,7 @@ spec:
                   - key: "release"
                     operator: In
                     values:
-                    - {PREFIX}
+                    - {CONFLUENT}
               topologyKey: "kubernetes.io/hostname"
       containers:
       - name: {KAFKA}-broker
@@ -42,11 +43,11 @@ spec:
         ports:
         - containerPort: 9092
           name: kafka
-        - containerPort: 31090
+        - containerPort: {BROKER_NODEPORT0}
           name: nodeport-0
-        - containerPort: 31091
+        - containerPort: {BROKER_NODEPORT1}
           name: nodeport-1
-        - containerPort: 31092
+        - containerPort: {BROKER_NODEPORT2}
           name: nodeport-2
         resources:
           {}
@@ -71,15 +72,15 @@ spec:
         - name: KAFKA_HEAP_OPTS
           value: -Xms512M -Xmx512M
         - name: KAFKA_ZOOKEEPER_CONNECT
-          value: "{PREFIX}-{ZOOKEEPER}-headless:2181"
+          value: "{CONFLUENT}-{ZOOKEEPER}-headless:2181"
         - name: KAFKA_LOG_DIRS
           value: "/opt/kafka/data-0/logs"
         - name: KAFKA_METRIC_REPORTERS
           value: "io.confluent.metrics.reporter.ConfluentMetricsReporter"
         - name: CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS
-          value: "PLAINTEXT://{PREFIX}-{KAFKA}-headless:9092"
+          value: "PLAINTEXT://{CONFLUENT}-{KAFKA}-headless:9092"
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: "EXTERNAL://${POD_NAME}:$((31090 + ${KAFKA_BROKER_ID}))"
+          value: "EXTERNAL://${POD_NAME}:$(({BROKER_NODEPORT0} + ${KAFKA_BROKER_ID}))"
         - name: "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP"
           value: "PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT"
         - name: "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR"
@@ -93,7 +94,7 @@ spec:
         - -exc
         - |
           export KAFKA_BROKER_ID=${HOSTNAME##*-} && \
-          export KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${POD_NAME}.{PREFIX}-{KAFKA}-headless.${POD_NAMESPACE}:9092,EXTERNAL://${POD_NAME}:$((31090 + ${KAFKA_BROKER_ID})) && \
+          export KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${POD_NAME}.{CONFLUENT}-{KAFKA}-headless.${POD_NAMESPACE}:9092,EXTERNAL://${POD_NAME}:$(({BROKER_NODEPORT0} + ${KAFKA_BROKER_ID})) && \
           exec /etc/confluent/docker/run
         volumeMounts:
           - name: datadir-0
@@ -110,12 +111,13 @@ spec:
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: {PREFIX}-{ZOOKEEPER}
+  name: {CONFLUENT}-{ZOOKEEPER}
+  namespace: {NAMESPACE}
   labels:
     app: {ZOOKEEPER}
-    release: {PREFIX}
+    release: {CONFLUENT}
 spec:
-  serviceName: {PREFIX}-{ZOOKEEPER}-headless
+  serviceName: {CONFLUENT}-{ZOOKEEPER}-headless
   podManagementPolicy: OrderedReady
   replicas: 3
   updateStrategy:
@@ -124,7 +126,7 @@ spec:
     metadata:
       labels:
         app: {ZOOKEEPER}
-        release: {PREFIX}
+        release: {CONFLUENT}
     spec:
       serviceAccountName: {PREFIX}-insight
       affinity:
@@ -141,7 +143,7 @@ spec:
                   - key: "release"
                     operator: In
                     values:
-                    - {PREFIX}
+                    - {CONFLUENT}
               topologyKey: "kubernetes.io/hostname"
       containers:
       - name: {ZOOKEEPER}-server
@@ -175,7 +177,7 @@ spec:
         - name: ZOOKEEPER_CLIENT_PORT
           value: "2181"
         - name : ZOOKEEPER_SERVERS
-          value: "{PREFIX}-{ZOOKEEPER}-0.{PREFIX}-{ZOOKEEPER}-headless.{NAMESPACE}:2888:3888;{PREFIX}-{ZOOKEEPER}-1.{PREFIX}-{ZOOKEEPER}-headless.{NAMESPACE}:2888:3888;{PREFIX}-{ZOOKEEPER}-2.{PREFIX}-{ZOOKEEPER}-headless.{NAMESPACE}:2888:3888"
+          value: "{CONFLUENT}-{ZOOKEEPER}-0.{CONFLUENT}-{ZOOKEEPER}-headless.{NAMESPACE}:2888:3888;{CONFLUENT}-{ZOOKEEPER}-1.{CONFLUENT}-{ZOOKEEPER}-headless.{NAMESPACE}:2888:3888;{CONFLUENT}-{ZOOKEEPER}-2.{CONFLUENT}-{ZOOKEEPER}-headless.{NAMESPACE}:2888:3888"
         # ZOOKEEPER_SERVER_ID is required just to pass {ZOOKEEPER} ensure script for env check,
         # the value(metadata.mame) is not used and will be overwritten in command part
         - name: ZOOKEEPER_SERVER_ID

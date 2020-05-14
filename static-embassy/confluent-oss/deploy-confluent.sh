@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source config.sh
-
 echo ""
 echo "Deploying Confluent platform using:"
 echo " - Namespace: $NAMESPACE"
@@ -16,6 +14,7 @@ echo " - Kafka-connect Image: $KAFKA_CONNECT_IMAGE"
 echo " - Schema-registry Image: $SCHEMA_REGISTRY_IMAGE"
 echo " - Kafka broker Image: $KAFKA_BROKER_IMAGE"
 echo " - Zookeeper Image: $ZOOKEEPER_IMAGE"
+echo " - Broker NodePort: $BROKER_NODEPORT0"
 echo ""
 
 cat <<EOF | kubectl apply -f -
@@ -98,6 +97,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: $CONFLUENT-$KAFKA-0-nodeport
+  namespace: $NAMESPACE
   labels:
     app: $KAFKA
     release: $CONFLUENT
@@ -107,8 +107,8 @@ spec:
   ports:
     - name: external-broker
       port: 19092
-      targetPort: 31090
-      nodePort: 31090
+      targetPort: $BROKER_NODEPORT0
+      nodePort: $BROKER_NODEPORT0
       protocol: TCP
   selector:
     app: $KAFKA
@@ -119,6 +119,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: $CONFLUENT-$KAFKA-1-nodeport
+  namespace: $NAMESPACE
   labels:
     app: $KAFKA
     release: $CONFLUENT
@@ -128,8 +129,8 @@ spec:
   ports:
     - name: external-broker
       port: 19092
-      targetPort: 31091
-      nodePort: 31091
+      targetPort: $BROKER_NODEPORT1
+      nodePort: $BROKER_NODEPORT1
       protocol: TCP
   selector:
     app: $KAFKA
@@ -140,6 +141,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: $CONFLUENT-$KAFKA-2-nodeport
+  namespace: $NAMESPACE
   labels:
     app: $KAFKA
     release: $CONFLUENT
@@ -149,8 +151,8 @@ spec:
   ports:
     - name: external-broker
       port: 19092
-      targetPort: 31092
-      nodePort: 31092
+      targetPort: $BROKER_NODEPORT2
+      nodePort: $BROKER_NODEPORT2
       protocol: TCP
   selector:
     app: $KAFKA
@@ -235,7 +237,6 @@ metadata:
     app: cc
     release: $CONFLUENT
 spec:
-  serviceAccountName: $PREFIX-insight
   replicas: 1
   selector:
     matchLabels:
@@ -247,6 +248,7 @@ spec:
         app: cc
         release: $CONFLUENT
     spec:
+      serviceAccountName: $PREFIX-insight
       containers:
         - name: cc
           image: $CONTROL_CENTER_IMAGE
@@ -282,7 +284,6 @@ metadata:
     app: $KAFKA_CONNECT
     release: $CONFLUENT
 spec:
-  serviceAccountName: $PREFIX-insight
   replicas: 1
   selector:
     matchLabels:
@@ -294,6 +295,7 @@ spec:
         app: $KAFKA_CONNECT
         release: $CONFLUENT
     spec:
+      serviceAccountName: $PREFIX-insight
       containers:
         - name: $KAFKA_CONNECT-server
           image: $KAFKA_CONNECT_IMAGE
@@ -356,7 +358,6 @@ metadata:
     app: $SCHEMA_REGISTRY
     release: $CONFLUENT
 spec:
-  serviceAccountName: $PREFIX-insight
   replicas: 1
   selector:
     matchLabels:
@@ -368,6 +369,7 @@ spec:
         app: $SCHEMA_REGISTRY
         release: $CONFLUENT
     spec:
+      serviceAccountName: $PREFIX-insight
       containers:
         - name: $SCHEMA_REGISTRY-server
           image: $SCHEMA_REGISTRY_IMAGE
@@ -396,12 +398,16 @@ spec:
             value: "-Xms512M -Xmx512M"
 EOF
 
-sed "s#{PREFIX}#$CONFLUENT#g" kafka-statefullset.yaml > kafka-statefullset-deploy-tmp0.yaml
+sed "s#{CONFLUENT}#$CONFLUENT#g" kafka-statefullset.yaml > kafka-statefullset-deploy-tmp0.yaml
 sed "s#{ZOOKEEPER}#$ZOOKEEPER#g" kafka-statefullset-deploy-tmp0.yaml >kafka-statefullset-deploy-tmp1.yaml
 sed "s#{KAFKA}#$KAFKA#g" kafka-statefullset-deploy-tmp1.yaml > kafka-statefullset-deploy-tmp2.yaml
 sed "s#{KAFKA_BROKER_IMAGE}#$KAFKA_BROKER_IMAGE#g" kafka-statefullset-deploy-tmp2.yaml > kafka-statefullset-deploy-tmp3.yaml
 sed "s#{ZOOKEEPER_IMAGE}#$ZOOKEEPER_IMAGE#g" kafka-statefullset-deploy-tmp3.yaml > kafka-statefullset-deploy-tmp4.yaml
-sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp4.yaml > kafka-statefullset-deploy.yaml
+sed "s#{BROKER_NODEPORT0}#$BROKER_NODEPORT0#g" kafka-statefullset-deploy-tmp4.yaml > kafka-statefullset-deploy-tmp5.yaml
+sed "s#{PREFIX}#$PREFIX#g" kafka-statefullset-deploy-tmp5.yaml > kafka-statefullset-deploy-tmp6.yaml
+sed "s#{BROKER_NODEPORT1}#$BROKER_NODEPORT1#g" kafka-statefullset-deploy-tmp6.yaml > kafka-statefullset-deploy-tmp7.yaml
+sed "s#{BROKER_NODEPORT2}#$BROKER_NODEPORT2#g" kafka-statefullset-deploy-tmp7.yaml > kafka-statefullset-deploy-tmp8.yaml
+sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp8.yaml > kafka-statefullset-deploy.yaml
 
 kubectl apply -f kafka-statefullset-deploy.yaml -n $NAMESPACE
 
