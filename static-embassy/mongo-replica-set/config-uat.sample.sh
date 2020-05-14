@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export NAMESPACE="mykrobe-dev"
+export NAMESPACE="mykrobe-uat"
 export MONGO_IMAGE="mongo:4.2"
 export RELEASE_NAME="mykrobe"
 export REPLICAS="3"

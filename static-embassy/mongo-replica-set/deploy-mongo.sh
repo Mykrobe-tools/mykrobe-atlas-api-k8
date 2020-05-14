@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source config.sh
-
 echo ""
 echo "Deploying mongo using:"
 echo " - Image: $MONGO_IMAGE"
@@ -25,7 +23,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: mongodb-replicaset
-  name: $PREFIX
+  name: $RELEASE_NAME-mongo-sa
   namespace: $NAMESPACE
 ---
 apiVersion: v1

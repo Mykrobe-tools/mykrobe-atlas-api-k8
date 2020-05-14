@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source config.sh
-
 echo ""
 echo "Deploying Mysql using:"
 echo " - Namespace: $NAMESPACE"
@@ -77,7 +75,7 @@ spec:
           - name: MB_DB_TYPE
             value: mysql
           - name: MB_DB_HOST
-            value: "$PREFIX-mysql.$PREFIX-dev.svc.cluster.local"
+            value: "$PREFIX-mysql.$NAMESPACE.svc.cluster.local"
           - name: MB_DB_PORT
             value: "3306"
           - name: MB_DB_DBNAME
