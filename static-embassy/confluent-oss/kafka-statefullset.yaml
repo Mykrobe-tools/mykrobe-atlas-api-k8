@@ -106,7 +106,7 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: "50Gi"
+          storage: "25Gi"
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -204,11 +204,11 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: "100Gi"
+          storage: "50Gi"
   - metadata:
       name: datalogdir
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: "100Gi"
+          storage: "50Gi"

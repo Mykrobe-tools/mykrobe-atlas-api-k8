@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: mykrobe-atlas-analysis-api
+  name: mykrobe-atlas-analysis-api
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: mykrobe-atlas-analysis-api
+  template:
+    metadata:
+      labels:
+        app: mykrobe-atlas-analysis-api
+    spec:
+      containers:
+      - args:
+        - -c
+        - uwsgi --http :80  --harakiri 300  --buffer-size=65535  -w wsgi:app
+        command:
+        - /bin/sh
+        env:
+        - name: CONFIG_HASH_MD5
+          value: 0960112ac0a45b542a3c77aea5f2ceb4
+        envFrom:
+        - configMapRef:
+            name: atlas-analysis-api-env
+        image: phelimb/mykrobe-atlas-analysis-api:113af42
+        imagePullPolicy: IfNotPresent
+        name: mykrobe-atlas-analysis
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /data/
+          name: uploads-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - name: uploads-data
+        persistentVolumeClaim:
+          claimName: uploads-data
