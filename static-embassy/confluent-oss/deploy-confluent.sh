@@ -20,6 +20,21 @@ echo ""
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-resources
+  namespace: $NAMESPACE
+spec:
+  hard:
+    pods: "4" 
+    requests.cpu: "1000m" 
+    requests.memory: 1Gi 
+    requests.ephemeral-storage: 2Gi 
+    limits.cpu: "2000m" 
+    limits.memory: 2Gi 
+    limits.ephemeral-storage: 4Gi
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
