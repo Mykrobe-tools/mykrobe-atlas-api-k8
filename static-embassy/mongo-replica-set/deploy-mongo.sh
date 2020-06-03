@@ -14,6 +14,15 @@ echo " - App Password: $APP_PASSWORD"
 echo " - Key: $MONGO_KEY"
 echo ""
 
+echo "Limits:"
+echo " - Request CPU: $REQUEST_CPU"
+echo " - Request Memory: $REQUEST_MEMORY"
+echo " - Request Storage: $REQUEST_STORAGE"
+echo " - Limit CPU: $LIMIT_CPU"
+echo " - Limit Memory: $LIMIT_MEMORY"
+echo " - Limit Storage: $LIMIT_STORAGE"
+echo ""
+
 kubectl apply -f mongodb-init-configmap.yaml -n $NAMESPACE
 
 cat <<EOF | kubectl apply -f -
@@ -159,13 +168,13 @@ spec:
           timeoutSeconds: 1
         resources: 
           requests:
-            memory: "1Gi"
-            cpu: "1000m" 
-            ephemeral-storage: "2Gi"         
+            memory: "$REQUEST_MEMORY"
+            cpu: "$REQUEST_CPU" 
+            ephemeral-storage: "$REQUEST_STORAGE"         
           limits:
-            memory: "2Gi"
-            cpu: "2000m" 
-            ephemeral-storage: "4Gi"
+            memory: "$LIMIT_MEMORY"
+            cpu: "$LIMIT_CPU" 
+            ephemeral-storage: "$LIMIT_STORAGE"
         volumeMounts:
         - mountPath: /data/db
           name: datadir
