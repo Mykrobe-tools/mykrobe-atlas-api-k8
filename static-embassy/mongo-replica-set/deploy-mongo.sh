@@ -298,6 +298,7 @@ spec:
       annotations: null
       name: datadir
     spec:
+      storageClassName: nfs-client
       accessModes:
       - ReadWriteOnce
       resources:
