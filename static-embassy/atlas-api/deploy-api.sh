@@ -3,6 +3,7 @@
 echo ""
 echo "Deploying atlas api using:"
 echo " - Namespace: $NAMESPACE"
+echo " - Prefix: $PREFIX"
 echo " - Env: $ENV"
 echo " - Api Image: $API_IMAGE"
 echo " - DB Host: $DB_SERVICE_HOST"
@@ -36,54 +37,56 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: demo-data
+  name: $PREFIX-demo-data
   namespace: $NAMESPACE
 spec:
+  storageClassName: nfs-client
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
-      storage: 8Gi
+      storage: $STORAGE_DEMO
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: uploads-data
+  name: $PREFIX-uploads-data
   namespace: $NAMESPACE
 spec:
+  storageClassName: nfs-client
   accessModes:
   - ReadWriteMany
   resources:
     requests:
-      storage: 30Gi
+      storage: $STORAGE_UPLOADS
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   labels:
-    app: atlas-api
-  name: atlas-api-Deployment
+    app: $PREFIX
+  name: $PREFIX-deployment
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: atlas-api
+      app: $PREFIX
   template:
     metadata:
       labels:
-        app: atlas-api
+        app: $PREFIX
     spec:
       containers:
       - image: $API_IMAGE
-        name: atlas-api
+        name: $PREFIX
         ports:
         - containerPort: 3000
           protocol: TCP
         volumeMounts:
         - mountPath: "/app/uploads"
-          name: uploads-volume
+          name: $PREFIX-uploads-volume
         - mountPath: "/app/demo"
-          name: demo-volume
+          name: $PREFIX-demo-volume
         env:
         - name: NODE_ENV
           value: production
@@ -138,46 +141,19 @@ spec:
         - name: LOCATIONIQ_API_KEY
           value: $LOCATIONIQ_API_KEY
       volumes:
-      - name: uploads-volume
+      - name: $PREFIX-uploads-volume
         persistentVolumeClaim:
-          claimName: uploads-data
-      - name: demo-volume
+          claimName: $PREFIX-uploads-data
+      - name: $PREFIX-demo-volume
         persistentVolumeClaim:
-          claimName: demo-data
+          claimName: $PREFIX-demo-data
       imagePullSecrets:
       - name: dockerhub
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: atlas-api-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/enable-cors: 'true'
-    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
-    nginx.ingress.kubernetes.io/proxy-body-size: 10m
-  namespace: $NAMESPACE
-spec:
-  backend:
-    serviceName: atlas-api-service
-    servicePort: 3000
-  tls:
-  - hosts:
-    - $API_HOST
-    secretName: api-$ENV-mykro-be-tls
-  rules:
-  - host: $API_HOST
-    http:
-      paths:
-      - backend:
-          serviceName: atlas-api-service
-          servicePort: 3000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: atlas-api-service
+  name: $PREFIX-service
   namespace: $NAMESPACE
 spec:
   type: NodePort
@@ -187,5 +163,32 @@ spec:
     protocol: TCP
     targetPort: 3000
   selector:
-    app: atlas-api
+    app: $PREFIX
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: $PREFIX-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/enable-cors: 'true'
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+  namespace: $NAMESPACE
+spec:
+  backend:
+    serviceName: $PREFIX-service
+    servicePort: 3000
+  tls:
+  - hosts:
+    - $API_HOST
+    secretName: $PREFIX-mykro-be-tls
+  rules:
+  - host: $API_HOST
+    http:
+      paths:
+      - backend:
+          serviceName: $PREFIX-service
+          servicePort: 3000
 EOF
