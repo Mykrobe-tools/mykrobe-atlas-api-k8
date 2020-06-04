@@ -36,6 +36,14 @@ echo ""
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: $PREFIX
+  name: $PREFIX
+  namespace: $NAMESPACE
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-data
@@ -77,6 +85,7 @@ spec:
       labels:
         app: postgres
     spec:
+      serviceAccountName: $PREFIX
       containers:
       - image: $POSTGRES_IMAGE
         name: postgres
@@ -156,6 +165,7 @@ spec:
       labels:
         app: $PREFIX
     spec:
+      serviceAccountName: $PREFIX
       containers:
       - image: $KEYCLOAK_IMAGE
         name: $PREFIX
