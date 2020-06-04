@@ -1,11 +1,11 @@
 #!/bin/bash
 
 echo ""
-echo "Deploying atlas api using:"
+echo "Deploying keycloak using:"
 echo " - Namespace: $NAMESPACE"
+echo " - Prefix: $PREFIX"
 echo " - Postgres image: $POSTGRES_IMAGE"
 echo " - Keycloak image: $KEYCLOAK_IMAGE"
-echo " - ENV: $ENV"
 echo " - Host: $HOST"
 echo " - Postgres db name: $POSTGRES_DB"
 echo " - Postgres user: $POSTGRES_USER"
@@ -14,6 +14,8 @@ echo " - DB address: $DB_ADDR"
 echo " - DB port: $DB_PORT"
 echo " - Keycloak admin user: $KEYCLOAK_USER"
 echo " - Keycloak admin password: $KEYCLOAK_PASSWORD"
+echo " - Postgres storage: $STORAGE_POSTGRES"
+echo " - Themes storage: $STORAGE_THEMES"
 echo ""
 
 cat <<EOF | kubectl apply -f -
@@ -26,30 +28,32 @@ metadata:
   labels:
     app: postgres
 spec:
+  storageClassName: nfs-client
   accessModes:
   - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
+      storage: $STORAGE_POSTGRES
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: keycloak-theme-data
+  name: $PREFIX-theme-data
   namespace: $NAMESPACE
 spec:
+  storageClassName: nfs-client
   accessModes:
   - ReadWriteMany
   resources:
     requests:
-      storage: 2Gi
+      storage: $STORAGE_THEMES
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   labels:
     app: postgres
-  name: keycloak-postgres
+  name: $PREFIX-postgres
   namespace: $NAMESPACE
 spec:
   replicas: 1
@@ -83,7 +87,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: keycloak-postgres
+  name: $PREFIX-postgres
   namespace: $NAMESPACE
   labels:
     app: postgres
@@ -99,7 +103,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: keycloak-service
+  name: $PREFIX-service
   namespace: $NAMESPACE
 spec:
   type: NodePort
@@ -109,41 +113,41 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    app: keycloak
+    app: $PREFIX
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   labels:
-    app: keycloak
-  name: keycloak-deployment
+    app: $PREFIX
+  name: $PREFIX-deployment
   namespace: $NAMESPACE
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: keycloak
+      app: $PREFIX
   template:
     metadata:
       labels:
-        app: keycloak
+        app: $PREFIX
     spec:
       containers:
       - image: $KEYCLOAK_IMAGE
-        name: keycloak
+        name: $PREFIX
         ports:
         - containerPort: 8080
           protocol: TCP
         volumeMounts:
         - mountPath: "/opt/jboss/keycloak/themes/mykrobe"
-          name: keycloak-theme-volume
+          name: $PREFIX-theme-volume
         env:
         - name: DB_VENDOR
           value: POSTGRES
         - name: DB_ADDR
           value: $DB_ADDR
         - name: DB_DATABASE
-          value: keycloak
+          value: $PREFIX
         - name: DB_PORT
           value: $DB_PORT
         - name: DB_USER
@@ -157,33 +161,33 @@ spec:
         - name: PROXY_ADDRESS_FORWARDING
           value: 'true'
       volumes:
-      - name: keycloak-theme-volume
+      - name: $PREFIX-theme-volume
         persistentVolumeClaim:
-          claimName: keycloak-theme-data
+          claimName: $PREFIX-theme-data
       imagePullSecrets:
       - name: dockerhub
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: atlas-keycloak-ingress
+  name: atlas-$PREFIX-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
   namespace: $NAMESPACE
 spec:
   backend:
-    serviceName: keycloak-service
+    serviceName: $PREFIX-service
     servicePort: 8080
   tls:
   - hosts:
     - $HOST
-    secretName: accounts-$ENV-mykro-be-tls
+    secretName: $PREFIX-mykro-be-tls
   rules:
   - host: $HOST
     http:
       paths:
       - backend:
-          serviceName: keycloak-service
+          serviceName: $PREFIX-service
           servicePort: 8080
 EOF
