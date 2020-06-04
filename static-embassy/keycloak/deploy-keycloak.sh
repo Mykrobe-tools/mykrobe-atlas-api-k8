@@ -18,13 +18,16 @@ echo " - Postgres storage: $STORAGE_POSTGRES"
 echo " - Themes storage: $STORAGE_THEMES"
 echo ""
 
-echo "Limits:"
+echo "Keycloak limits:"
 echo " - Request CPU: $REQUEST_CPU"
 echo " - Request Memory: $REQUEST_MEMORY"
 echo " - Request Storage: $REQUEST_STORAGE"
 echo " - Limit CPU: $LIMIT_CPU"
 echo " - Limit Memory: $LIMIT_MEMORY"
 echo " - Limit Storage: $LIMIT_STORAGE"
+echo ""
+
+echo "Postgres limits:"
 echo " - Request DB CPU: $REQUEST_DB_CPU"
 echo " - Request DB Memory: $REQUEST_DB_MEMORY"
 echo " - Request DB Storage: $REQUEST_DB_STORAGE"
@@ -40,7 +43,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: $PREFIX
-  name: $PREFIX
+  name: $PREFIX-sa
   namespace: $NAMESPACE
 ---
 apiVersion: v1
@@ -85,7 +88,7 @@ spec:
       labels:
         app: postgres
     spec:
-      serviceAccountName: $PREFIX
+      serviceAccountName: $PREFIX-sa
       containers:
       - image: $POSTGRES_IMAGE
         name: postgres
@@ -165,7 +168,7 @@ spec:
       labels:
         app: $PREFIX
     spec:
-      serviceAccountName: $PREFIX
+      serviceAccountName: $PREFIX-sa
       containers:
       - image: $KEYCLOAK_IMAGE
         name: $PREFIX
