@@ -2,7 +2,6 @@
 
 export NAMESPACE="mykrobe-dev"
 export PREFIX="atlas-api"
-export ENV="dev"
 export API_IMAGE="makeandship/atlas-api:30"
 
 export DB_SERVICE_HOST="mykrobe-mongodb-replicaset-client.mykrobe-dev.svc.cluster.local"
