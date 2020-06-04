@@ -18,6 +18,21 @@ echo " - Postgres storage: $STORAGE_POSTGRES"
 echo " - Themes storage: $STORAGE_THEMES"
 echo ""
 
+echo "Limits:"
+echo " - Request CPU: $REQUEST_CPU"
+echo " - Request Memory: $REQUEST_MEMORY"
+echo " - Request Storage: $REQUEST_STORAGE"
+echo " - Limit CPU: $LIMIT_CPU"
+echo " - Limit Memory: $LIMIT_MEMORY"
+echo " - Limit Storage: $LIMIT_STORAGE"
+echo " - Request DB CPU: $REQUEST_DB_CPU"
+echo " - Request DB Memory: $REQUEST_DB_MEMORY"
+echo " - Request DB Storage: $REQUEST_DB_STORAGE"
+echo " - Limit DB CPU: $LIMIT_DB_CPU"
+echo " - Limit DB Memory: $LIMIT_DB_MEMORY"
+echo " - Limit DB Storage: $LIMIT_DB_STORAGE"
+echo ""
+
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
@@ -79,6 +94,15 @@ spec:
           value: $POSTGRES_USER
         - name: POSTGRES_PASSWORD
           value: $POSTGRES_PASSWORD
+        resources: 
+          requests:
+            memory: "$REQUEST_DB_MEMORY"
+            cpu: "$REQUEST_DB_CPU" 
+            ephemeral-storage: "$REQUEST_DB_STORAGE"         
+          limits:
+            memory: "$LIMIT_DB_MEMORY"
+            cpu: "$LIMIT_DB_CPU" 
+            ephemeral-storage: "$LIMIT_DB_STORAGE"
       volumes:
       - name: postgresdb
         persistentVolumeClaim:
@@ -160,6 +184,15 @@ spec:
           value: $KEYCLOAK_PASSWORD
         - name: PROXY_ADDRESS_FORWARDING
           value: 'true'
+        resources: 
+          requests:
+            memory: "$REQUEST_MEMORY"
+            cpu: "$REQUEST_CPU" 
+            ephemeral-storage: "$REQUEST_STORAGE"         
+          limits:
+            memory: "$LIMIT_MEMORY"
+            cpu: "$LIMIT_CPU" 
+            ephemeral-storage: "$LIMIT_STORAGE"
       volumes:
       - name: $PREFIX-theme-volume
         persistentVolumeClaim:

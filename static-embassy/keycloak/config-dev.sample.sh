@@ -17,4 +17,19 @@ export KEYCLOAK_PASSWORD="<KEYCLOAK_PASSWORD>"
 export STORAGE_POSTGRES="10Gi"
 export STORAGE_THEMES="2Gi"
 
+# Pod (Deployment) resource limits
+export REQUEST_DB_CPU="1000m"
+export REQUEST_DB_MEMORY="4Gi"
+export REQUEST_DB_STORAGE="2Gi"
+export LIMIT_DB_CPU="1000m"
+export LIMIT_DB_MEMORY="4Gi"
+export LIMIT_DB_STORAGE="10Gi"
+
+export REQUEST_CPU="1000m"
+export REQUEST_MEMORY="4Gi"
+export REQUEST_STORAGE="2Gi"
+export LIMIT_CPU="1000m"
+export LIMIT_MEMORY="4Gi"
+export LIMIT_STORAGE="2Gi"
+
 sh ./deploy-keycloak.sh
