@@ -68,6 +68,19 @@ spec:
     requests:
       storage: $STORAGE_UPLOADS
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: $PREFIX-env-secret
+  namespace: $NAMESPACE
+data:
+  MONGO_PASSWORD: $MONGO_PASSWORD
+  AWS_ACCESS_KEY: $AWS_ACCESS_KEY
+  AWS_SECRET_KEY: $AWS_SECRET_KEY
+  ES_PASSWORD: $ES_PASSWORD
+  KEYCLOAK_ADMIN_PASSWORD: $KEYCLOAK_ADMIN_PASSWORD
+  LOCATIONIQ_API_KEY: $LOCATIONIQ_API_KEY
+---
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -107,11 +120,20 @@ spec:
         - name: MONGO_USER
           value: $MONGO_USER
         - name: MONGO_PASSWORD
-          value: $MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: MONGO_PASSWORD
         - name: AWS_ACCESS_KEY
-          value: $AWS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: AWS_ACCESS_KEY
         - name: AWS_SECRET_KEY
-          value: $AWS_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: AWS_SECRET_KEY
         - name: AWS_REGION
           value: $AWS_REGION
         - name: ATLAS_APP
@@ -121,11 +143,14 @@ spec:
         - name: ES_HOST
           value: $ES_HOST
         - name: ES_PORT
-          value: $ES_PORT
+          value: "$ES_PORT"
         - name: ES_USERNAME
           value: $ES_USERNAME
         - name: ES_PASSWORD
-          value: $ES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: ES_PASSWORD
         - name: ES_INDEX_NAME
           value: $ES_INDEX_NAME
         - name: KEYCLOAK_REDIRECT_URI
@@ -133,11 +158,14 @@ spec:
         - name: KEYCLOAK_URL
           value: $KEYCLOAK_URL
         - name: KEYCLOAK_ADMIN_PASSWORD
-          value: $KEYCLOAK_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: KEYCLOAK_ADMIN_PASSWORD
         - name: API_HOST
           value: $API_HOST
         - name: DEBUG
-          value: $DEBUG
+          value: "$DEBUG"
         - name: ANALYSIS_API
           value: $ANALYSIS_API
         - name: BIGSI_API
@@ -147,7 +175,10 @@ spec:
         - name: DEMO_DATA_ROOT_FOLDER
           value: $DEMO_DATA_ROOT_FOLDER
         - name: LOCATIONIQ_API_KEY
-          value: $LOCATIONIQ_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: LOCATIONIQ_API_KEY
         - name: NODE_OPTIONS
           value: '--max-old-space-size=$NODE_OPTIONS_MEMORY'
         resources: 
