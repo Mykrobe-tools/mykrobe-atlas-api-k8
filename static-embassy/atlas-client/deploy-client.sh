@@ -20,19 +20,12 @@ echo ""
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
-kind: Service
+kind: ServiceAccount
 metadata:
-  name: $PREFIX-service
-  namespace: $NAMESPACE
-spec:
-  type: NodePort
-  ports:
-  - name: http
-    port: 3000
-    protocol: TCP
-    targetPort: 3000
-  selector:
+  labels:
     app: $PREFIX
+  name: $PREFIX-sa
+  namespace: $NAMESPACE
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -50,12 +43,16 @@ spec:
       labels:
         app: $PREFIX
     spec:
+      serviceAccountName: $PREFIX-sa
       containers:
       - image: $CLIENT_IMAGE
         name: $PREFIX
         ports:
         - containerPort: 3000
           protocol: TCP
+        env:
+        - name: NODE_OPTIONS
+          value: '--max-old-space-size=$NODE_OPTIONS_MEMORY'
         resources: 
           requests:
             memory: "$REQUEST_MEMORY"
@@ -67,6 +64,21 @@ spec:
             ephemeral-storage: "$LIMIT_STORAGE"
       imagePullSecrets:
       - name: dockerhub
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $PREFIX-service
+  namespace: $NAMESPACE
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: $PREFIX
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
