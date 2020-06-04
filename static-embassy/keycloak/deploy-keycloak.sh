@@ -172,7 +172,7 @@ spec:
         - name: DB_DATABASE
           value: $PREFIX
         - name: DB_PORT
-          value: $DB_PORT
+          value: "$DB_PORT"
         - name: DB_USER
           value: $POSTGRES_USER
         - name: DB_PASSWORD
