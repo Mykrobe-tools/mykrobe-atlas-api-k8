@@ -2,6 +2,7 @@
 
 export NAMESPACE="mykrobe-dev"
 export PREFIX="keycloak"
+export POSTGRES_PREFIX="postgres"
 export POSTGRES_IMAGE="postgres:10"
 export KEYCLOAK_IMAGE="makeandship/keycloak:1"
 export HOST="accounts-dev.mykro.be"
@@ -23,13 +24,13 @@ export REQUEST_DB_MEMORY="4Gi"
 export REQUEST_DB_STORAGE="2Gi"
 export LIMIT_DB_CPU="1000m"
 export LIMIT_DB_MEMORY="4Gi"
-export LIMIT_DB_STORAGE="10Gi"
+export LIMIT_DB_STORAGE="4Gi"
 
 export REQUEST_CPU="1000m"
 export REQUEST_MEMORY="4Gi"
 export REQUEST_STORAGE="2Gi"
 export LIMIT_CPU="1000m"
 export LIMIT_MEMORY="4Gi"
-export LIMIT_STORAGE="2Gi"
+export LIMIT_STORAGE="4Gi"
 
 sh ./deploy-keycloak.sh

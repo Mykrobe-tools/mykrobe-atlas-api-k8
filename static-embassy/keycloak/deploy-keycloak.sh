@@ -4,6 +4,7 @@ echo ""
 echo "Deploying keycloak using:"
 echo " - Namespace: $NAMESPACE"
 echo " - Prefix: $PREFIX"
+echo " - Postgres prefix: $POSTGRES_PREFIX"
 echo " - Postgres image: $POSTGRES_IMAGE"
 echo " - Keycloak image: $KEYCLOAK_IMAGE"
 echo " - Host: $HOST"
@@ -49,10 +50,10 @@ metadata:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-data
+  name: $POSTGRES_PREFIX-data
   namespace: $NAMESPACE
   labels:
-    app: postgres
+    app: $POSTGRES_PREFIX
 spec:
   storageClassName: nfs-client
   accessModes:
@@ -78,27 +79,27 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: postgres
-  name: $PREFIX-postgres
+    app: $POSTGRES_PREFIX
+  name: $POSTGRES_PREFIX
   namespace: $NAMESPACE
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: postgres
+        app: $POSTGRES_PREFIX
     spec:
       serviceAccountName: $PREFIX-sa
       containers:
       - image: $POSTGRES_IMAGE
-        name: postgres
+        name: $POSTGRES_PREFIX
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5432
           protocol: TCP
         volumeMounts:
         - mountPath: "/var/lib/postgresql/data"
-          name: postgresdb
+          name: $POSTGRES_PREFIX-data
         env:
         - name: POSTGRES_DB
           value: $POSTGRES_DB
@@ -116,17 +117,17 @@ spec:
             cpu: "$LIMIT_DB_CPU" 
             ephemeral-storage: "$LIMIT_DB_STORAGE"
       volumes:
-      - name: postgresdb
+      - name: $POSTGRES_PREFIX-data
         persistentVolumeClaim:
-          claimName: postgres-data
+          claimName: $POSTGRES_PREFIX-data
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $PREFIX-postgres
+  name: $POSTGRES_PREFIX-service
   namespace: $NAMESPACE
   labels:
-    app: postgres
+    app: $POSTGRES_PREFIX
 spec:
   type: NodePort
   ports:
@@ -134,22 +135,7 @@ spec:
     port: 5432
     targetPort: 5432
   selector:
-    app: postgres
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: $PREFIX-service
-  namespace: $NAMESPACE
-spec:
-  type: NodePort
-  ports:
-  - name: http
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    app: $PREFIX
+    app: $POSTGRES_PREFIX
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -213,10 +199,25 @@ spec:
       imagePullSecrets:
       - name: dockerhub
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $PREFIX-service
+  namespace: $NAMESPACE
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: $PREFIX
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: atlas-$PREFIX-ingress
+  name: $PREFIX-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
