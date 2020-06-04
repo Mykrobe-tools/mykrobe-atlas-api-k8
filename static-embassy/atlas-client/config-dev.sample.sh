@@ -2,7 +2,7 @@
 
 export NAMESPACE="mykrobe-dev"
 export PREFIX="atlas"
-export CLIENT_IMAGE="makeandship/atlas-client:15"
+export CLIENT_IMAGE="makeandship/atlas-client:14"
 export HOST="dev.mykro.be"
 
 # Pod (Deployment) resource limits
