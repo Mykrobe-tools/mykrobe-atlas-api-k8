@@ -14,24 +14,18 @@ echo " - App Password: $APP_PASSWORD"
 echo " - Key: $MONGO_KEY"
 echo ""
 
+echo "Limits:"
+echo " - Request CPU: $REQUEST_CPU"
+echo " - Request Memory: $REQUEST_MEMORY"
+echo " - Request Storage: $REQUEST_STORAGE"
+echo " - Limit CPU: $LIMIT_CPU"
+echo " - Limit Memory: $LIMIT_MEMORY"
+echo " - Limit Storage: $LIMIT_STORAGE"
+echo ""
+
 kubectl apply -f mongodb-init-configmap.yaml -n $NAMESPACE
 
 cat <<EOF | kubectl apply -f -
----
-apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: compute-resources
-  namespace: $NAMESPACE
-spec:
-  hard:
-    pods: "4" 
-    requests.cpu: "1000m" 
-    requests.memory: 1Gi 
-    requests.ephemeral-storage: 2Gi 
-    limits.cpu: "2000m" 
-    limits.memory: 2Gi 
-    limits.ephemeral-storage: 4Gi
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -172,7 +166,15 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-        resources: {}
+        resources: 
+          requests:
+            memory: "$REQUEST_MEMORY"
+            cpu: "$REQUEST_CPU" 
+            ephemeral-storage: "$REQUEST_STORAGE"         
+          limits:
+            memory: "$LIMIT_MEMORY"
+            cpu: "$LIMIT_CPU" 
+            ephemeral-storage: "$LIMIT_STORAGE"
         volumeMounts:
         - mountPath: /data/db
           name: datadir
@@ -296,6 +298,7 @@ spec:
       annotations: null
       name: datadir
     spec:
+      storageClassName: nfs-client
       accessModes:
       - ReadWriteOnce
       resources:

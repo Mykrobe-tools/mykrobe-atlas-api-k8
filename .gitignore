@@ -11,4 +11,6 @@ gocd/keys/bitbucket-readonly
 .DS_Store
 static-embassy/mongo-replica-set/config.sh
 static-embassy/metabase/mysql/config.sh
-static-embassy/metabase/config.sh
+static-embassy/metabase/config-dev.sh
+static-embassy/atlas-api/config-dev.sh
+static-embassy/keycloak/config.sh
