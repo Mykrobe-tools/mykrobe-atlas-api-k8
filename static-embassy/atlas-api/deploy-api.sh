@@ -31,6 +31,15 @@ echo " - Demo data folder: $DEMO_DATA_ROOT_FOLDER"
 echo " - Location IQ api key: $LOCATIONIQ_API_KEY"
 echo ""
 
+echo "Limits:"
+echo " - Request CPU: $REQUEST_CPU"
+echo " - Request Memory: $REQUEST_MEMORY"
+echo " - Request Storage: $REQUEST_STORAGE"
+echo " - Limit CPU: $LIMIT_CPU"
+echo " - Limit Memory: $LIMIT_MEMORY"
+echo " - Limit Storage: $LIMIT_STORAGE"
+echo ""
+
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
@@ -139,6 +148,17 @@ spec:
           value: $DEMO_DATA_ROOT_FOLDER
         - name: LOCATIONIQ_API_KEY
           value: $LOCATIONIQ_API_KEY
+        - name: NODE_OPTIONS
+          value: '--max-old-space-size=$NODE_OPTIONS_MEMORY'
+        resources: 
+          requests:
+            memory: "$REQUEST_MEMORY"
+            cpu: "$REQUEST_CPU" 
+            ephemeral-storage: "$REQUEST_STORAGE"         
+          limits:
+            memory: "$LIMIT_MEMORY"
+            cpu: "$LIMIT_CPU" 
+            ephemeral-storage: "$LIMIT_STORAGE"
       volumes:
       - name: $PREFIX-uploads-volume
         persistentVolumeClaim:

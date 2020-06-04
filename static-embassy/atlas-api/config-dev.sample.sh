@@ -34,7 +34,17 @@ export UPLOADS_LOCATION="/data"
 export DEMO_DATA_ROOT_FOLDER="/app/demo"
 export LOCATIONIQ_API_KEY="<LOCATIONIQ_API_KEY>"
 
+# Storage sizes
 export STORAGE_DEMO="8Gi"
 export STORAGE_UPLOADS="50Gi"
+
+# Pod (Deployment) resource limits
+export REQUEST_CPU="1000m"
+export REQUEST_MEMORY="4Gi"
+export REQUEST_STORAGE="2Gi"
+export LIMIT_CPU="1000m"
+export LIMIT_MEMORY="4Gi"
+export LIMIT_STORAGE="4Gi"
+export NODE_OPTIONS_MEMORY="4096"
 
 sh ./deploy-api.sh
