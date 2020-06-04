@@ -13,3 +13,4 @@ static-embassy/mongo-replica-set/config.sh
 static-embassy/metabase/mysql/config.sh
 static-embassy/metabase/config.sh
 static-embassy/atlas-api/config.sh
+static-embassy/keycloak/config.sh
