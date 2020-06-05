@@ -51,6 +51,8 @@ spec:
         - containerPort: 3000
           protocol: TCP
         env:
+        - name: HOST
+          value: 0.0.0.0
         - name: NODE_OPTIONS
           value: '--max-old-space-size=$NODE_OPTIONS_MEMORY'
         resources: 
