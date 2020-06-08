@@ -16,10 +16,10 @@ metadata:
 spec:
   storageClassName: nfs-client
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
-      storage: 32Gi
+      storage: 8Gi
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -41,19 +41,6 @@ data:
     rename-command SPOP ""
     rename-command SREM ""
     rename-command RENAME ""
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: $REDIS_PREFIX
-  namespace: $NAMESPACE
-spec:
-  type: NodePort
-  ports:
-  - name: $REDIS_PREFIX
-    port: 6379
-  selector:
-    app: $REDIS_PREFIX
 ---
 apiVersion: apps/v1beta2
 kind: StatefulSet
@@ -91,7 +78,7 @@ spec:
         - name: redis-data
           mountPath: "/data/"
         - name: redis-conf
-            mountPath: /etc/redis
+          mountPath: /etc/redis
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -112,4 +99,17 @@ spec:
       - name: $REDIS_PREFIX-conf
         configMap:
           name: $REDIS_PREFIX-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $REDIS_PREFIX
+  namespace: $NAMESPACE
+spec:
+  type: NodePort
+  ports:
+  - name: $REDIS_PREFIX
+    port: 6379
+  selector:
+    app: $REDIS_PREFIX
 EOF

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# create the confimap from files
-kubectl create configmap analysis-files --from-file=NC_000962.3.fasta --from-file=NC_000962.3.gb --from-file=tb_newick.txt -n $NAMESPACE
-
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
@@ -22,11 +19,24 @@ data:
   REDIS_PORT: "6379"
   TB_GENBANK_PATH: config/NC_000962.3.gb
   TB_REFERENCE_PATH: config/NC_000962.3.fasta
-  TB_TREE_PATH_V1: config/tb_newick.txt
+  TB_TREE_PATH_V1: config/tb_tree.txt
 kind: ConfigMap
 metadata:
   name: $ANALYSIS_PREFIX-env
   namespace: $NAMESPACE
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: $ANALYSIS_PREFIX-config
+  namespace: $NAMESPACE
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Mi
 ---
 apiVersion: v1
 kind: Service
@@ -50,7 +60,7 @@ kind: Deployment
 metadata:
   labels:
     app: $ANALYSIS_PREFIX-worker
-  name: $ANALYSIS_PREFIX -worker
+  name: $ANALYSIS_PREFIX-worker
   namespace: $NAMESPACE
 spec:
   selector:
@@ -86,22 +96,15 @@ spec:
         volumeMounts:
         - mountPath: /data/
           name: uploads-data
-        - mountPath: /config/NC_000962.3.fasta
-          name: analysis-files
-          subPath: NC_000962.3.fasta
-        - mountPath: /config/NC_000962.3.gb
-          name: analysis-files
-          subPath: NC_000962.3.gb
-        - mountPath: /config/tb_newick.txt
-          name: analysis-files
-          subPath: tb_newick.txt
+        - mountPath: /config/
+          name: config-data
       volumes:
       - name: uploads-data
         persistentVolumeClaim:
           claimName: $ATLAS_API_PREFIX-uploads-data
-      - name: analysis-files
-        configMap:
-          name: analysis-files    
+      - name: config-data
+        persistentVolumeClaim:
+          claimName: $ANALYSIS_PREFIX-config-data
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
