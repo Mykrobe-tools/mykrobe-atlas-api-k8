@@ -17,9 +17,9 @@ data:
   FLASK_DEBUG: "1"
   REDIS_HOST: $REDIS_PREFIX
   REDIS_PORT: "6379"
-  TB_GENBANK_PATH: config/NC_000962.3.gb
-  TB_REFERENCE_PATH: config/NC_000962.3.fasta
-  TB_TREE_PATH_V1: config/tb_tree.txt
+  TB_GENBANK_PATH: /config/NC_000962.3.gb
+  TB_REFERENCE_PATH: /config/NC_000962.3.fasta
+  TB_TREE_PATH_V1: /config/tb_tree.txt
 kind: ConfigMap
 metadata:
   name: $ANALYSIS_PREFIX-env
@@ -28,7 +28,7 @@ metadata:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: $ANALYSIS_PREFIX-config
+  name: $ANALYSIS_PREFIX-config-data
   namespace: $NAMESPACE
 spec:
   storageClassName: nfs-client
@@ -96,12 +96,12 @@ spec:
         - mountPath: /data/
           name: uploads-data
         - mountPath: /config/
-          name: config-data
+          name: $ANALYSIS_PREFIX-config-data
       volumes:
       - name: uploads-data
         persistentVolumeClaim:
           claimName: $ATLAS_API_PREFIX-uploads-data
-      - name: config-data
+      - name: $ANALYSIS_PREFIX-config-data
         persistentVolumeClaim:
           claimName: $ANALYSIS_PREFIX-config-data
 ---
