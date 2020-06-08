@@ -5,27 +5,27 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: bigsi-api-sa
+  name: $BIGSI_PREFIX-sa
   namespace: $NAMESPACE
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-atlas-bigsi-aggregator-api
+    app: bigsi-aggregator-api
     tier: front
-  name: mykrobe-atlas-bigsi-aggregator-api-deployment
+  name: bigsi-aggregator-api-deployment
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: mykrobe-atlas-bigsi-aggregator-api
+      app: bigsi-aggregator-api
   template:
     metadata:
       labels:
-        app: mykrobe-atlas-bigsi-aggregator-api
+        app: bigsi-aggregator-api
     spec:
-      serviceAccountName: bigsi-api-sa
+      serviceAccountName: $BIGSI_PREFIX-sa
       containers:
       - args:
         - -c
@@ -40,7 +40,7 @@ spec:
             name: bigsi-aggregator-env
         image: $BIGSI_AGGREGATOR_IMAGE
         imagePullPolicy: IfNotPresent
-        name: mykrobe-atlas-bigsi-aggregator
+        name: bigsi-aggregator
         ports:
         - containerPort: 80
           protocol: TCP
@@ -51,8 +51,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: mykrobe-atlas-bigsi-aggregator-api
-  name: mykrobe-atlas-bigsi-aggregator-api-service
+    app: bigsi-aggregator-api
+  name: bigsi-aggregator-api-service
   namespace: $NAMESPACE
 spec:
   ports:
@@ -61,16 +61,16 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: mykrobe-atlas-bigsi-aggregator-api
+    app: bigsi-aggregator-api
   sessionAffinity: None
   type: NodePort
 ---
 apiVersion: v1
 data:
   ATLAS_API: $ATLAS_API
-  BIGSI_URLS: http://mykrobe-atlas-bigsi-service
-  REDIS_HOST: redis
-  REDIS_IP: redis
+  BIGSI_URLS: http://bigsi-service
+  REDIS_HOST: $REDIS_PREFIX
+  REDIS_IP: $REDIS_PREFIX
   REDIS_PORT: "6379"
 kind: ConfigMap
 metadata:
@@ -81,20 +81,20 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-atlas-bigsi-aggregator-worker
+    app: bigsi-aggregator-worker
     tier: front
-  name: mykrobe-atlas-bigsi-aggregator-worker
+  name: bigsi-aggregator-worker
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: mykrobe-atlas-bigsi-aggregator-worker
+      app: bigsi-aggregator-worker
   template:
     metadata:
       labels:
-        app: mykrobe-atlas-bigsi-aggregator-worker
+        app: bigsi-aggregator-worker
     spec:
-      serviceAccountName: bigsi-api-sa
+      serviceAccountName: $BIGSI_PREFIX-sa
       containers:
       - args:
         - -A
@@ -111,7 +111,7 @@ spec:
             name: bigsi-aggregator-env
         image: $BIGSI_AGGREGATOR_IMAGE
         imagePullPolicy: IfNotPresent
-        name: mykrobe-atlas-bigsi-aggregator-worker
+        name: bigsi-aggregator-worker
       dnsPolicy: ClusterFirst
       restartPolicy: Always
 ---
@@ -128,21 +128,21 @@ data:
       flag: "c" ## Change to 'r' for read-only access
 kind: ConfigMap
 metadata:
-  name: mykrobe-atlas-bigsi-config
+  name: bigsi-config
   namespace: $NAMESPACE
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-atlas-bigsi
+    app: $PREFIX_BIGSI
     tier: front
-  name: mykrobe-atlas-bigsi-deployment
+  name: bigsi-deployment
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: mykrobe-atlas-bigsi
+      app: $PREFIX_BIGSI
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -151,9 +151,9 @@ spec:
   template:
     metadata:
       labels:
-        app: mykrobe-atlas-bigsi
+        app: $PREFIX_BIGSI
     spec:
-      serviceAccountName: bigsi-api-sa
+      serviceAccountName: $BIGSI_PREFIX-sa
       containers:
       - args:
         - -c
@@ -163,16 +163,16 @@ spec:
         - /bin/sh
         envFrom:
         - configMapRef:
-            name: mykrobe-atlas-bigsi-env
+            name: bigsi-env
         image: $BIGSI_IMAGE
         imagePullPolicy: IfNotPresent
-        name: mykrobe-atlas-bigsi
+        name: $PREFIX_BIGSI
         ports:
         - containerPort: 80
           protocol: TCP
         volumeMounts:
         - mountPath: /data/
-          name: pv-storage-for-mykrobe-atlas-bigsi
+          name: pv-storage-for-bigsi
         - mountPath: /etc/bigsi/conf/
           name: configmap-volume
       dnsPolicy: ClusterFirst
@@ -185,12 +185,12 @@ spec:
           memory: $REQUEST_MEMORY_BIGSI
           cpu: $REQUEST_CPU_BIGSI
       volumes:
-      - name: pv-storage-for-mykrobe-atlas-bigsi
+      - name: pv-storage-for-bigsi
         persistentVolumeClaim:
-          claimName: pv-claim-for-mykrobe-atlas-bigsi
+          claimName: pv-claim-for-bigsi
       - configMap:
           defaultMode: 420
-          name: mykrobe-atlas-bigsi-config
+          name: bigsi-config
         name: configmap-volume
 ---
 apiVersion: v1
@@ -211,19 +211,19 @@ metadata:
   namespace: $NAMESPACE
 spec:
   backend:
-    serviceName: mykrobe-atlas-bigsi-aggregator-api-service
+    serviceName: bigsi-aggregator-api-service
     servicePort: 80
   rules:
   - host: $BIGSI_DNS
     http:
       paths:
       - backend:
-          serviceName: mykrobe-atlas-bigsi-aggregator-api-service
+          serviceName: bigsi-aggregator-api-service
           servicePort: 80
   tls:
   - hosts:
     - $BIGSI_DNS
-    secretName: bigsi-$TARGET_ENV-mykro-be-tls
+    secretName: $BIGSI_PREFIX-mykro-be-tls
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -231,6 +231,7 @@ metadata:
   name: bigsi-data
   namespace: $NAMESPACE
 spec:
+  storageClassName: nfs-client
   accessModes:
   - ReadWriteMany
   resources:

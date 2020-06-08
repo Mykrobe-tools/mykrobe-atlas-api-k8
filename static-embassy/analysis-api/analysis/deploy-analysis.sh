@@ -5,32 +5,32 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: analysis-api-sa
+  name: $ANALYSIS_PREFIX-sa
   namespace: $NAMESPACE
 ---
 apiVersion: v1
 data:
   ATLAS_API: $ATLAS_API
-  BIGSI_URL: http://mykrobe-atlas-bigsi-aggregator-api-service/api/v1
-  CELERY_BROKER_URL: redis://redis:6379
+  BIGSI_URL: http://bigsi-aggregator-api-service/api/v1
+  CELERY_BROKER_URL: redis://$REDIS_PREFIX:6379
   DEFAULT_OUTDIR: /data/out/
   FLASK_DEBUG: "1"
-  REDIS_HOST: redis
+  REDIS_HOST: $REDIS_PREFIX
   REDIS_PORT: "6379"
   TB_GENBANK_PATH: data/NC_000962.3.gb
   TB_REFERENCE_PATH: data/NC_000962.3.fasta
   TB_TREE_PATH_V1: data/tb_newick.txt
 kind: ConfigMap
 metadata:
-  name: atlas-analysis-api-env
+  name: $ANALYSIS_PREFIX-env
   namespace: $NAMESPACE
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: mykrobe-atlas-analysis-api
-  name: mykrobe-atlas-analysis-api
+    app: $ANALYSIS_PREFIX
+  name: $ANALYSIS_PREFIX
   namespace: $NAMESPACE
 spec:
   ports:
@@ -39,7 +39,7 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: mykrobe-atlas-analysis-api
+    app: $ANALYSIS_PREFIX
   type: NodePort
 ---
 apiVersion: extensions/v1beta1
@@ -58,7 +58,7 @@ spec:
       labels:
         app: mykrobe-atlas-analysis-worker
     spec:
-      serviceAccountName: analysis-api-sa
+      serviceAccountName: $ANALYSIS_PREFIX-sa
       containers:
       - args:
         - -A
@@ -76,7 +76,7 @@ spec:
           value: $ANALYSIS_CONFIG_HASH_MD5
         envFrom:
         - configMapRef:
-            name: atlas-analysis-api-env
+            name: $ANALYSIS_PREFIX-env
         image: $ANALYSIS_API_IMAGE
         imagePullPolicy: IfNotPresent
         name: mykrobe-atlas-analysis
@@ -86,14 +86,14 @@ spec:
       volumes:
       - name: uploads-data
         persistentVolumeClaim:
-          claimName: uploads-data
+          claimName: $ATLAS_API_PREFIX-uploads-data
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-atlas-analysis-api
-  name: mykrobe-atlas-analysis-api
+    app: $ANALYSIS_PREFIX
+  name: $ANALYSIS_PREFIX
   namespace: $NAMESPACE
 spec:
   progressDeadlineSeconds: 600
@@ -101,13 +101,13 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: mykrobe-atlas-analysis-api
+      app: $ANALYSIS_PREFIX
   template:
     metadata:
       labels:
-        app: mykrobe-atlas-analysis-api
+        app: $ANALYSIS_PREFIX
     spec:
-      serviceAccountName: analysis-api-sa
+      serviceAccountName: $ANALYSIS_PREFIX-sa
       containers:
       - args:
         - -c
@@ -119,7 +119,7 @@ spec:
           value: $ANALYSIS_CONFIG_HASH_MD5
         envFrom:
         - configMapRef:
-            name: atlas-analysis-api-env
+            name: $ANALYSIS_PREFIX-env
         image: ANALYSIS_API_IMAGE
         imagePullPolicy: IfNotPresent
         name: mykrobe-atlas-analysis
@@ -141,7 +141,7 @@ spec:
       volumes:
       - name: uploads-data
         persistentVolumeClaim:
-          claimName: uploads-data
+          claimName: $ATLAS_API_PREFIX-uploads-data
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -153,17 +153,17 @@ metadata:
   namespace: $NAMESPACE
 spec:
   backend:
-    serviceName: mykrobe-atlas-analysis-api
+    serviceName: $ANALYSIS_PREFIX
     servicePort: 80
   rules:
   - host: $ANALYSIS_API_DNS
     http:
       paths:
       - backend:
-          serviceName: mykrobe-atlas-analysis-api
+          serviceName: $ANALYSIS_PREFIX
           servicePort: 80
   tls:
   - hosts:
     - $ANALYSIS_API_DNS
-    secretName: analysis-$TARGET_ENV-mykro-be-tls
+    secretName: $ANALYSIS_PREFIX-mykro-be-tls
 EOF

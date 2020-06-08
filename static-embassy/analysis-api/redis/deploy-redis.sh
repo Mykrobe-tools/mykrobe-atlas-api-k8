@@ -5,15 +5,16 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: redis-sa
+  name: $REDIS_PREFIX-sa
   namespace: $NAMESPACE
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: redis-data
+  name: $REDIS_PREFIX-data
   namespace: $NAMESPACE
 spec:
+  storageClassName: nfs-client
   accessModes:
   - ReadWriteMany
   resources:
@@ -23,7 +24,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: redis-conf
+  name: $REDIS_PREFIX-conf
   namespace: $NAMESPACE
 data:
   redis.conf: |
@@ -44,40 +45,40 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis
+  name: $REDIS_PREFIX
   namespace: $NAMESPACE
 spec:
   type: NodePort
   ports:
-  - name: redis
+  - name: $REDIS_PREFIX
     port: 6379
   selector:
-    app: redis
+    app: $REDIS_PREFIX
 ---
 apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: redis
+  name: $REDIS_PREFIX
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: redis
-  serviceName: redis
+      app: $REDIS_PREFIX
+  serviceName: $REDIS_PREFIX
   replicas: 1
   template:
     metadata:
       labels:
-        app: redis
+        app: $REDIS_PREFIX
     spec:
-      serviceAccountName: redis-sa
+      serviceAccountName: $REDIS_PREFIX-sa
       securityContext:
         runAsUser: 9999
         runAsGroup: 9999
         fsGroup: 9999
         runAsNonRoot: true
       containers:
-      - name: redis
+      - name: $REDIS_PREFIX
         image: $REDIS_IMAGE
         imagePullPolicy: Always
         command:
@@ -105,10 +106,10 @@ spec:
             memory: $POD_MEMORY_REDIS
             cpu: $POD_CPU_REDIS
       volumes:
-      - name: redis-data
+      - name: $REDIS_PREFIX-data
         persistentVolumeClaim:
-          claimName: redis-data
-      - name: redis-conf
+          claimName: $REDIS_PREFIX-data
+      - name: $REDIS_PREFIX-conf
         configMap:
-          name: redis-conf
+          name: $REDIS_PREFIX-conf
 EOF
