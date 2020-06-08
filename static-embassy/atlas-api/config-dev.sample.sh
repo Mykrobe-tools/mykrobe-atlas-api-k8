@@ -39,10 +39,10 @@ export STORAGE_UPLOADS="50Gi"
 
 # Pod (Deployment) resource limits
 export REQUEST_CPU="1000m"
-export REQUEST_MEMORY="4Gi"
+export REQUEST_MEMORY="1Gi"
 export REQUEST_STORAGE="2Gi"
 export LIMIT_CPU="1000m"
-export LIMIT_MEMORY="4Gi"
+export LIMIT_MEMORY="1Gi"
 export LIMIT_STORAGE="4Gi"
 export NODE_OPTIONS_MEMORY="4096"
 

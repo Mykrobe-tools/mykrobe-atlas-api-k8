@@ -14,3 +14,4 @@ static-embassy/metabase/mysql/config.sh
 static-embassy/metabase/config-dev.sh
 static-embassy/atlas-api/config-dev.sh
 static-embassy/keycloak/config.sh
+static-embassy/atlas-client/config-dev.sh
