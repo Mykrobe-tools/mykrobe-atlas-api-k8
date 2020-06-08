@@ -49,17 +49,17 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-atlas-analysis-worker
-  name: mykrobe-atlas-analysis-worker
+    app: $ANALYSIS_PREFIX-worker
+  name: $ANALYSIS_PREFIX -worker
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: mykrobe-atlas-analysis-worker
+      app: $ANALYSIS_PREFIX-worker
   template:
     metadata:
       labels:
-        app: mykrobe-atlas-analysis-worker
+        app: $ANALYSIS_PREFIX-worker
     spec:
       serviceAccountName: $ANALYSIS_PREFIX-sa
       containers:

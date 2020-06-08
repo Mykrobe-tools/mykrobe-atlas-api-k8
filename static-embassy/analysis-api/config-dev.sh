@@ -1,7 +1,6 @@
 #!/bin/bash
 
 export NAMESPACE="analysis-dev"
-export ATLAS_API_PREFIX="atlas-api"
 export ATLAS_API="https://api-dev.mykro.be"
 export ANALYSIS_API_IMAGE="phelimb/mykrobe-atlas-analysis-api:113af42"
 export ANALYSIS_CONFIG_HASH_MD5="0960112ac0a45b542a3c77aea5f2ceb4"
@@ -14,6 +13,7 @@ export REDIS_IMAGE="redis:4.0"
 export REDIS_PREFIX="redis"
 export ANALYSIS_PREFIX="analysis-api"
 export BIGSI_PREFIX="bigsi-api"
+export ATLAS_API_PREFIX="atlas-api"
 
 export POD_CPU_REDIS="1000m"
 export POD_MEMORY_REDIS="1Gi"
