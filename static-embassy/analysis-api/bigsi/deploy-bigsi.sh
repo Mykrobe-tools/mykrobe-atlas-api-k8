@@ -12,18 +12,18 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: bigsi-aggregator-api
+    app: $BIGSI_PREFIX-aggregator
     tier: front
-  name: bigsi-aggregator-api-deployment
+  name: $BIGSI_PREFIX-aggregator-deployment
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: bigsi-aggregator-api
+      app: $BIGSI_PREFIX-aggregator
   template:
     metadata:
       labels:
-        app: bigsi-aggregator-api
+        app: $BIGSI_PREFIX-aggregator
     spec:
       serviceAccountName: $BIGSI_PREFIX-sa
       containers:
@@ -51,17 +51,16 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: bigsi-aggregator-api
-  name: bigsi-aggregator-api-service
+    app: $BIGSI_PREFIX-aggregator
+  name: $BIGSI_PREFIX-aggregator-service
   namespace: $NAMESPACE
 spec:
   ports:
-  - nodePort: 31290
-    port: 80
+  - port: 80
     protocol: TCP
     targetPort: 80
   selector:
-    app: bigsi-aggregator-api
+    app: $BIGSI_PREFIX-aggregator
   sessionAffinity: None
   type: NodePort
 ---
@@ -74,25 +73,25 @@ data:
   REDIS_PORT: "6379"
 kind: ConfigMap
 metadata:
-  name: bigsi-aggregator-env
+  name: $BIGSI_PREFIX-aggregator-env
   namespace: $NAMESPACE
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: bigsi-aggregator-worker
+    app: $BIGSI_PREFIX-worker
     tier: front
-  name: bigsi-aggregator-worker
+  name: $BIGSI_PREFIX-worker
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: bigsi-aggregator-worker
+      app: $BIGSI_PREFIX-worker
   template:
     metadata:
       labels:
-        app: bigsi-aggregator-worker
+        app: $BIGSI_PREFIX-worker
     spec:
       serviceAccountName: $BIGSI_PREFIX-sa
       containers:
@@ -108,10 +107,19 @@ spec:
           value: $BIGSI_CONFIG_HASH_MD5
         envFrom:
         - configMapRef:
-            name: bigsi-aggregator-env
+            name: $BIGSI_PREFIX-aggregator-env
         image: $BIGSI_AGGREGATOR_IMAGE
         imagePullPolicy: IfNotPresent
-        name: bigsi-aggregator-worker
+        name: $BIGSI_PREFIX-worker
+        resources:
+          limits:
+            memory: $LIMIT_MEMORY_BIGSI
+            cpu: $LIMIT_CPU_BIGSI
+            ephemeral-storage: "$LIMIT_STORAGE_BIGSI"
+          requests:
+            memory: $REQUEST_MEMORY_BIGSI
+            cpu: $REQUEST_CPU_BIGSI
+            ephemeral-storage: "$REQUEST_STORAGE_BIGSI" 
       dnsPolicy: ClusterFirst
       restartPolicy: Always
 ---
@@ -128,21 +136,21 @@ data:
       flag: "c" ## Change to 'r' for read-only access
 kind: ConfigMap
 metadata:
-  name: bigsi-config
+  name: $BIGSI_PREFIX-config
   namespace: $NAMESPACE
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: $PREFIX_BIGSI
+    app: $BIGSI_PREFIX
     tier: front
-  name: bigsi-deployment
+  name: $BIGSI_PREFIX-deployment
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: $PREFIX_BIGSI
+      app: $BIGSI_PREFIX
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -151,46 +159,48 @@ spec:
   template:
     metadata:
       labels:
-        app: $PREFIX_BIGSI
+        app: $BIGSI_PREFIX
     spec:
       serviceAccountName: $BIGSI_PREFIX-sa
       containers:
-      - args:
-        - -c
-        - uwsgi --enable-threads --http :80 --wsgi-file bigsi/__main__.py --callable
-          __hug_wsgi__ --processes=4 --buffer-size=32768 --harakiri=300000
-        command:
-        - /bin/sh
-        envFrom:
-        - configMapRef:
-            name: bigsi-env
-        image: $BIGSI_IMAGE
-        imagePullPolicy: IfNotPresent
-        name: $PREFIX_BIGSI
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /data/
-          name: pv-storage-for-bigsi
-        - mountPath: /etc/bigsi/conf/
-          name: configmap-volume
+        - args:
+          - -c
+          - uwsgi --enable-threads --http :80 --wsgi-file bigsi/__main__.py --callable
+            __hug_wsgi__ --processes=4 --buffer-size=32768 --harakiri=300000
+          command:
+          - /bin/sh
+          envFrom:
+          - configMapRef:
+              name: $BIGSI_PREFIX-env
+          image: $BIGSI_IMAGE
+          imagePullPolicy: IfNotPresent
+          name: $BIGSI_PREFIX
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /data/
+            name: $BIGSI_PREFIX-data
+          - mountPath: /etc/bigsi/conf/
+            name: configmap-volume
+          resources:
+            limits:
+              memory: $LIMIT_MEMORY_BIGSI
+              cpu: $LIMIT_CPU_BIGSI
+              ephemeral-storage: "$LIMIT_STORAGE_BIGSI"
+            requests:
+              memory: $REQUEST_MEMORY_BIGSI
+              cpu: $REQUEST_CPU_BIGSI
+              ephemeral-storage: "$REQUEST_STORAGE_BIGSI"   
       dnsPolicy: ClusterFirst
       restartPolicy: Always
-      resources:
-        limits:
-          memory: $LIMIT_MEMORY_BIGSI
-          cpu: $LIMIT_CPU_BIGSI
-        requests:
-          memory: $REQUEST_MEMORY_BIGSI
-          cpu: $REQUEST_CPU_BIGSI
       volumes:
-      - name: pv-storage-for-bigsi
+      - name: $BIGSI_PREFIX-data
         persistentVolumeClaim:
-          claimName: pv-claim-for-bigsi
+          claimName: $BIGSI_PREFIX-data
       - configMap:
           defaultMode: 420
-          name: bigsi-config
+          name: BIGSI_PREFIX-config
         name: configmap-volume
 ---
 apiVersion: v1
@@ -198,7 +208,7 @@ data:
   BIGSI_CONFIG: /etc/bigsi/conf/config.yaml
 kind: ConfigMap
 metadata:
-  name: bigsi-env
+  name: $BIGSI_PREFIX-env
   namespace: $NAMESPACE
 ---
 apiVersion: extensions/v1beta1
@@ -207,18 +217,18 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: nginx
-  name: bigsi-ingress
+  name: $BIGSI_PREFIX-ingress
   namespace: $NAMESPACE
 spec:
   backend:
-    serviceName: bigsi-aggregator-api-service
+    serviceName: $BIGSI_PREFIX-aggregator-service
     servicePort: 80
   rules:
   - host: $BIGSI_DNS
     http:
       paths:
       - backend:
-          serviceName: bigsi-aggregator-api-service
+          serviceName: $BIGSI_PREFIX-aggregator-service
           servicePort: 80
   tls:
   - hosts:
@@ -228,12 +238,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: bigsi-data
+  name: $BIGSI_PREFIX-data
   namespace: $NAMESPACE
 spec:
   storageClassName: nfs-client
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
       storage: 8Gi

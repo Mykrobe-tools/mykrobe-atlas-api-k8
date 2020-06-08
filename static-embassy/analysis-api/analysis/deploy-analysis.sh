@@ -47,8 +47,7 @@ metadata:
   namespace: $NAMESPACE
 spec:
   ports:
-  - nodePort: 30412
-    port: 80
+  - port: 80
     protocol: TCP
     targetPort: 80
   selector:
