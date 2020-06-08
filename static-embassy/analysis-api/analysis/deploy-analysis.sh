@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# create the confimap from files
+kubectl create configmap analysis-file --from-file=NC_000962.3.fasta --from-file=NC_000962.3.gb --from-file=tb_newick.txt -n $NAMESPACE
+
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
