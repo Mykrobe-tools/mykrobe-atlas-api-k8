@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export NAMESPACE="analysis-dev"
+export NAMESPACE="mykrobe-dev"
 export ATLAS_API="https://api-dev.mykro.be"
 
 export ANALYSIS_API_IMAGE="phelimb/mykrobe-atlas-analysis-api:113af42"
@@ -19,17 +19,17 @@ export ANALYSIS_PREFIX="analysis-api"
 export BIGSI_PREFIX="bigsi-api"
 export ATLAS_API_PREFIX="atlas-api"
 
-export POD_CPU_REDIS="1000m"
+export POD_CPU_REDIS="250m"
 export POD_MEMORY_REDIS="1Gi"
 export REQUEST_MEMORY_ANALYSIS="1Gi"
-export REQUEST_CPU_ANALYSIS="1000m"
+export REQUEST_CPU_ANALYSIS="250m"
 export LIMIT_MEMORY_ANALYSIS="2Gi"
-export LIMIT_CPU_ANALYSIS="1000m"
+export LIMIT_CPU_ANALYSIS="250m"
 export REQUEST_MEMORY_BIGSI="1Gi"
-export REQUEST_CPU_BIGSI="1000m"
+export REQUEST_CPU_BIGSI="250m"
 export REQUEST_STORAGE_BIGSI="4Gi"
 export LIMIT_MEMORY_BIGSI="2Gi"
-export LIMIT_CPU_BIGSI="1000m"
+export LIMIT_CPU_BIGSI="250m"
 export LIMIT_STORAGE_BIGSI="4Gi"
 
 echo ""

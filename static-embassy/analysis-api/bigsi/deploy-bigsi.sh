@@ -37,10 +37,10 @@ spec:
           value: $BIGSI_CONFIG_HASH_MD5
         envFrom:
         - configMapRef:
-            name: bigsi-aggregator-env
+            name: $BIGSI_PREFIX-aggregator-env
         image: $BIGSI_AGGREGATOR_IMAGE
         imagePullPolicy: IfNotPresent
-        name: bigsi-aggregator
+        name: $BIGSI_PREFIX-aggregator
         ports:
         - containerPort: 80
           protocol: TCP
@@ -200,7 +200,7 @@ spec:
           claimName: $BIGSI_PREFIX-data
       - configMap:
           defaultMode: 420
-          name: BIGSI_PREFIX-config
+          name: $BIGSI_PREFIX-config
         name: configmap-volume
 ---
 apiVersion: v1

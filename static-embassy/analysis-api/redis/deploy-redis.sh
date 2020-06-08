@@ -39,7 +39,6 @@ data:
     rename-command BGSAVE ""
     rename-command SAVE ""
     rename-command SPOP ""
-    rename-command SREM ""
     rename-command RENAME ""
 ---
 apiVersion: apps/v1beta2

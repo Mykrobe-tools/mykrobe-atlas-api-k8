@@ -137,7 +137,7 @@ spec:
         envFrom:
         - configMapRef:
             name: $ANALYSIS_PREFIX-env
-        image: ANALYSIS_API_IMAGE
+        image: $ANALYSIS_API_IMAGE
         imagePullPolicy: IfNotPresent
         name: mykrobe-atlas-analysis
         ports:
