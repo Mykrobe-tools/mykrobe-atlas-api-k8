@@ -2,6 +2,12 @@
 
 cat <<EOF | kubectl apply -f -
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bigsi-api-sa
+  namespace: $NAMESPACE
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -19,6 +25,7 @@ spec:
       labels:
         app: mykrobe-atlas-bigsi-aggregator-api
     spec:
+      serviceAccountName: bigsi-api-sa
       containers:
       - args:
         - -c
@@ -87,6 +94,7 @@ spec:
       labels:
         app: mykrobe-atlas-bigsi-aggregator-worker
     spec:
+      serviceAccountName: bigsi-api-sa
       containers:
       - args:
         - -A
@@ -145,6 +153,7 @@ spec:
       labels:
         app: mykrobe-atlas-bigsi
     spec:
+      serviceAccountName: bigsi-api-sa
       containers:
       - args:
         - -c
@@ -168,6 +177,13 @@ spec:
           name: configmap-volume
       dnsPolicy: ClusterFirst
       restartPolicy: Always
+      resources:
+        limits:
+          memory: $LIMIT_MEMORY_BIGSI
+          cpu: $LIMIT_CPU_BIGSI
+        requests:
+          memory: $REQUEST_MEMORY_BIGSI
+          cpu: $REQUEST_CPU_BIGSI
       volumes:
       - name: pv-storage-for-mykrobe-atlas-bigsi
         persistentVolumeClaim:

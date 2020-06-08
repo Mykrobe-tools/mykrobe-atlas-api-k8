@@ -3,19 +3,10 @@
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
-kind: ResourceQuota
+kind: ServiceAccount
 metadata:
-  name: compute-resources
+  name: analysis-api-sa
   namespace: $NAMESPACE
-spec:
-  hard:
-    pods: "4" 
-    requests.cpu: "1000m" 
-    requests.memory: 1Gi 
-    requests.ephemeral-storage: 2Gi 
-    limits.cpu: "2000m" 
-    limits.memory: 2Gi 
-    limits.ephemeral-storage: 4Gi
 ---
 apiVersion: v1
 data:
@@ -67,6 +58,7 @@ spec:
       labels:
         app: mykrobe-atlas-analysis-worker
     spec:
+      serviceAccountName: analysis-api-sa
       containers:
       - args:
         - -A
@@ -115,6 +107,7 @@ spec:
       labels:
         app: mykrobe-atlas-analysis-api
     spec:
+      serviceAccountName: analysis-api-sa
       containers:
       - args:
         - -c
@@ -136,6 +129,13 @@ spec:
         volumeMounts:
         - mountPath: /data/
           name: uploads-data
+        resources:
+          limits:
+            memory: $LIMIT_MEMORY_ANALYSIS
+            cpu: $LIMIT_CPU_ANALYSIS
+          requests:
+            memory: $REQUEST_MEMORY_ANALYSIS
+            cpu: $REQUEST_CPU_ANALYSIS
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       volumes:

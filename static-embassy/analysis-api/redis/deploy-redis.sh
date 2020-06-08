@@ -3,6 +3,12 @@
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: redis-sa
+  namespace: $NAMESPACE
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: redis-data
@@ -13,6 +19,27 @@ spec:
   resources:
     requests:
       storage: 32Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-conf
+  namespace: $NAMESPACE
+data:
+  redis.conf: |
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    rename-command DEBUG ""
+    rename-command KEYS ""
+    rename-command PEXPIRE ""
+    rename-command CONFIG ""
+    rename-command SHUTDOWN ""
+    rename-command BGREWRITEAOF ""
+    rename-command BGSAVE ""
+    rename-command SAVE ""
+    rename-command SPOP ""
+    rename-command SREM ""
+    rename-command RENAME ""
 ---
 apiVersion: v1
 kind: Service
@@ -43,18 +70,45 @@ spec:
       labels:
         app: redis
     spec:
+      serviceAccountName: redis-sa
+      securityContext:
+        runAsUser: 9999
+        runAsGroup: 9999
+        fsGroup: 9999
+        runAsNonRoot: true
       containers:
       - name: redis
         image: $REDIS_IMAGE
         imagePullPolicy: Always
+        command:
+        - redis-server
+        - "/etc/redis/redis.conf"
         ports:
         - containerPort: 6379
           name: redis
         volumeMounts:
         - name: redis-data
           mountPath: "/data/"
+        - name: redis-conf
+            mountPath: /etc/redis
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        resources:
+          limits:
+            memory: $POD_MEMORY_REDIS
+            cpu: $POD_CPU_REDIS
+          requests:
+            memory: $POD_MEMORY_REDIS
+            cpu: $POD_CPU_REDIS
       volumes:
       - name: redis-data
         persistentVolumeClaim:
           claimName: redis-data
+      - name: redis-conf
+        configMap:
+          name: redis-conf
 EOF
