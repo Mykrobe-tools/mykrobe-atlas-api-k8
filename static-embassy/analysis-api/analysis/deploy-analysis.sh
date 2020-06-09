@@ -43,7 +43,7 @@ kind: Service
 metadata:
   labels:
     app: $ANALYSIS_PREFIX
-  name: $ANALYSIS_PREFIX
+  name: $ANALYSIS_PREFIX-service
   namespace: $NAMESPACE
 spec:
   ports:
