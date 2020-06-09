@@ -27,8 +27,8 @@ export KEYCLOAK_ADMIN_PASSWORD="<KEYCLOAK_ADMIN_PASSWORD>"
 export API_HOST="api-dev.mykro.be"
 export DEBUG=1
 
-export ANALYSIS_API="https://analysis-dev.mykro.be"
-export BIGSI_API="https://bigsi-dev.mykro.be"
+export ANALYSIS_API="http://analysis-api-service.mykrobe-dev.svc.cluster.local"
+export BIGSI_API="http://bigsi-api-service.mykrobe-dev.svc.cluster.local"
 export UPLOADS_LOCATION="/data"
 export DEMO_DATA_ROOT_FOLDER="/app/demo"
 export LOCATIONIQ_API_KEY="<LOCATIONIQ_API_KEY>"
