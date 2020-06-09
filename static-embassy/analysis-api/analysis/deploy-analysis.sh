@@ -159,28 +159,4 @@ spec:
       - name: uploads-data
         persistentVolumeClaim:
           claimName: $ATLAS_API_PREFIX-uploads-data
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: nginx
-  name: analysis-ingress
-  namespace: $NAMESPACE
-spec:
-  backend:
-    serviceName: $ANALYSIS_PREFIX
-    servicePort: 80
-  rules:
-  - host: $ANALYSIS_API_DNS
-    http:
-      paths:
-      - backend:
-          serviceName: $ANALYSIS_PREFIX
-          servicePort: 80
-  tls:
-  - hosts:
-    - $ANALYSIS_API_DNS
-    secretName: $ANALYSIS_PREFIX-mykro-be-tls
 EOF

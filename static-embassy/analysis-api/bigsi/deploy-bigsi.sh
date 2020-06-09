@@ -8,6 +8,27 @@ metadata:
   name: $BIGSI_PREFIX-sa
   namespace: $NAMESPACE
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: $BIGSI_PREFIX-data
+  namespace: $NAMESPACE
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: v1
+data:
+  BIGSI_CONFIG: /etc/bigsi/conf/config.yaml
+kind: ConfigMap
+metadata:
+  name: $BIGSI_PREFIX-env
+  namespace: $NAMESPACE
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -202,49 +223,4 @@ spec:
           defaultMode: 420
           name: $BIGSI_PREFIX-config
         name: configmap-volume
----
-apiVersion: v1
-data:
-  BIGSI_CONFIG: /etc/bigsi/conf/config.yaml
-kind: ConfigMap
-metadata:
-  name: $BIGSI_PREFIX-env
-  namespace: $NAMESPACE
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: nginx
-  name: $BIGSI_PREFIX-ingress
-  namespace: $NAMESPACE
-spec:
-  backend:
-    serviceName: $BIGSI_PREFIX-aggregator-service
-    servicePort: 80
-  rules:
-  - host: $BIGSI_DNS
-    http:
-      paths:
-      - backend:
-          serviceName: $BIGSI_PREFIX-aggregator-service
-          servicePort: 80
-  tls:
-  - hosts:
-    - $BIGSI_DNS
-    secretName: $BIGSI_PREFIX-mykro-be-tls
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: $BIGSI_PREFIX-data
-  namespace: $NAMESPACE
-spec:
-  storageClassName: nfs-client
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 8Gi
 EOF
