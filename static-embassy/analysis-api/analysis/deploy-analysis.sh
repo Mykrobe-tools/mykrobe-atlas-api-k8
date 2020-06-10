@@ -3,70 +3,74 @@
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
-kind: ResourceQuota
+kind: ServiceAccount
 metadata:
-  name: compute-resources
+  name: $ANALYSIS_PREFIX-sa
   namespace: $NAMESPACE
-spec:
-  hard:
-    pods: "4" 
-    requests.cpu: "1000m" 
-    requests.memory: 1Gi 
-    requests.ephemeral-storage: 2Gi 
-    limits.cpu: "2000m" 
-    limits.memory: 2Gi 
-    limits.ephemeral-storage: 4Gi
 ---
 apiVersion: v1
 data:
   ATLAS_API: $ATLAS_API
-  BIGSI_URL: http://mykrobe-atlas-bigsi-aggregator-api-service/api/v1
-  CELERY_BROKER_URL: redis://redis:6379
+  BIGSI_URL: http://bigsi-aggregator-api-service/api/v1
+  CELERY_BROKER_URL: redis://$REDIS_PREFIX:6379
   DEFAULT_OUTDIR: /data/out/
   FLASK_DEBUG: "1"
-  REDIS_HOST: redis
+  REDIS_HOST: $REDIS_PREFIX
   REDIS_PORT: "6379"
-  TB_GENBANK_PATH: data/NC_000962.3.gb
-  TB_REFERENCE_PATH: data/NC_000962.3.fasta
-  TB_TREE_PATH_V1: data/tb_newick.txt
+  TB_GENBANK_PATH: /config/NC_000962.3.gb
+  TB_REFERENCE_PATH: /config/NC_000962.3.fasta
+  TB_TREE_PATH_V1: /config/tb_tree.txt
 kind: ConfigMap
 metadata:
-  name: atlas-analysis-api-env
+  name: $ANALYSIS_PREFIX-env
   namespace: $NAMESPACE
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: $ANALYSIS_PREFIX-config-data
+  namespace: $NAMESPACE
+spec:
+  storageClassName: nfs-client
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Mi
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: mykrobe-atlas-analysis-api
-  name: mykrobe-atlas-analysis-api
+    app: $ANALYSIS_PREFIX
+  name: $ANALYSIS_PREFIX-service
   namespace: $NAMESPACE
 spec:
   ports:
-  - nodePort: 30412
-    port: 80
+  - port: 80
     protocol: TCP
     targetPort: 80
   selector:
-    app: mykrobe-atlas-analysis-api
+    app: $ANALYSIS_PREFIX
   type: NodePort
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-atlas-analysis-worker
-  name: mykrobe-atlas-analysis-worker
+    app: $ANALYSIS_PREFIX-worker
+  name: $ANALYSIS_PREFIX-worker
   namespace: $NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: mykrobe-atlas-analysis-worker
+      app: $ANALYSIS_PREFIX-worker
   template:
     metadata:
       labels:
-        app: mykrobe-atlas-analysis-worker
+        app: $ANALYSIS_PREFIX-worker
     spec:
+      serviceAccountName: $ANALYSIS_PREFIX-sa
       containers:
       - args:
         - -A
@@ -84,24 +88,29 @@ spec:
           value: $ANALYSIS_CONFIG_HASH_MD5
         envFrom:
         - configMapRef:
-            name: atlas-analysis-api-env
+            name: $ANALYSIS_PREFIX-env
         image: $ANALYSIS_API_IMAGE
         imagePullPolicy: IfNotPresent
         name: mykrobe-atlas-analysis
         volumeMounts:
         - mountPath: /data/
           name: uploads-data
+        - mountPath: /config/
+          name: $ANALYSIS_PREFIX-config-data
       volumes:
       - name: uploads-data
         persistentVolumeClaim:
-          claimName: uploads-data
+          claimName: $ATLAS_API_PREFIX-uploads-data
+      - name: $ANALYSIS_PREFIX-config-data
+        persistentVolumeClaim:
+          claimName: $ANALYSIS_PREFIX-config-data
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: mykrobe-atlas-analysis-api
-  name: mykrobe-atlas-analysis-api
+    app: $ANALYSIS_PREFIX
+  name: $ANALYSIS_PREFIX
   namespace: $NAMESPACE
 spec:
   progressDeadlineSeconds: 600
@@ -109,12 +118,13 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: mykrobe-atlas-analysis-api
+      app: $ANALYSIS_PREFIX
   template:
     metadata:
       labels:
-        app: mykrobe-atlas-analysis-api
+        app: $ANALYSIS_PREFIX
     spec:
+      serviceAccountName: $ANALYSIS_PREFIX-sa
       containers:
       - args:
         - -c
@@ -126,8 +136,8 @@ spec:
           value: $ANALYSIS_CONFIG_HASH_MD5
         envFrom:
         - configMapRef:
-            name: atlas-analysis-api-env
-        image: ANALYSIS_API_IMAGE
+            name: $ANALYSIS_PREFIX-env
+        image: $ANALYSIS_API_IMAGE
         imagePullPolicy: IfNotPresent
         name: mykrobe-atlas-analysis
         ports:
@@ -136,34 +146,17 @@ spec:
         volumeMounts:
         - mountPath: /data/
           name: uploads-data
+        resources:
+          limits:
+            memory: $LIMIT_MEMORY_ANALYSIS
+            cpu: $LIMIT_CPU_ANALYSIS
+          requests:
+            memory: $REQUEST_MEMORY_ANALYSIS
+            cpu: $REQUEST_CPU_ANALYSIS
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       volumes:
       - name: uploads-data
         persistentVolumeClaim:
-          claimName: uploads-data
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: nginx
-  name: analysis-ingress
-  namespace: $NAMESPACE
-spec:
-  backend:
-    serviceName: mykrobe-atlas-analysis-api
-    servicePort: 80
-  rules:
-  - host: $ANALYSIS_API_DNS
-    http:
-      paths:
-      - backend:
-          serviceName: mykrobe-atlas-analysis-api
-          servicePort: 80
-  tls:
-  - hosts:
-    - $ANALYSIS_API_DNS
-    secretName: analysis-$TARGET_ENV-mykro-be-tls
+          claimName: $ATLAS_API_PREFIX-uploads-data
 EOF

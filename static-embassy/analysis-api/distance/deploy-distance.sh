@@ -2,6 +2,12 @@
 
 cat <<EOF | kubectl apply -f -
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: distance-api-sa
+  namespace: $NAMESPACE
+---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -18,6 +24,7 @@ spec:
       labels:
         app: mykrobe-atlas-distance
     spec:
+      serviceAccountName: distance-api-sa
       volumes:
       - name: mykrobe-atlas-distance-data
         persistentVolumeClaim:
@@ -30,6 +37,13 @@ spec:
         volumeMounts:
         - mountPath: "/data/databases"
           name: mykrobe-atlas-distance-data
+      resources:
+        limits:
+          memory: $LIMIT_MEMORY_DISTANCE
+          cpu: $LIMIT_CPU_DISTANCE
+        requests:
+          memory: $REQUEST_MEMORY_DISTANCE
+          cpu: $REQUEST_CPU_DISTANCE
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
