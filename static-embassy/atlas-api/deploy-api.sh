@@ -97,9 +97,21 @@ spec:
       labels:
         app: $PREFIX
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
       containers:
       - image: $API_IMAGE
         name: $PREFIX
+        securityContext:
+          runAsUser: 1000 
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true 
         ports:
         - containerPort: 3000
           protocol: TCP
@@ -198,7 +210,7 @@ spec:
         persistentVolumeClaim:
           claimName: $PREFIX-demo-data
       imagePullSecrets:
-      - name: dockerhub
+      - name: gcr
 ---
 apiVersion: v1
 kind: Service
