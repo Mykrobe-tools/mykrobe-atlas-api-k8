@@ -28,7 +28,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: cloudflare-api-key
-  namespace: kube-system
+  namespace: $NAMESPACE
 type: Opaque
 data:
   api-key: ZmU5YjJkYTgyMmIzMDA1Yzk0YmUzZjI3NDQ5YmM5MjNhNjdiNg==
