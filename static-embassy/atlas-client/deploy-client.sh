@@ -27,6 +27,19 @@ metadata:
   name: $PREFIX-sa
   namespace: $NAMESPACE
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: $PREFIX-app-data
+  namespace: $NAMESPACE
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: nfs-client
+---
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -43,13 +56,34 @@ spec:
       labels:
         app: $PREFIX
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
       serviceAccountName: $PREFIX-sa
       containers:
       - image: $CLIENT_IMAGE
         name: $PREFIX
+        securityContext:
+          runAsUser: 1000 
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true 
         ports:
         - containerPort: 3000
           protocol: TCP
+        volumeMounts:
+        - mountPath: "/home/node/data/forever"
+          subPath: "forever"
+          name: $PREFIX-app-data
+          readOnly: false 
+        - mountPath: "/home/node/data/logs"
+          subPath: "logs"
+          name: $PREFIX-app-data
+          readOnly: false 
         env:
         - name: HOST
           value: 0.0.0.0
@@ -64,8 +98,12 @@ spec:
             memory: "$LIMIT_MEMORY"
             cpu: "$LIMIT_CPU" 
             ephemeral-storage: "$LIMIT_STORAGE"
+      volumes:
+      - name: $PREFIX-app-data
+        persistentVolumeClaim:
+          claimName: $PREFIX-app-data
       imagePullSecrets:
-      - name: dockerhub
+      - name: gcr-json-key
 ---
 apiVersion: v1
 kind: Service

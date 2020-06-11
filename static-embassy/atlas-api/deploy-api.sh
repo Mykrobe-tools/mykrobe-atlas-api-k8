@@ -29,6 +29,7 @@ echo " - Bigsi api: $BIGSI_API"
 echo " - Uploads location: $UPLOADS_LOCATION"
 echo " - Demo data folder: $DEMO_DATA_ROOT_FOLDER"
 echo " - Location IQ api key: $LOCATIONIQ_API_KEY"
+echo " - Swagger api files: $SWAGGER_API_FILES"
 echo ""
 
 echo "Limits:"
@@ -212,6 +213,8 @@ spec:
             secretKeyRef:
               name: $PREFIX-env-secret
               key: LOCATIONIQ_API_KEY
+        - name: SWAGGER_API_FILES
+          value: $SWAGGER_API_FILES
         - name: NODE_OPTIONS
           value: '--max-old-space-size=$NODE_OPTIONS_MEMORY'
         resources: 
