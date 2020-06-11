@@ -79,7 +79,7 @@ spec:
   resources:
     requests:
       storage: 100Mi
-  storageClassName: standard
+  storageClassName: nfs-client
 ---
 apiVersion: v1
 kind: Secret
