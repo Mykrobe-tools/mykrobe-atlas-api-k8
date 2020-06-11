@@ -32,6 +32,7 @@ export BIGSI_API="http://bigsi-api-aggregator-service.mykrobe-dev.svc.cluster.lo
 export UPLOADS_LOCATION="/data"
 export DEMO_DATA_ROOT_FOLDER="/app/demo"
 export LOCATIONIQ_API_KEY="<LOCATIONIQ_API_KEY>"
+export SWAGGER_API_FILES="/home/node/app/dist/server/routes/*.route.js"
 
 # Storage sizes
 export STORAGE_DEMO="8Gi"
