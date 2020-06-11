@@ -15,3 +15,6 @@ static-embassy/metabase/config-dev.sh
 static-embassy/atlas-api/config-dev.sh
 static-embassy/keycloak/config.sh
 static-embassy/atlas-client/config-dev.sh
+
+# credentials
+static-embassy/gcr/atlas-275810-1b85bf39eb34.json
