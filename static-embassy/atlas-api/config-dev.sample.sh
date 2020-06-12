@@ -30,7 +30,7 @@ export LOG_LEVEL=debug
 
 export ANALYSIS_API="http://analysis-api-service.mykrobe-dev.svc.cluster.local"
 export BIGSI_API="http://bigsi-api-aggregator-service.mykrobe-dev.svc.cluster.local"
-export UPLOADS_DIR="/home/node/app/uploads"
+export UPLOAD_DIR="/home/node/app/uploads"
 export UPLOADS_LOCATION="/home/node/data"
 export UPLOADS_TEMP_LOCATION="/home/node/tmp"
 export DEMO_DATA_ROOT_FOLDER="/home/node/app/demo"
