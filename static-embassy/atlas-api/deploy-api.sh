@@ -146,10 +146,10 @@ spec:
         - containerPort: 3000
           protocol: TCP
         volumeMounts:
-        - mountPath: "/home/node/app/uploads"
+        - mountPath: $UPLOAD_DIR
           name: $PREFIX-uploads-volume
           readOnly: false 
-        - mountPath: "/home/node/app/demo"
+        - mountPath: $DEMO_DATA_ROOT_FOLDER
           name: $PREFIX-demo-volume
           readOnly: false 
         - mountPath: "/home/node/data/forever"
@@ -160,7 +160,7 @@ spec:
           subPath: "logs"
           name: $PREFIX-app-data
           readOnly: false 
-        - mountPath: "/home/node/tmp"
+        - mountPath: $UPLOADS_TEMP_LOCATION
           name: $PREFIX-app-tmp
           readOnly: false
         env:
