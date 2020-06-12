@@ -26,7 +26,10 @@ echo " - API host: $API_HOST"
 echo " - Debug: $DEBUG"
 echo " - Analysis api: $ANALYSIS_API"
 echo " - Bigsi api: $BIGSI_API"
+echo " - Analysis API dir: $ANALYSIS_API_DIR"
+echo " - Upload dir: $UPLOAD_DIR"
 echo " - Uploads location: $UPLOADS_LOCATION"
+echo " - Uploads temp location: $UPLOADS_TEMP_LOCATION"
 echo " - Demo data folder: $DEMO_DATA_ROOT_FOLDER"
 echo " - Location IQ api key: $LOCATIONIQ_API_KEY"
 echo " - Swagger api files: $SWAGGER_API_FILES"
@@ -83,6 +86,19 @@ spec:
   storageClassName: nfs-client
 ---
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: $PREFIX-app-tmp
+  namespace: $NAMESPACE
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: nfs-client
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: $PREFIX-env-secret
@@ -125,15 +141,17 @@ spec:
           capabilities:
             drop:
             - ALL
-          readOnlyRootFilesystem: true 
+          readOnlyRootFilesystem: true
         ports:
         - containerPort: 3000
           protocol: TCP
         volumeMounts:
-        - mountPath: "/app/uploads"
+        - mountPath: $UPLOAD_DIR
           name: $PREFIX-uploads-volume
-        - mountPath: "/app/demo"
+          readOnly: false 
+        - mountPath: $DEMO_DATA_ROOT_FOLDER
           name: $PREFIX-demo-volume
+          readOnly: false 
         - mountPath: "/home/node/data/forever"
           subPath: "forever"
           name: $PREFIX-app-data
@@ -142,6 +160,9 @@ spec:
           subPath: "logs"
           name: $PREFIX-app-data
           readOnly: false 
+        - mountPath: $UPLOADS_TEMP_LOCATION
+          name: $PREFIX-app-tmp
+          readOnly: false
         env:
         - name: NODE_ENV
           value: production
@@ -200,12 +221,20 @@ spec:
           value: $API_HOST
         - name: DEBUG
           value: "$DEBUG"
+        - name: LOG_LEVEL
+          value: "$LOG_LEVEL"
         - name: ANALYSIS_API
           value: $ANALYSIS_API
         - name: BIGSI_API
           value: $BIGSI_API
+        - name: ANALYSIS_API_DIR
+          value: $ANALYSIS_API_DIR
+        - name: UPLOAD_DIR
+          value: $UPLOAD_DIR
         - name: UPLOADS_LOCATION
           value: $UPLOADS_LOCATION
+        - name: UPLOADS_TEMP_LOCATION
+          value: $UPLOADS_TEMP_LOCATION
         - name: DEMO_DATA_ROOT_FOLDER
           value: $DEMO_DATA_ROOT_FOLDER
         - name: LOCATIONIQ_API_KEY
@@ -236,6 +265,9 @@ spec:
       - name: $PREFIX-app-data
         persistentVolumeClaim:
           claimName: $PREFIX-app-data
+      - name: $PREFIX-app-tmp
+        persistentVolumeClaim:
+          claimName: $PREFIX-app-tmp
       imagePullSecrets:
       - name: gcr-json-key
 ---

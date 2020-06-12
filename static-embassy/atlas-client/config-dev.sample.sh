@@ -2,10 +2,9 @@
 
 export NAMESPACE="mykrobe-dev"
 export PREFIX="atlas"
-export CLIENT_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas:v0.0.1"
+export CLIENT_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas:v0.0.7"
 export HOST="dev.mykro.be"
 export NODE_OPTIONS_MEMORY="4096"
-
 
 # Pod (Deployment) resource limits
 export REQUEST_CPU="1000m"
