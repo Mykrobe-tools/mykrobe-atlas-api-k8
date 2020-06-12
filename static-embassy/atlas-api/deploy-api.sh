@@ -125,7 +125,7 @@ spec:
           capabilities:
             drop:
             - ALL
-          readOnlyRootFilesystem: true 
+          readOnlyRootFilesystem: true
         ports:
         - containerPort: 3000
           protocol: TCP
@@ -142,6 +142,9 @@ spec:
           subPath: "logs"
           name: $PREFIX-app-data
           readOnly: false 
+        - mountPath: "/home/node/data/tmp"
+          name: $PREFIX-app-data
+          readOnly: false
         env:
         - name: NODE_ENV
           value: production
