@@ -27,6 +27,7 @@ echo " - Debug: $DEBUG"
 echo " - Analysis api: $ANALYSIS_API"
 echo " - Bigsi api: $BIGSI_API"
 echo " - Uploads location: $UPLOADS_LOCATION"
+echo " - Uploads temp location: $UPLOADS_TEMP_LOCATION"
 echo " - Demo data folder: $DEMO_DATA_ROOT_FOLDER"
 echo " - Location IQ api key: $LOCATIONIQ_API_KEY"
 echo " - Swagger api files: $SWAGGER_API_FILES"
@@ -209,6 +210,8 @@ spec:
           value: $BIGSI_API
         - name: UPLOADS_LOCATION
           value: $UPLOADS_LOCATION
+        - name: UPLOADS_TEMP_LOCATION
+          value: $UPLOADS_TEMP_LOCATION
         - name: DEMO_DATA_ROOT_FOLDER
           value: $DEMO_DATA_ROOT_FOLDER
         - name: LOCATIONIQ_API_KEY
