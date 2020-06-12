@@ -84,6 +84,19 @@ spec:
   storageClassName: nfs-client
 ---
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: $PREFIX-app-tmp
+  namespace: $NAMESPACE
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: nfs-client
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: $PREFIX-env-secret
@@ -131,10 +144,12 @@ spec:
         - containerPort: 3000
           protocol: TCP
         volumeMounts:
-        - mountPath: "/app/uploads"
+        - mountPath: "/home/node/app/uploads"
           name: $PREFIX-uploads-volume
-        - mountPath: "/app/demo"
+          readOnly: false 
+        - mountPath: "/home/node/app/demo"
           name: $PREFIX-demo-volume
+          readOnly: false 
         - mountPath: "/home/node/data/forever"
           subPath: "forever"
           name: $PREFIX-app-data
@@ -143,8 +158,8 @@ spec:
           subPath: "logs"
           name: $PREFIX-app-data
           readOnly: false 
-        - mountPath: "/home/node/data/tmp"
-          name: $PREFIX-app-data
+        - mountPath: "/home/node/tmp"
+          name: $PREFIX-app-tmp
           readOnly: false
         env:
         - name: NODE_ENV
@@ -204,6 +219,8 @@ spec:
           value: $API_HOST
         - name: DEBUG
           value: "$DEBUG"
+        - name: LOG_LEVEL
+          value: "$LOG_LEVEL"
         - name: ANALYSIS_API
           value: $ANALYSIS_API
         - name: BIGSI_API
@@ -242,6 +259,9 @@ spec:
       - name: $PREFIX-app-data
         persistentVolumeClaim:
           claimName: $PREFIX-app-data
+      - name: $PREFIX-app-tmp
+        persistentVolumeClaim:
+          claimName: $PREFIX-app-tmp
       imagePullSecrets:
       - name: gcr-json-key
 ---

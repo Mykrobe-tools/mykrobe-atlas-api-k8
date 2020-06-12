@@ -2,7 +2,7 @@
 
 export NAMESPACE="mykrobe-dev"
 export PREFIX="atlas-api"
-export API_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas-api:v0.0.5"
+export API_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas-api:v0.0.5-RC1"
 
 export DB_SERVICE_HOST="mykrobe-mongodb-replicaset-client.mykrobe-dev.svc.cluster.local"
 export DB_RS_NAME="rs0"
@@ -26,12 +26,14 @@ export KEYCLOAK_URL="https://accounts.makeandship.com/auth"
 export KEYCLOAK_ADMIN_PASSWORD="<KEYCLOAK_ADMIN_PASSWORD>"
 export API_HOST="api-dev.mykro.be"
 export DEBUG=1
+export LOG_LEVEL=debug
 
 export ANALYSIS_API="http://analysis-api-service.mykrobe-dev.svc.cluster.local"
 export BIGSI_API="http://bigsi-api-aggregator-service.mykrobe-dev.svc.cluster.local"
-export UPLOADS_LOCATION="/data"
-export UPLOADS_TEMP_LOCATION="/data/tmp"
-export DEMO_DATA_ROOT_FOLDER="/app/demo"
+export UPLOADS_DIR="/home/node/app/uploads"
+export UPLOADS_LOCATION="/home/node/data"
+export UPLOADS_TEMP_LOCATION="/home/node/tmp"
+export DEMO_DATA_ROOT_FOLDER="/home/node/app/demo"
 export LOCATIONIQ_API_KEY="<LOCATIONIQ_API_KEY>"
 export SWAGGER_API_FILES="/home/node/app/dist/server/routes/*.route.js"
 
