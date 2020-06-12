@@ -26,6 +26,8 @@ echo " - API host: $API_HOST"
 echo " - Debug: $DEBUG"
 echo " - Analysis api: $ANALYSIS_API"
 echo " - Bigsi api: $BIGSI_API"
+echo " - Analysis API dir: $ANALYSIS_API_DIR"
+echo " - Upload dir: $UPLOAD_DIR"
 echo " - Uploads location: $UPLOADS_LOCATION"
 echo " - Uploads temp location: $UPLOADS_TEMP_LOCATION"
 echo " - Demo data folder: $DEMO_DATA_ROOT_FOLDER"
@@ -225,6 +227,10 @@ spec:
           value: $ANALYSIS_API
         - name: BIGSI_API
           value: $BIGSI_API
+        - name: ANALYSIS_API_DIR
+          value: $ANALYSIS_API_DIR
+        - name: UPLOAD_DIR
+          value: $UPLOAD_DIR
         - name: UPLOADS_LOCATION
           value: $UPLOADS_LOCATION
         - name: UPLOADS_TEMP_LOCATION

@@ -33,10 +33,10 @@ metadata:
 spec:
   storageClassName: nfs-client
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
-      storage: 200Mi
+      storage: 50Mi
 ---
 apiVersion: v1
 kind: Service
@@ -146,6 +146,8 @@ spec:
         volumeMounts:
         - mountPath: /data/
           name: uploads-data
+        - mountPath: /config/
+          name: $ANALYSIS_PREFIX-config-data
         resources:
           limits:
             memory: $LIMIT_MEMORY_ANALYSIS
@@ -159,4 +161,7 @@ spec:
       - name: uploads-data
         persistentVolumeClaim:
           claimName: $ATLAS_API_PREFIX-uploads-data
+      - name: $ANALYSIS_PREFIX-config-data
+        persistentVolumeClaim:
+          claimName: $ANALYSIS_PREFIX-config-data
 EOF
