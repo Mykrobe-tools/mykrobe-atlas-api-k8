@@ -2,7 +2,7 @@
 
 export NAMESPACE="mykrobe-dev"
 export PREFIX="atlas-api"
-export API_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas-api:v0.0.3"
+export API_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas-api:v0.0.5"
 
 export DB_SERVICE_HOST="mykrobe-mongodb-replicaset-client.mykrobe-dev.svc.cluster.local"
 export DB_RS_NAME="rs0"
@@ -30,6 +30,7 @@ export DEBUG=1
 export ANALYSIS_API="http://analysis-api-service.mykrobe-dev.svc.cluster.local"
 export BIGSI_API="http://bigsi-api-aggregator-service.mykrobe-dev.svc.cluster.local"
 export UPLOADS_LOCATION="/data"
+export UPLOADS_TEMP_LOCATION="/data/tmp"
 export DEMO_DATA_ROOT_FOLDER="/app/demo"
 export LOCATIONIQ_API_KEY="<LOCATIONIQ_API_KEY>"
 export SWAGGER_API_FILES="/home/node/app/dist/server/routes/*.route.js"
