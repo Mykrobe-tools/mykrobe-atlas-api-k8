@@ -2,7 +2,7 @@
 
 export NAMESPACE="mykrobe-dev"
 export PREFIX="atlas"
-export CLIENT_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas:v0.0.7"
+export CLIENT_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas:v0.0.8-RC1"
 export HOST="dev.mykro.be"
 export NODE_OPTIONS_MEMORY="4096"
 
