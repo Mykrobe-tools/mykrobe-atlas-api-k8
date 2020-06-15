@@ -441,25 +441,25 @@ spec:
               ephemeral-storage: "$KAFKA_EPHERMERAL_STORAGE"
 EOF
 
-sed "s#{CONFLUENT}#$CONFLUENT#g" kafka-statefullset.yaml > kafka-statefullset-deploy-tmp0.yaml
-sed "s#{ZOOKEEPER}#$ZOOKEEPER#g" kafka-statefullset-deploy-tmp0.yaml >kafka-statefullset-deploy-tmp1.yaml
-sed "s#{KAFKA}#$KAFKA#g" kafka-statefullset-deploy-tmp1.yaml > kafka-statefullset-deploy-tmp2.yaml
-sed "s#{KAFKA_BROKER_IMAGE}#$KAFKA_BROKER_IMAGE#g" kafka-statefullset-deploy-tmp2.yaml > kafka-statefullset-deploy-tmp3.yaml
-sed "s#{ZOOKEEPER_IMAGE}#$ZOOKEEPER_IMAGE#g" kafka-statefullset-deploy-tmp3.yaml > kafka-statefullset-deploy-tmp4.yaml
-sed "s#{BROKER_NODEPORT0}#$BROKER_NODEPORT0#g" kafka-statefullset-deploy-tmp4.yaml > kafka-statefullset-deploy-tmp5.yaml
-sed "s#{PREFIX}#$PREFIX#g" kafka-statefullset-deploy-tmp5.yaml > kafka-statefullset-deploy-tmp6.yaml
-sed "s#{BROKER_NODEPORT1}#$BROKER_NODEPORT1#g" kafka-statefullset-deploy-tmp6.yaml > kafka-statefullset-deploy-tmp7.yaml
-sed "s#{BROKER_NODEPORT2}#$BROKER_NODEPORT2#g" kafka-statefullset-deploy-tmp7.yaml > kafka-statefullset-deploy-tmp8.yaml
-sed "s#{REQUEST_ZOOKEEPER_CPU}#$REQUEST_ZOOKEEPER_CPU#g" kafka-statefullset-deploy-tmp8.yaml > kafka-statefullset-deploy-tmp9.yaml
-sed "s#{REQUEST_ZOOKEEPER_MEMORY}#$REQUEST_ZOOKEEPER_MEMORY#g" kafka-statefullset-deploy-tmp9.yaml > kafka-statefullset-deploy-tmp10.yaml
-sed "s#{REQUEST_ZOOKEEPER_STORAGE}#$REQUEST_ZOOKEEPER_STORAGE#g" kafka-statefullset-deploy-tmp10.yaml > kafka-statefullset-deploy-tmp11.yaml
-sed "s#{LIMIT_ZOOKEEPER_CPU}#$LIMIT_ZOOKEEPER_CPU#g" kafka-statefullset-deploy-tmp11.yaml > kafka-statefullset-deploy-tmp12.yaml
-sed "s#{LIMIT_ZOOKEEPER_MEMORY}#$LIMIT_ZOOKEEPER_MEMORY#g" kafka-statefullset-deploy-tmp12.yaml > kafka-statefullset-deploy-tmp13.yaml
-sed "s#{LIMIT_ZOOKEEPER_STORAGE}#$LIMIT_ZOOKEEPER_STORAGE#g" kafka-statefullset-deploy-tmp13.yaml > kafka-statefullset-deploy-tmp14.yaml
-sed "s#{ZOOKEEPER_EPHERMERAL_STORAGE}#$ZOOKEEPER_EPHERMERAL_STORAGE#g" kafka-statefullset-deploy-tmp14.yaml > kafka-statefullset-deploy-tmp15.yaml
-sed "s#{KAFKA_EPHERMERAL_STORAGE}#$KAFKA_EPHERMERAL_STORAGE#g" kafka-statefullset-deploy-tmp15.yaml > kafka-statefullset-deploy-tmp16.yaml
-sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp16.yaml > kafka-statefullset-deploy.yaml
+sed "s#{CONFLUENT}#$CONFLUENT#g" kafka-statefulset.yaml > kafka-statefulset-deploy-tmp0.yaml
+sed "s#{ZOOKEEPER}#$ZOOKEEPER#g" kafka-statefulset-deploy-tmp0.yaml >kafka-statefulset-deploy-tmp1.yaml
+sed "s#{KAFKA}#$KAFKA#g" kafka-statefulset-deploy-tmp1.yaml > kafka-statefulset-deploy-tmp2.yaml
+sed "s#{KAFKA_BROKER_IMAGE}#$KAFKA_BROKER_IMAGE#g" kafka-statefulset-deploy-tmp2.yaml > kafka-statefulset-deploy-tmp3.yaml
+sed "s#{ZOOKEEPER_IMAGE}#$ZOOKEEPER_IMAGE#g" kafka-statefulset-deploy-tmp3.yaml > kafka-statefulset-deploy-tmp4.yaml
+sed "s#{BROKER_NODEPORT0}#$BROKER_NODEPORT0#g" kafka-statefulset-deploy-tmp4.yaml > kafka-statefulset-deploy-tmp5.yaml
+sed "s#{PREFIX}#$PREFIX#g" kafka-statefulset-deploy-tmp5.yaml > kafka-statefulset-deploy-tmp6.yaml
+sed "s#{BROKER_NODEPORT1}#$BROKER_NODEPORT1#g" kafka-statefulset-deploy-tmp6.yaml > kafka-statefulset-deploy-tmp7.yaml
+sed "s#{BROKER_NODEPORT2}#$BROKER_NODEPORT2#g" kafka-statefulset-deploy-tmp7.yaml > kafka-statefulset-deploy-tmp8.yaml
+sed "s#{REQUEST_ZOOKEEPER_CPU}#$REQUEST_ZOOKEEPER_CPU#g" kafka-statefulset-deploy-tmp8.yaml > kafka-statefulset-deploy-tmp9.yaml
+sed "s#{REQUEST_ZOOKEEPER_MEMORY}#$REQUEST_ZOOKEEPER_MEMORY#g" kafka-statefulset-deploy-tmp9.yaml > kafka-statefulset-deploy-tmp10.yaml
+sed "s#{REQUEST_ZOOKEEPER_STORAGE}#$REQUEST_ZOOKEEPER_STORAGE#g" kafka-statefulset-deploy-tmp10.yaml > kafka-statefulset-deploy-tmp11.yaml
+sed "s#{LIMIT_ZOOKEEPER_CPU}#$LIMIT_ZOOKEEPER_CPU#g" kafka-statefulset-deploy-tmp11.yaml > kafka-statefulset-deploy-tmp12.yaml
+sed "s#{LIMIT_ZOOKEEPER_MEMORY}#$LIMIT_ZOOKEEPER_MEMORY#g" kafka-statefulset-deploy-tmp12.yaml > kafka-statefulset-deploy-tmp13.yaml
+sed "s#{LIMIT_ZOOKEEPER_STORAGE}#$LIMIT_ZOOKEEPER_STORAGE#g" kafka-statefulset-deploy-tmp13.yaml > kafka-statefulset-deploy-tmp14.yaml
+sed "s#{ZOOKEEPER_EPHERMERAL_STORAGE}#$ZOOKEEPER_EPHERMERAL_STORAGE#g" kafka-statefulset-deploy-tmp14.yaml > kafka-statefulset-deploy-tmp15.yaml
+sed "s#{KAFKA_EPHERMERAL_STORAGE}#$KAFKA_EPHERMERAL_STORAGE#g" kafka-statefulset-deploy-tmp15.yaml > kafka-statefulset-deploy-tmp16.yaml
+sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefulset-deploy-tmp16.yaml > kafka-statefulset-deploy.yaml
 
-kubectl apply -f kafka-statefullset-deploy.yaml -n $NAMESPACE
+kubectl apply -f kafka-statefulset-deploy.yaml -n $NAMESPACE
 
-rm kafka-statefullset-deploy*
+rm kafka-statefulset-deploy*

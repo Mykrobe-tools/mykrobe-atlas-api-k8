@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export NAMESPACE="mykrobe-insight-dev"
+export NAMESPACE="insight-dev"
 export PREFIX="mykrobe"
 export CONFLUENT="$PREFIX-confluent"
 export ZOOKEEPER="zookeeper"
