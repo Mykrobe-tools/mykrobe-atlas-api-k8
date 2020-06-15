@@ -376,10 +376,12 @@ spec:
           resources: 
             requests:
               memory: "$REQUEST_KAFKA_CONNECT_MEMORY"
-              cpu: "$REQUEST_KAFKA_CONNECT_CPU"         
+              cpu: "$REQUEST_KAFKA_CONNECT_CPU"
+              ephemeral-storage: "$KAFKA_EPHERMERAL_STORAGE"      
             limits:
               memory: "$LIMIT_KAFKA_CONNECT_MEMORY"
               cpu: "$LIMIT_KAFKA_CONNECT_CPU"
+              ephemeral-storage: "$KAFKA_EPHERMERAL_STORAGE"
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -431,10 +433,12 @@ spec:
           resources: 
             requests:
               memory: "$REQUEST_SCHEMA_REGISTRY_MEMORY"
-              cpu: "$REQUEST_SCHEMA_REGISTRY_CPU"         
+              cpu: "$REQUEST_SCHEMA_REGISTRY_CPU"
+              ephemeral-storage: "$KAFKA_EPHERMERAL_STORAGE"        
             limits:
               memory: "$LIMIT_SCHEMA_REGISTRY_MEMORY"
               cpu: "$LIMIT_SCHEMA_REGISTRY_CPU"
+              ephemeral-storage: "$KAFKA_EPHERMERAL_STORAGE"
 EOF
 
 sed "s#{CONFLUENT}#$CONFLUENT#g" kafka-statefullset.yaml > kafka-statefullset-deploy-tmp0.yaml
