@@ -17,6 +17,31 @@ echo " - Zookeeper Image: $ZOOKEEPER_IMAGE"
 echo " - Broker NodePort: $BROKER_NODEPORT0"
 echo ""
 
+
+echo "Limits:"
+echo " - Request Zookeeper CPU: $REQUEST_ZOOKEEPER_CPU"
+echo " - Request Zookeeper Memory: $REQUEST_ZOOKEEPER_MEMORY"
+echo " - Request Zookeeper Storage: $REQUEST_ZOOKEEPER_STORAGE"
+echo " - Limit Zookeeper CPU: $LIMIT_ZOOKEEPER_CPU"
+echo " - Limit Zookeeper Memory: $LIMIT_ZOOKEEPER_MEMORY"
+echo " - Limit Zookeeper Storage: $LIMIT_ZOOKEEPER_STORAGE"
+echo " - Zookeeper Ephermeral Storage: $ZOOKEEPER_EPHERMERAL_STORAGE"
+echo " - Request Broker CPU: $REQUEST_KAFKA_CPU"
+echo " - Request Broker Memory: $REQUEST_KAFKA_MEMORY"
+echo " - Request Broker Storage: $REQUEST_KAFKA_STORAGE"
+echo " - Limit Broker CPU: $LIMIT_KAFKA_CPU"
+echo " - Limit Broker Memory: $LIMIT_KAFKA_MEMORY"
+echo " - Limit Broker Storage: $LIMIT_KAFKA_STORAGE"
+echo " - Request Schema Registry CPU: $REQUEST_SCHEMA_REGISTRY_CPU"
+echo " - Request Schema Registry Memory: $REQUEST_SCHEMA_REGISTRY_MEMORY"
+echo " - Limit Schema Registry CPU: $LIMIT_SCHEMA_REGISTRY_CPU"
+echo " - Limit Schema Registry Memory: $LIMIT_SCHEMA_REGISTRY_MEMORY"
+echo " - Request Connect CPU: $REQUEST_KAFKA_CONNECT_CPU"
+echo " - Request Connect Memory: $REQUEST_KAFKA_CONNECT_MEMORY"
+echo " - Limit Connect CPU: $LIMIT_KAFKA_CONNECT_CPU"
+echo " - Limit Connect Memory: $LIMIT_KAFKA_CONNECT_MEMORY"
+echo ""
+
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
@@ -427,7 +452,9 @@ sed "s#{REQUEST_ZOOKEEPER_STORAGE}#$REQUEST_ZOOKEEPER_STORAGE#g" kafka-statefull
 sed "s#{LIMIT_ZOOKEEPER_CPU}#$LIMIT_ZOOKEEPER_CPU#g" kafka-statefullset-deploy-tmp11.yaml > kafka-statefullset-deploy-tmp12.yaml
 sed "s#{LIMIT_ZOOKEEPER_MEMORY}#$LIMIT_ZOOKEEPER_MEMORY#g" kafka-statefullset-deploy-tmp12.yaml > kafka-statefullset-deploy-tmp13.yaml
 sed "s#{LIMIT_ZOOKEEPER_STORAGE}#$LIMIT_ZOOKEEPER_STORAGE#g" kafka-statefullset-deploy-tmp13.yaml > kafka-statefullset-deploy-tmp14.yaml
-sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp14.yaml > kafka-statefullset-deploy.yaml
+sed "s#{ZOOKEEPER_EPHERMERAL_STORAGE}#$ZOOKEEPER_EPHERMERAL_STORAGE#g" kafka-statefullset-deploy-tmp14.yaml > kafka-statefullset-deploy-tmp15.yaml
+sed "s#{KAFKA_EPHERMERAL_STORAGE}#$KAFKA_EPHERMERAL_STORAGE#g" kafka-statefullset-deploy-tmp15.yaml > kafka-statefullset-deploy-tmp16.yaml
+sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp16.yaml > kafka-statefullset-deploy.yaml
 
 kubectl apply -f kafka-statefullset-deploy.yaml -n $NAMESPACE
 

@@ -102,10 +102,12 @@ spec:
         resources: 
           requests:
             memory: {REQUEST_KAFKA_MEMORY}
-            cpu: {REQUEST_KAFKA_CPU}        
+            cpu: {REQUEST_KAFKA_CPU}    
+            ephemeral-storage: {KAFKA_EPHERMERAL_STORAGE}    
           limits:
             memory: {LIMIT_KAFKA_MEMORY}
             cpu: {LIMIT_KAFKA_MEMORY}
+            ephemeral-storage: {KAFKA_EPHERMERAL_STORAGE}  
   volumeClaimTemplates:
   - metadata:
       name: datadir-0
@@ -211,10 +213,12 @@ spec:
         resources: 
           requests:
             memory: {REQUEST_ZOOKEEPER_MEMORY}
-            cpu: {REQUEST_ZOOKEEPER_CPU}         
+            cpu: {REQUEST_ZOOKEEPER_CPU}
+            ephemeral-storage: {ZOOKEEPER_EPHERMERAL_STORAGE}         
           limits:
             memory: {LIMIT_ZOOKEEPER_MEMORY}
             cpu: {LIMIT_ZOOKEEPER_CPU}
+            ephemeral-storage: {ZOOKEEPER_EPHERMERAL_STORAGE}  
   volumeClaimTemplates:
   - metadata:
       name: datadir
