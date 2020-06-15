@@ -33,13 +33,19 @@ spec:
         - name: data
           mountPath: /var/lib/mysql
       containers:
+      serviceAccountName: {PREFIX}-mysql-sa
       - name: {PREFIX}-mysql
         image: {MYSQL_IMAGE}
         imagePullPolicy: "IfNotPresent"
-        resources:
+        resources: 
           requests:
-            cpu: 100m
-            memory: 256Mi
+            memory: "{REQUEST_MEMORY}"
+            cpu: "{REQUEST_CPU}"
+            ephemeral-storage: "{REQUEST_STORAGE}"         
+          limits:
+            memory: "{LIMIT_MEMORY}" 
+            cpu: "{LIMIT_CPU}"  
+            ephemeral-storage: "{LIMIT_STORAGE}" 
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
