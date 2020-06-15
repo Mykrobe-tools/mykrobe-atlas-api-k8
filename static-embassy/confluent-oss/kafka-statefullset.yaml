@@ -99,14 +99,25 @@ spec:
         volumeMounts:
           - name: datadir-0
             mountPath: /opt/kafka/data-0
+        resources: 
+          requests:
+            memory: {REQUEST_KAFKA_MEMORY}
+            cpu: {REQUEST_KAFKA_CPU}        
+          limits:
+            memory: {LIMIT_KAFKA_MEMORY}
+            cpu: {LIMIT_KAFKA_MEMORY}
   volumeClaimTemplates:
   - metadata:
       name: datadir-0
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: nfs-client
+      accessModes:
+      - ReadWriteOnce
       resources:
         requests:
-          storage: "25Gi"
+          storage: {REQUEST_KAFKA_STORAGE}
+        limits:
+          storage: {LIMIT_KAFKA_STORAGE}
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -197,18 +208,33 @@ spec:
           mountPath: /var/lib/zookeeper/data
         - name: datalogdir
           mountPath: /var/lib/zookeeper/log
+        resources: 
+          requests:
+            memory: {REQUEST_ZOOKEEPER_MEMORY}
+            cpu: {REQUEST_ZOOKEEPER_CPU}         
+          limits:
+            memory: {LIMIT_ZOOKEEPER_MEMORY}
+            cpu: {LIMIT_ZOOKEEPER_CPU}
   volumeClaimTemplates:
   - metadata:
       name: datadir
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: nfs-client
+      accessModes:
+      - ReadWriteOnce
       resources:
         requests:
-          storage: "50Gi"
+          storage: {REQUEST_ZOOKEEPER_STORAGE}
+        limits:
+          storage: {LIMIT_ZOOKEEPER_STORAGE}
   - metadata:
       name: datalogdir
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: nfs-client
+      accessModes:
+      - ReadWriteOnce
       resources:
         requests:
-          storage: "50Gi"
+          storage: {REQUEST_ZOOKEEPER_STORAGE}
+        limits:
+          storage: {LIMIT_ZOOKEEPER_STORAGE}

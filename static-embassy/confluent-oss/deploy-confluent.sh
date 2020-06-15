@@ -20,21 +20,6 @@ echo ""
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: compute-resources
-  namespace: $NAMESPACE
-spec:
-  hard:
-    pods: "4" 
-    requests.cpu: "1000m" 
-    requests.memory: 1Gi 
-    requests.ephemeral-storage: 2Gi 
-    limits.cpu: "2000m" 
-    limits.memory: 2Gi 
-    limits.ephemeral-storage: 4Gi
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
@@ -363,6 +348,13 @@ spec:
               value: "io.confluent.connect.avro.AvroConverter"
             - name: "CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE"
               value: "false"
+          resources: 
+            requests:
+              memory: "$REQUEST_KAFKA_CONNECT_MEMORY"
+              cpu: "$REQUEST_KAFKA_CONNECT_CPU"         
+            limits:
+              memory: "$LIMIT_KAFKA_CONNECT_MEMORY"
+              cpu: "$LIMIT_KAFKA_CONNECT_CPU"
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -411,6 +403,13 @@ spec:
             value: "true"
           - name: SCHEMA_REGISTRY_HEAP_OPTS
             value: "-Xms512M -Xmx512M"
+          resources: 
+            requests:
+              memory: "$REQUEST_SCHEMA_REGISTRY_MEMORY"
+              cpu: "$REQUEST_SCHEMA_REGISTRY_CPU"         
+            limits:
+              memory: "$LIMIT_SCHEMA_REGISTRY_MEMORY"
+              cpu: "$LIMIT_SCHEMA_REGISTRY_CPU"
 EOF
 
 sed "s#{CONFLUENT}#$CONFLUENT#g" kafka-statefullset.yaml > kafka-statefullset-deploy-tmp0.yaml
@@ -422,7 +421,13 @@ sed "s#{BROKER_NODEPORT0}#$BROKER_NODEPORT0#g" kafka-statefullset-deploy-tmp4.ya
 sed "s#{PREFIX}#$PREFIX#g" kafka-statefullset-deploy-tmp5.yaml > kafka-statefullset-deploy-tmp6.yaml
 sed "s#{BROKER_NODEPORT1}#$BROKER_NODEPORT1#g" kafka-statefullset-deploy-tmp6.yaml > kafka-statefullset-deploy-tmp7.yaml
 sed "s#{BROKER_NODEPORT2}#$BROKER_NODEPORT2#g" kafka-statefullset-deploy-tmp7.yaml > kafka-statefullset-deploy-tmp8.yaml
-sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp8.yaml > kafka-statefullset-deploy.yaml
+sed "s#{REQUEST_ZOOKEEPER_CPU}#$REQUEST_ZOOKEEPER_CPU#g" kafka-statefullset-deploy-tmp8.yaml > kafka-statefullset-deploy-tmp9.yaml
+sed "s#{REQUEST_ZOOKEEPER_MEMORY}#$REQUEST_ZOOKEEPER_MEMORY#g" kafka-statefullset-deploy-tmp9.yaml > kafka-statefullset-deploy-tmp10.yaml
+sed "s#{REQUEST_ZOOKEEPER_STORAGE}#$REQUEST_ZOOKEEPER_STORAGE#g" kafka-statefullset-deploy-tmp10.yaml > kafka-statefullset-deploy-tmp11.yaml
+sed "s#{LIMIT_ZOOKEEPER_CPU}#$LIMIT_ZOOKEEPER_CPU#g" kafka-statefullset-deploy-tmp11.yaml > kafka-statefullset-deploy-tmp12.yaml
+sed "s#{LIMIT_ZOOKEEPER_MEMORY}#$LIMIT_ZOOKEEPER_MEMORY#g" kafka-statefullset-deploy-tmp12.yaml > kafka-statefullset-deploy-tmp13.yaml
+sed "s#{LIMIT_ZOOKEEPER_STORAGE}#$LIMIT_ZOOKEEPER_STORAGE#g" kafka-statefullset-deploy-tmp13.yaml > kafka-statefullset-deploy-tmp14.yaml
+sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefullset-deploy-tmp14.yaml > kafka-statefullset-deploy.yaml
 
 kubectl apply -f kafka-statefullset-deploy.yaml -n $NAMESPACE
 
