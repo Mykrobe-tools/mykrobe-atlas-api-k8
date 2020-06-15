@@ -19,7 +19,7 @@ spec:
         app: {PREFIX}-mysql
         release: {PREFIX}-mysql
     spec:
-      serviceAccountName: {PREFIX}-insight
+      serviceAccountName: {PREFIX}-mysql-sa
       initContainers:
       - name: "remove-lost-found"
         image: "busybox:1.29.3"
@@ -33,7 +33,6 @@ spec:
         - name: data
           mountPath: /var/lib/mysql
       containers:
-      serviceAccountName: {PREFIX}-mysql-sa
       - name: {PREFIX}-mysql
         image: {MYSQL_IMAGE}
         imagePullPolicy: "IfNotPresent"
