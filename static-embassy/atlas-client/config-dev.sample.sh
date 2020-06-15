@@ -17,26 +17,25 @@ export LIMIT_STORAGE="4Gi"
 # Env vars
 
 # Endpoint of the API
-REACT_APP_API_URL=
+export REACT_APP_API_URL="https://api-dev.mykro.be"
 
 # Swagger spec if available
-REACT_APP_API_SPEC_URL=
+export REACT_APP_API_SPEC_URL="https://api-dev.mykro.be/swagger.json"
 
 # Universal cookie name, used to store auth token if not using Keycloak
-REACT_APP_TOKEN_STORAGE_KEY=
+export REACT_APP_TOKEN_STORAGE_KEY="dev.mykro.be"
 
 # If using Keycloak
-REACT_APP_KEYCLOAK_URL=
-REACT_APP_KEYCLOAK_REALM=
-REACT_APP_KEYCLOAK_CLIENT_ID=
-REACT_APP_KEYCLOAK_IDP=
+export REACT_APP_KEYCLOAK_URL="https://accounts-dev.mykro.be/auth"
+export REACT_APP_KEYCLOAK_REALM="atlas"
+export REACT_APP_KEYCLOAK_CLIENT_ID="react-web-client"
+export REACT_APP_KEYCLOAK_IDP=
 
 # Provider upload keys
-REACT_APP_GOOGLE_MAPS_API_KEY=
-REACT_APP_BOX_CLIENT_ID=
-REACT_APP_DROPBOX_APP_KEY=
-REACT_APP_GOOGLE_DRIVE_CLIENT_ID=
-REACT_APP_GOOGLE_DRIVE_DEVELOPER_KEY=
-REACT_APP_ONEDRIVE_CLIENT_ID=
-
+export REACT_APP_GOOGLE_MAPS_API_KEY=`echo -n "" | base64`
+export REACT_APP_BOX_CLIENT_ID=`echo -n "" | base64`
+export REACT_APP_DROPBOX_APP_KEY=`echo -n "" | base64`
+export REACT_APP_GOOGLE_DRIVE_CLIENT_ID=`echo -n "" | base64`
+export REACT_APP_GOOGLE_DRIVE_DEVELOPER_KEY=`echo -n "" | base64`
+export REACT_APP_ONEDRIVE_CLIENT_ID=`echo -n "" | base64`
 sh ./deploy-client.sh
