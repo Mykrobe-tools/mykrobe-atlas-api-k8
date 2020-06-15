@@ -17,6 +17,15 @@ echo " - Limit Memory: $LIMIT_MEMORY"
 echo " - Limit Storage: $LIMIT_STORAGE"
 echo ""
 
+echo "Env:"
+echo " - Keycloak URL: $REACT_APP_KEYCLOAK_URL"
+echo " - Keycloak Realm: $REACT_APP_KEYCLOAK_REALM"
+echo " - Keycloak Client: $REACT_APP_KEYCLOAK_CLIENT_ID"
+echo " - API URL: $REACT_APP_API_URL"
+echo " - API URL Swagger Docs: $REACT_APP_API_SPEC_URL"
+echo " - App Storage Key (Cookie): $REACT_APP_TOKEN_STORAGE_KEY"
+echo ""
+
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
@@ -39,6 +48,19 @@ spec:
     requests:
       storage: 100Mi
   storageClassName: nfs-client
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: $PREFIX-env-secret
+  namespace: $NAMESPACE
+data:
+  REACT_APP_GOOGLE_MAPS_API_KEY: $REACT_APP_GOOGLE_MAPS_API_KEY
+  REACT_APP_BOX_CLIENT_ID: $REACT_APP_BOX_CLIENT_ID
+  REACT_APP_DROPBOX_APP_KEY: $REACT_APP_DROPBOX_APP_KEY
+  REACT_APP_GOOGLE_DRIVE_CLIENT_ID: $REACT_APP_GOOGLE_DRIVE_CLIENT_ID
+  REACT_APP_GOOGLE_DRIVE_DEVELOPER_KEY: $REACT_APP_GOOGLE_DRIVE_DEVELOPER_KEY
+  REACT_APP_ONEDRIVE_CLIENT_ID: $REACT_APP_ONEDRIVE_CLIENT_ID
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -89,6 +111,48 @@ spec:
           value: 0.0.0.0
         - name: NODE_OPTIONS
           value: '--max-old-space-size=$NODE_OPTIONS_MEMORY'
+        - name: REACT_APP_API_URL
+          value: $REACT_APP_API_URL
+        - name: REACT_APP_API_SPEC_URL
+          value: $REACT_APP_API_SPEC_URL
+        - name: REACT_APP_KEYCLOAK_URL
+          value: $REACT_APP_KEYCLOAK_URL
+        - name: REACT_APP_KEYCLOAK_REALM
+          value: $REACT_APP_KEYCLOAK_REALM
+        - name: REACT_APP_KEYCLOAK_CLIENT_ID
+          value: $REACT_APP_KEYCLOAK_CLIENT_ID
+        - name: REACT_APP_TOKEN_STORAGE_KEY
+          value: $REACT_APP_TOKEN_STORAGE_KEY
+        - name: REACT_APP_GOOGLE_MAPS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: REACT_APP_GOOGLE_MAPS_API_KEY
+        - name: REACT_APP_BOX_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: REACT_APP_BOX_CLIENT_ID
+        - name: REACT_APP_DROPBOX_APP_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: REACT_APP_DROPBOX_APP_KEY
+        - name: REACT_APP_GOOGLE_DRIVE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: REACT_APP_GOOGLE_DRIVE_CLIENT_ID
+        - name: REACT_APP_GOOGLE_DRIVE_DEVELOPER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: REACT_APP_GOOGLE_DRIVE_DEVELOPER_KEY
+        - name: REACT_APP_ONEDRIVE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: $PREFIX-env-secret
+              key: REACT_APP_ONEDRIVE_CLIENT_ID
         resources: 
           requests:
             memory: "$REQUEST_MEMORY"
