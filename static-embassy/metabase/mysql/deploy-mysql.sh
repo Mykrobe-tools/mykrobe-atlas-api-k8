@@ -10,6 +10,14 @@ echo " - Database User: $DB_USER"
 echo " - User Password: $DB_PASSWORD"
 echo " - Root Password: $ROOT_PASSWORD"
 echo ""
+echo "Limits:"
+echo " - Request CPU: $REQUEST_CPU"
+echo " - Request Memory: $REQUEST_MEMORY"
+echo " - Request Storage: $REQUEST_STORAGE"
+echo " - Limit CPU: $LIMIT_CPU"
+echo " - Limit Memory: $LIMIT_MEMORY"
+echo " - Limit Storage: $LIMIT_STORAGE"
+echo ""
 
 cat <<EOF | kubectl apply -f -
 ---
