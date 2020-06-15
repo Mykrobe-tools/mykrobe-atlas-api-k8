@@ -17,6 +17,15 @@ echo " - Limit Memory: $LIMIT_MEMORY"
 echo " - Limit Storage: $LIMIT_STORAGE"
 echo ""
 
+echo "Env:"
+echo " - Keycloak URL: $REACT_APP_KEYCLOAK_URL"
+echo " - Keycloak Realm: $REACT_APP_KEYCLOAK_REALM"
+echo " - Keycloak Client: $REACT_APP_KEYCLOAK_CLIENT_ID"
+echo " - API URL: $REACT_APP_API_URL"
+echo " - API URL Swagger Docs: $REACT_APP_API_SPEC_URL"
+echo " - App Storage Key (Cookie): $REACT_APP_TOKEN_STORAGE_KEY"
+echo ""
+
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
