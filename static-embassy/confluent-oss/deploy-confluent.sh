@@ -458,7 +458,13 @@ sed "s#{LIMIT_ZOOKEEPER_MEMORY}#$LIMIT_ZOOKEEPER_MEMORY#g" kafka-statefulset-dep
 sed "s#{LIMIT_ZOOKEEPER_STORAGE}#$LIMIT_ZOOKEEPER_STORAGE#g" kafka-statefulset-deploy-tmp13.yaml > kafka-statefulset-deploy-tmp14.yaml
 sed "s#{ZOOKEEPER_EPHERMERAL_STORAGE}#$ZOOKEEPER_EPHERMERAL_STORAGE#g" kafka-statefulset-deploy-tmp14.yaml > kafka-statefulset-deploy-tmp15.yaml
 sed "s#{KAFKA_EPHERMERAL_STORAGE}#$KAFKA_EPHERMERAL_STORAGE#g" kafka-statefulset-deploy-tmp15.yaml > kafka-statefulset-deploy-tmp16.yaml
-sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefulset-deploy-tmp16.yaml > kafka-statefulset-deploy.yaml
+sed "s#{REQUEST_KAFKA_CPU}#$REQUEST_KAFKA_CPU#g" kafka-statefulset-deploy-tmp16.yaml > kafka-statefulset-deploy-tmp17.yaml
+sed "s#{REQUEST_KAFKA_MEMORY}#$REQUEST_KAFKA_MEMORY#g" kafka-statefulset-deploy-tmp17.yaml > kafka-statefulset-deploy-tmp18.yaml
+sed "s#{REQUEST_KAFKA_STORAGE}#$REQUEST_KAFKA_STORAGE#g" kafka-statefulset-deploy-tmp18.yaml > kafka-statefulset-deploy-tmp19.yaml
+sed "s#{LIMIT_KAFKA_CPU}#$LIMIT_KAFKA_CPU#g" kafka-statefulset-deploy-tmp19.yaml > kafka-statefulset-deploy-tmp20.yaml
+sed "s#{LIMIT_KAFKA_MEMORY}#$LIMIT_KAFKA_MEMORY#g" kafka-statefulset-deploy-tmp20.yaml > kafka-statefulset-deploy-tmp21.yaml
+sed "s#{LIMIT_KAFKA_STORAGE}#$LIMIT_KAFKA_STORAGE#g" kafka-statefulset-deploy-tmp21.yaml > kafka-statefulset-deploy-tmp22.yaml
+sed "s#{NAMESPACE}#$NAMESPACE#g" kafka-statefulset-deploy-tmp22.yaml > kafka-statefulset-deploy.yaml
 
 kubectl apply -f kafka-statefulset-deploy.yaml -n $NAMESPACE
 
