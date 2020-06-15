@@ -101,13 +101,13 @@ spec:
             mountPath: /opt/kafka/data-0
         resources: 
           requests:
-            memory: {REQUEST_KAFKA_MEMORY}
-            cpu: {REQUEST_KAFKA_CPU}    
-            ephemeral-storage: {KAFKA_EPHERMERAL_STORAGE}    
+            memory: "{REQUEST_KAFKA_MEMORY}"
+            cpu: "{REQUEST_KAFKA_CPU}"    
+            ephemeral-storage: "{KAFKA_EPHERMERAL_STORAGE}"   
           limits:
-            memory: {LIMIT_KAFKA_MEMORY}
-            cpu: {LIMIT_KAFKA_MEMORY}
-            ephemeral-storage: {KAFKA_EPHERMERAL_STORAGE}  
+            memory: "{LIMIT_KAFKA_MEMORY}"
+            cpu: "{LIMIT_KAFKA_MEMORY}"
+            ephemeral-storage: "{KAFKA_EPHERMERAL_STORAGE}" 
   volumeClaimTemplates:
   - metadata:
       name: datadir-0
@@ -117,9 +117,9 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: {REQUEST_KAFKA_STORAGE}
+          storage: "{REQUEST_KAFKA_STORAGE}"
         limits:
-          storage: {LIMIT_KAFKA_STORAGE}
+          storage: "{LIMIT_KAFKA_STORAGE}"
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -212,13 +212,13 @@ spec:
           mountPath: /var/lib/zookeeper/log
         resources: 
           requests:
-            memory: {REQUEST_ZOOKEEPER_MEMORY}
-            cpu: {REQUEST_ZOOKEEPER_CPU}
-            ephemeral-storage: {ZOOKEEPER_EPHERMERAL_STORAGE}         
+            memory: "{REQUEST_ZOOKEEPER_MEMORY}"
+            cpu: "{REQUEST_ZOOKEEPER_CPU}"
+            ephemeral-storage: "{ZOOKEEPER_EPHERMERAL_STORAGE}"        
           limits:
-            memory: {LIMIT_ZOOKEEPER_MEMORY}
-            cpu: {LIMIT_ZOOKEEPER_CPU}
-            ephemeral-storage: {ZOOKEEPER_EPHERMERAL_STORAGE}  
+            memory: "{LIMIT_ZOOKEEPER_MEMORY}"
+            cpu: "{LIMIT_ZOOKEEPER_CPU}"
+            ephemeral-storage: "{ZOOKEEPER_EPHERMERAL_STORAGE}" 
   volumeClaimTemplates:
   - metadata:
       name: datadir
@@ -228,9 +228,9 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: {REQUEST_ZOOKEEPER_STORAGE}
+          storage: "{REQUEST_ZOOKEEPER_STORAGE}"
         limits:
-          storage: {LIMIT_ZOOKEEPER_STORAGE}
+          storage: "{LIMIT_ZOOKEEPER_STORAGE}"
   - metadata:
       name: datalogdir
     spec:
@@ -239,6 +239,6 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: {REQUEST_ZOOKEEPER_STORAGE}
+          storage: "{REQUEST_ZOOKEEPER_STORAGE}"
         limits:
-          storage: {LIMIT_ZOOKEEPER_STORAGE}
+          storage: "{LIMIT_ZOOKEEPER_STORAGE}"
