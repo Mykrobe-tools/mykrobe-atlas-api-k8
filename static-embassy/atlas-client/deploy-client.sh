@@ -55,7 +55,6 @@ metadata:
   name: $PREFIX-env-secret
   namespace: $NAMESPACE
 data:
-  REACT_APP_TOKEN_STORAGE_KEY: $REACT_APP_TOKEN_STORAGE_KEY
   REACT_APP_GOOGLE_MAPS_API_KEY: $REACT_APP_GOOGLE_MAPS_API_KEY
   REACT_APP_BOX_CLIENT_ID: $REACT_APP_BOX_CLIENT_ID
   REACT_APP_DROPBOX_APP_KEY: $REACT_APP_DROPBOX_APP_KEY
@@ -122,13 +121,7 @@ spec:
           value: $REACT_APP_KEYCLOAK_REALM
         - name: REACT_APP_KEYCLOAK_CLIENT_ID
           value: $REACT_APP_KEYCLOAK_CLIENT_ID
-        - name: REACT_APP_KEYCLOAK_IDP
-          value: $REACT_APP_KEYCLOAK_IDP
         - name: REACT_APP_TOKEN_STORAGE_KEY
-          valueFrom:
-            secretKeyRef:
-              name: $PREFIX-env-secret
-              key: REACT_APP_TOKEN_STORAGE_KEY
           value: $REACT_APP_TOKEN_STORAGE_KEY
         - name: REACT_APP_GOOGLE_MAPS_API_KEY
           valueFrom:
