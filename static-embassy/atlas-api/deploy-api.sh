@@ -134,6 +134,10 @@ spec:
     metadata:
       labels:
         app: $PREFIX
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-secret-db-creds: "database/creds/mongo"
+        vault.hashicorp.com/role: "mongo"
     spec:
       securityContext:
         runAsUser: 1000
