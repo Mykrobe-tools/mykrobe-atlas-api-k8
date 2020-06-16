@@ -119,8 +119,8 @@ spec:
               cpu: "{REQUEST_CPU}"    
               ephemeral-storage: "{EPHERMERAL_STORAGE}"   
             limits:
-              memory: "{LIMIT_KAFKA_MEMORY}"
-              cpu: "{LIMIT_KAFKA_MEMORY}"
+              memory: "{LIMIT_MEMORY}"
+              cpu: "{LIMIT_CPU}"
               ephemeral-storage: "{EPHERMERAL_STORAGE}" 
           ports:
             - containerPort: 8200

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl apply -n $NAMESPACE -f -
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -156,7 +156,7 @@ spec:
         app.kubernetes.io/instance: $PREFIX
         component: webhook
     spec:
-      serviceAccountName: "$PREFIX-agent-injector"
+      serviceAccountName: "$PREFIX-agent-injector-sa"
       securityContext:
         runAsNonRoot: true
         runAsGroup: 1000
@@ -241,6 +241,6 @@ sed "s#{REQUEST_STORAGE}#$REQUEST_STORAGE#g" deploy-tmp6.yaml > deploy-tmp7.yaml
 sed "s#{IMAGE_NAME}#$IMAGE_NAME#g" deploy-tmp7.yaml > deploy-tmp8.yaml
 sed "s#{LIMIT_STORAGE}#$LIMIT_STORAGE#g" deploy-tmp8.yaml > deploy-resolved.yaml
 
-kubectl apply -f deploy-resolved.yaml
+kubectl apply -f deploy-resolved.yaml -n $NAMESPACE
 
 rm deploy-*.yaml
