@@ -129,7 +129,7 @@ spec:
         app: mongodb-replicaset
         release: $RELEASE_NAME
     spec:
-      serviceAccountName: $PREFIX
+      serviceAccountName: $RELEASE_NAME-mongo-sa
       containers:
       - args:
         - --config=/data/configdb/mongod.conf
