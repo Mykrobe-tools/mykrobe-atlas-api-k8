@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {PREFIX}-vault-config
+  name: {PREFIX}-config
   labels:
-    app.kubernetes.io/name: vault
+    app.kubernetes.io/name: {PREFIX}
     app.kubernetes.io/instance: {PREFIX}
 data:
   extraconfig-from-values.hcl: |-
@@ -23,25 +23,25 @@ data:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {PREFIX}-vault
+  name: {PREFIX}
   labels:
-    app.kubernetes.io/name: vault
+    app.kubernetes.io/name: {PREFIX}
     app.kubernetes.io/instance: {PREFIX}
 spec:
-  serviceName: {PREFIX}-vault-internal
+  serviceName: {PREFIX}-internal
   podManagementPolicy: Parallel
   replicas: 1
   updateStrategy:
     type: OnDelete
   selector:
     matchLabels:
-      app.kubernetes.io/name: vault
+      app.kubernetes.io/name: {PREFIX}
       app.kubernetes.io/instance: {PREFIX}
       component: server
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: vault
+        app.kubernetes.io/name: {PREFIX}
         app.kubernetes.io/instance: {PREFIX}
         component: server
     spec:
@@ -50,12 +50,12 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: vault
+                  app.kubernetes.io/name: {PREFIX}
                   app.kubernetes.io/instance: "{PREFIX}"
                   component: server
               topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
-      serviceAccountName: {PREFIX}-vault
+      serviceAccountName: {PREFIX}-sa
       securityContext:
         runAsNonRoot: true
         runAsGroup: 1000
@@ -64,10 +64,10 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {PREFIX}-vault-config
+            name: {PREFIX}-config
       containers:
-        - name: vault
-          image: vault:1.4.0
+        - name: {PREFIX}
+          image: {IMAGE_NAME}
           imagePullPolicy: IfNotPresent
           command: 
           - "/bin/sh"

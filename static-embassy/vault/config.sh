@@ -1,7 +1,8 @@
 #!/bin/bash
 
 export NAMESPACE="shared"
-export PREFIX="mykrobe"
+export PREFIX="vault"
+export IMAGE_NAME="vault:1.4.0"
 
 export REQUEST_MEMORY="1Gi"
 export REQUEST_CPU="500m"
@@ -15,6 +16,7 @@ echo ""
 echo "Deploying vault using:"
 echo " - NAMESPACE: $NAMESPACE"
 echo " - Prefix: $PREFIX"
+echo " - Image: $IMAGE_NAME"
 echo ""
 
 echo "Limits:"
