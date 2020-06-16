@@ -57,5 +57,5 @@ spec:
               cpu: "$LIMIT_CPU"
               ephemeral-storage: "$LIMIT_STORAGE"
       imagePullSecrets:
-        - name: dockerhub
+        - name: gcr-json-key
 EOF
