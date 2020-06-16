@@ -47,6 +47,14 @@ echo ""
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: $PREFIX
+  name: $PREFIX-sa
+  namespace: $NAMESPACE
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: $PREFIX-demo-data
@@ -126,12 +134,17 @@ spec:
     metadata:
       labels:
         app: $PREFIX
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-secret-db-creds: "database/creds/mongo"
+        vault.hashicorp.com/role: "mongo"
     spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
         runAsNonRoot: true
+      serviceAccountName: $PREFIX-sa  
       containers:
       - image: $API_IMAGE
         name: $PREFIX

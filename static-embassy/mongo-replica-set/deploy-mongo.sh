@@ -122,11 +122,14 @@ spec:
     metadata:
       annotations:
         checksum/config: aefdcd6191ba1431beacf13834fede80e015dea465ab21a7e73d1eaa8c70ea51
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "mongo"
+        vault.hashicorp.com/agent-inject-secret-db-creds: "database/creds/mongo"
       labels:
         app: mongodb-replicaset
         release: $RELEASE_NAME
     spec:
-      serviceAccountName: $PREFIX
+      serviceAccountName: $RELEASE_NAME-mongo-sa
       containers:
       - args:
         - --config=/data/configdb/mongod.conf
