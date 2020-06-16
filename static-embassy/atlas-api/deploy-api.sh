@@ -47,6 +47,14 @@ echo ""
 cat <<EOF | kubectl apply -f -
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: $PREFIX
+  name: $PREFIX-sa
+  namespace: $NAMESPACE
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: $PREFIX-demo-data
@@ -132,6 +140,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         runAsNonRoot: true
+      serviceAccountName: $PREFIX-sa  
       containers:
       - image: $API_IMAGE
         name: $PREFIX
