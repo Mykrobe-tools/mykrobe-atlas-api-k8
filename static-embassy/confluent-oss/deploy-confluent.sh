@@ -430,6 +430,8 @@ spec:
             value: "true"
           - name: SCHEMA_REGISTRY_HEAP_OPTS
             value: "-Xms512M -Xmx512M"
+          - name: SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL
+            value: "none"
           resources: 
             requests:
               memory: "$REQUEST_SCHEMA_REGISTRY_MEMORY"

@@ -2,7 +2,7 @@
 
 export NAMESPACE="insight-dev"
 export PREFIX="mykrobe"
-export CONSUMER_IMAGE="makeandship/atlas-kafka-consumer:1.0.0"
+export CONSUMER_IMAGE="eu.gcr.io/atlas-275810/mykrobe-atlas-kafka-consumer:v0.0.3"
 export APP_NAME="kafka-consumer"
 export BROKER_URL="http://mykrobe-confluent-kafka.insight-dev.svc.cluster.local:9092"
 export SCHEMA_REGISTRY_URL="http://mykrobe-confluent-schema-registry.insight-dev.svc.cluster.local:8081"
